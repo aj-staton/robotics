@@ -1,27 +1,30 @@
+'''
+This file's purpose is to define an interface to communicate with the
+iRobot Roomba Create2 robot. This will include changing the mode of operation
+on the robot, reading input from the robot's physical buttons, and moving
+the robot.
+
+Written by: Miles Ziemer, Robby Carff, and Austin Staton for use in CSCE 274
+Date: September 15th, 2019
+'''
+import sys
+from SerialInterface import *
+import struct
+
 ####################################################################
 # Button Opcode 165
-# Bit:	7	6	5	4	3	2	1	0
-# value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
+# Bit Number:  7	6	5	4	3	2	1	0
+# Bit Number Value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
 ####################################################################
-Buttons = 165
+BUTTONS = chr(165)
 ####################################################################
 # State Opcodes
 ####################################################################
-START = 128
-RESET = 7
-STOP = 173
-PASSIVE = 
-SAFE = 131
-####################################################################
-# Drive Opcode 137
-# Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
-# [Radius high byte] [Radius low byte]
-#
-# Velocity (-500 – 500 mm/s)
-# Radius (-2000 – 2000 mm)
-#
-####################################################################
-Drive = 137
+START = chr(128)
+RESET = chr(7)
+STOP = chr(173)
+PASSIVE = chr(128)
+SAFE = chr(131)
 ####################################################################
 # DriveDirect Opcode 145
 # Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
@@ -31,28 +34,34 @@ Drive = 137
 # Left wheel velocity (-500 – 500 mm/s)
 #
 ####################################################################
-DriveDirect = 145
+DriveDirect = chr(145)
+
 
 class RobotInterface:
+    
+    def __Init__(self):
+	self.connection = SerialInterface()
 
-		def __Init__(self):
-				Serial = SerialInterface()
+    def SetState(self, state):
+        if state == "STOP":
+	    self.connection.Write(STOP)
+        else if state == "RESET":
+            self.connection.Write(RESET)
+        else if state == "START":
+            self.connection.Write(START)
+        else if state == "PASSIVE":
+            self.connection.Write(PASSIVE)
+        else if state == "SAFE":
+            self.connection.Write(SAFE)
+        else
+            print "Invalid state input into the SetState function"
+            sys.exit()
 
-		def SetState(self, setState):
-			if (setState == "start") 
-				Serial.write(STATE)
-			else if (setState == "reset")
-				Serial.write(RESET)
-			else if (setState == "stop")
-				Serial.write(STOP)
-			else if (setState == "SAFE")
-				Serial.write(SAFE)
-
-
-
-
-
-
-
-
-
+    def ReadButton(self):
+        # Send a request to read the button.
+        # self.connection.Write(BUTTONS+chr(7))
+        # Take in the inputted byte, store as bits.
+        button_input = self.connection.Read(1)
+        byte = struct.unpack('B', button_input)[0]
+        
+    def Drive(self, velocity, radius):
