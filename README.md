@@ -11,7 +11,7 @@ Table of Contents
 * [Credits](#Credits)
 
 ### Project_One
-[Our robot drives around a mufukin regular polygon of N sides](https://drive.google.com/file/d/1qV1KdgdLvN7GdSB7fDuzNeR2KqT55yui/view).
+Our robot drives around a [mufukin](https://drive.google.com/file/d/1qV1KdgdLvN7GdSB7fDuzNeR2KqT55yui/view) regular polygon of N sides.
 
 ### Project_Two
 
