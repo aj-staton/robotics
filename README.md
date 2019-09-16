@@ -23,4 +23,4 @@ Our robot drives around a [mufukin](https://drive.google.com/file/d/1qV1KdgdLvN7
 
 
 ### Credits
-[Mario](https://sites.google.com/view/mariosx) - for notes and sample code
+[Marios](https://sites.google.com/view/mariosx) - for notes and sample code
