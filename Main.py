@@ -32,25 +32,32 @@ import RobotInterface
 class main:
 	#drive direct at 150 mm/s speed 
 	def drive(time):
+		#drive direct takes in a high set and low set of bytes
 		roomba.driveDirect()
-		time.sleep(time)
+		time.sleep(time) #the time is here because the thread
+						 # would run for ever if it was in main
 
 	#rotating at a specified speed COUNTER CLOCKWISE
-	def rotate():
+	def rotate(time):
 		roomba.rotate()
+		time.sleep(time) #the time is here because the thread
+						 # would run for ever if it was in main
 
 	#calculate the polygon and drive
 	def regularPolygon(n):
+		#calculating the lengths and angles
 		Angle = degrees - degrees/n
 		sideLength = Length/n
+
+		#calculating the times for the robot to move
 		driveTime = sideLength/driveSpeed
+		rotateTime = angle/drivespeed
 		
 		for n
 			#driving for the calculated time
 			drive(driveTime)
 			#rotating specific degree amount
-			rotate()
-			time.sleep(driveTime)
+			rotate(rotateTime)
 
 	def main():
 		# (A) initialize a connection
