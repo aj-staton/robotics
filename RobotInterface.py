@@ -68,11 +68,22 @@ class RobotInterface:
             print "Invalid state input into the SetState function"
             sys.exit()
 
-    def ReadButton(self):
-        # Send a request to read the button.
-        # self.connection.Write(BUTTONS+chr(7))
-        # Take in the inputted byte, store as bits.
-        button_input = self.connection.Read(1)
-        byte = struct.unpack('B', button_input)[0]
-        
-    def Drive(self, velocity, radius):
+    ###############################################################
+    #  ReadButton() reads the byte that is returned from the iRobot
+    #  when a button on the robot is pressed. This byte will then
+    #  be ANDed (bitwise) with the parameter, 'button', which will
+    #  pass in the intended button to read. A true/false value for
+    #  whether or not the intended button was pressed will be
+    #  returned.
+    #
+    #  Param: button -- The button that is intended to be pressed.
+    #                   This will be passed as a hex value to later
+    #                   be ANDed with the robot's returned byte.  
+    ###############################################################
+    def ReadButton(self, button):
+        # Send a request to read the pressed button.
+        self.connection.Write(BUTTONS)
+        button_input = self.connection.Read()
+        return(button & struct.unpack('B', button_input))
+
+    def DriveDirect(self, velocity, radius):
