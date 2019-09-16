@@ -42,8 +42,19 @@ class RobotInterface:
     def __Init__(self):
 	self.connection = SerialInterface()
 
-    def SetState(self, state):
-        if state == "STOP":
+    ################################################################
+    #  SetState() will change the mode of operation on the iRobot. A 
+    #  string will be inputted into the function to enhance the 
+    #  readability in other files using this interface. The Robot
+    #  Interface will handle the conversion of this state, inputted 
+    #  as string, to the bitwise representation needed by the iRobot.
+    #  This will be done using the predefined opcodes within this file.
+    #
+    #  Param: state -- The robot's state in plain english, as a 
+    #                  string.
+    ################################################################
+    def SetState(self, state): 
+        if state == "STOP"
 	    self.connection.Write(STOP)
         else if state == "RESET":
             self.connection.Write(RESET)
