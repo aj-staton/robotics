@@ -7,6 +7,7 @@ the robot.
 Written by: Miles Ziemer, Robby Carff, and Austin Staton for use in CSCE 274
 Date: September 15th, 2019
 '''
+import time
 import sys
 from SerialInterface import *
 import struct
@@ -34,7 +35,7 @@ SAFE = chr(131)
 # Left wheel velocity (-500 – 500 mm/s)
 #
 ####################################################################
-DriveDirect = chr(145)
+DRIVE = chr(145)
 
 
 class RobotInterface:
@@ -86,4 +87,23 @@ class RobotInterface:
         button_input = self.connection.Read()
         return(button & struct.unpack('B', button_input))
 
-    def DriveDirect(self, velocity, radius):
+    def DriveDirect(self, HighR, LowR, HighL, LowL):
+	opcode = struct.pack('B', DRIVE)
+	self.connection.Write(opcode) # Can we write a struct??
+	time.sleep(0.00675)
+
+	highR = struct.pack('B', HighR)
+	self.connection.Write(highR)
+	time.sleep(0.00675)
+ 
+	lowR = struct.pack('B', LowR)
+	self.connection.Write(lowR)
+	time.sleep(0.00675)
+
+	highL = struct.pack('B', HighL)
+	self.connection.Write(highL)
+	time.sleep(0.00675)
+
+	lowL = struct.pack('B', LowL)
+	self.connection.Write(lowL)
+	time.sleep(0.00675) 
