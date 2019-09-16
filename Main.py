@@ -1,8 +1,9 @@
 ####################################################################
-#This the main program that will be running and Interacting
+# This the main program that will be running and Interacting
 # with the robot
 #
-# Typed by: Robert Carff -- September 15th, 2019
+# Typed by: Robert Carff, Austin Statin, Miles Ziemer 
+#			-- September 15th, 2019
 #
 ####################################################################
 # Magic number Variables
@@ -31,6 +32,10 @@ class main:
 		for n
 			#driving for the calculated time
 			drive()
+			time.sleep(driveTime)
+
+
+			#rotating specific degree amount
 			rotate()
 
 	def main():
