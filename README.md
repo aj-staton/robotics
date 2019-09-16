@@ -1,6 +1,6 @@
 ## Robotic application and design 
 ---
-This repository houses our projects for the Icreate2
+This repository houses our projects for the iRobot Roomba Create2 robot.
 
 Table of Contents
 * [Project_One](#Project_One)
