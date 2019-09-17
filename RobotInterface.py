@@ -87,6 +87,12 @@ class RobotInterface:
         button_input = self.connection.Read()
         return(button & struct.unpack('B', button_input))
 
+
+
+    #TODO WHAT IF WE MAKE THIS TAKE IN THE FULL 16 BIT NUMBER
+    #AND THEN BREAK IT APART INTO TWO PEICES AND PACK IT
+    #THAT WAY WE CAN CALL 
+    #	(roomba.DriveDirect(leftSpeed,rightSpeed))
     def DriveDirect(self, HighR, LowR, HighL, LowL):
 	opcode = struct.pack('B', DRIVE)
 	self.connection.Write(opcode) # Can we write a struct??
