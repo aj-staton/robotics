@@ -27,15 +27,15 @@ STOP = chr(173)
 PASSIVE = chr(128)
 SAFE = chr(131)
 ####################################################################
-# DriveDirect Opcode 145
+# Drive Opcode 137
 # Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
-# [Radius high byte] [Radius low byte]
+#                  [Radius high byte] [Radius low byte]
 #
 # Right wheel velocity (-500 – 500 mm/s)
 # Left wheel velocity (-500 – 500 mm/s)
 #
 ####################################################################
-DRIVE = chr(145)
+DRIVE = chr(137)
 
 
 class RobotInterface:
@@ -85,7 +85,7 @@ class RobotInterface:
         # Send a request to read the pressed button.
         self.connection.Write(BUTTONS)
         button_input = self.connection.Read()
-        return(button & struct.unpack('B', button_input))
+        return (button & struct.unpack('B', button_input))
 
 
 
@@ -93,23 +93,9 @@ class RobotInterface:
     #AND THEN BREAK IT APART INTO TWO PEICES AND PACK IT
     #THAT WAY WE CAN CALL 
     #	(roomba.DriveDirect(leftSpeed,rightSpeed))
-    def DriveDirect(self, HighR, LowR, HighL, LowL):
-	opcode = struct.pack('B', DRIVE)
-	self.connection.Write(opcode) # Can we write a struct??
-	time.sleep(0.00675)
 
-	highR = struct.pack('B', HighR)
-	self.connection.Write(highR)
-	time.sleep(0.00675)
- 
-	lowR = struct.pack('B', LowR)
-	self.connection.Write(lowR)
-	time.sleep(0.00675)
-
-	highL = struct.pack('B', HighL)
-	self.connection.Write(highL)
-	time.sleep(0.00675)
-
-	lowL = struct.pack('B', LowL)
-	self.connection.Write(lowL)
-	time.sleep(0.00675) 
+    def Drive(self, HighR, LowR, HighL, LowL):
+	    data = struct.pack('B', DRIVE, HighR, LowR, HighL, LowL)
+        # Pack all of the bytes at once.
+        self.connection.Write(data)
+	    
