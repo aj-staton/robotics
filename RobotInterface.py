@@ -17,15 +17,15 @@ import struct
 # Bit Number:  7	6	5	4	3	2	1	0
 # Bit Number Value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
 ####################################################################
-BUTTONS = chr(165)
+BUTTONS = 165
 ####################################################################
 # State Opcodes
 ####################################################################
-START = chr(128)
-RESET = chr(7)
-STOP = chr(173)
-PASSIVE = chr(128)
-SAFE = chr(131)
+START = 128
+RESET = 7
+STOP = 173
+PASSIVE = 128
+SAFE = 131
 ####################################################################
 # Drive Opcode 137
 # Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
@@ -35,11 +35,10 @@ SAFE = chr(131)
 # Left wheel velocity (-500 to 500 mm/s)
 #
 ####################################################################
-DRIVE = chr(137)
+DRIVE = 137
 
 
 class RobotInterface:
-    
     def __init__(self):
 	self.connection = SerialInterface()
 
@@ -56,15 +55,15 @@ class RobotInterface:
     ################################################################
     def SetState(self, state): 
         if state == "STOP":
-	    self.connection.Write(STOP)
+	    self.connection.Write(chr(STOP))
         elif state == "RESET":
-            self.connection.Write(RESET)
+            self.connection.Write(chr(RESET))
         elif state == "START":
-            self.connection.Write(START)
+            self.connection.Write(chr(START))
         elif state == "PASSIVE":
-            self.connection.Write(PASSIVE)
+            self.connection.Write(chr(PASSIVE))
         elif state == "SAFE":
-            self.connection.Write(SAFE)
+            self.connection.Write(chr(SAFE))
         else:
             print "Invalid state input into the SetState function"
             sys.exit()
@@ -87,15 +86,8 @@ class RobotInterface:
         button_input = self.connection.Read()
         return (button & struct.unpack('B', button_input))
 
-
-
-    #TODO WHAT IF WE MAKE THIS TAKE IN THE FULL 16 BIT NUMBER
-    #AND THEN BREAK IT APART INTO TWO PEICES AND PACK IT
-    #THAT WAY WE CAN CALL 
-    #	(roomba.DriveDirect(leftSpeed,rightSpeed))
-
     def Drive(self, velocity, radius):
-	data = struct.pack('h', DRIVE, velocity, radius)
+	data = struct.pack('>B2H', DRIVE, velocity, radius)
         # Pack all of the bytes at once.
         self.connection.Write(data)
 	    
