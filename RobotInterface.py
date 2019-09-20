@@ -94,8 +94,8 @@ class RobotInterface:
     #THAT WAY WE CAN CALL 
     #	(roomba.DriveDirect(leftSpeed,rightSpeed))
 
-    def Drive(self, HighR, LowR, HighL, LowL):
-	    data = struct.pack('B', DRIVE, HighR, LowR, HighL, LowL)
+    def Drive(self, velocity, radius):
+	data = struct.pack('h', DRIVE, velocity, radius)
         # Pack all of the bytes at once.
         self.connection.Write(data)
 	    
