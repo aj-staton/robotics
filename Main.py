@@ -14,7 +14,7 @@ sleepTime = 0.0125 #this time is in seconds (12.5 miliseconds)
 
 high = 00000000 # calculated for 150 mm/s
 low = 10110110 # calculated for 150 mm/s
-
+driveSpeed = 150 # in mm/s 
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -32,44 +32,63 @@ CLOCK = chr(7)
 # Imports
 import RobotInterface
 ####################################################################
+
+
+
+
 class main:
-	#drive direct at 150 mm/s speed 
-	def drive(time):
-		#drive direct takes in a high set and low set of bytes
-		roomba.driveDirect(high,low,high,low)
-		time.sleep(time) #the time is here because the thread
-						 # would run for ever if it was in main
-
-	#rotating at a specified speed COUNTER CLOCKWISE
-	def rotate(time):
-		roomba.rotate()
-		time.sleep(time) #the time is here because the thread
-						 # would run for ever if it was in main
-
-	#calculate the polygon and drive
-	def regularPolygon(n):
-		#calculating the lengths and angles
-		Angle = degrees - degrees/n
+    ###############################################################
+    #  Drive() Calculates the Side lengths based off the
+    # 		   total perimeter of 2000mm, and the drives for the 
+    #		   correct amount of time asuming 150 mm/s veloctiy.
+    #		   
+    ###############################################################	
+    def driveSide():
 		sideLength = Length/n
-		#calculating the times for the robot to move
 		driveTime = sideLength/driveSpeed
-		rotateTime = angle/drivespeed
-		
-		for n
-			#driving for the calculated time
-			drive(driveTime)
-			#rotating specific degree amount
-			rotate(rotateTime)
+		roomba.driveDirect(high,low,high,low)
+		time.sleep(driveTime)
 
+    ###############################################################
+    #  Rotate() Uses the driveDirect function, but only rotates
+    # 		    one wheel, allowing us to turn
+    #		   
+    #		   
+    ###############################################################	
+    def rotate():
+		Angle = degrees - degrees/n
+		rotateTime = angle/drivespeed
+		roomba.driveDirect(high,low,high,high) #passing in high b/c its 0s
+		time.sleep(10) # we can adjust this/figure our rotate time
+
+	
+	###############################################################
+    #  regularPolygon() Once the robot is powered on, this method
+    # 		   			waits for the clean button to be pressed.
+    #		   			Once pressed - it drives the length of a 
+    #					side and turns. Repeats this N times.
+    #		   
+    ###############################################################	
+	def regularPolygon(n):
+		while (ReadButton(CLEAN))
+			for n
+				driveSide()
+				rotate()
+
+
+###############################################################
+#  Main() Sets the robot into safe and passive mode, and then
+# 		   runs our draw regularPolygon() method
+#		   
+#		   
+###############################################################	
 if __name__ == "__main__":
-		# (A) initialize a connection
 	    roomba = SerialInterface()
-	    # (A) set in passive and safe mode
 	    roomba.setState("SAFE")
-	    roomba.setState("PASSIVE") #I dont think we have passive declared yet
-	    
-	    '''
-	    if (ReadButton(CLEAN))
-		   # (B) Given an input N move counter clockwise
-		    regularPolygon()
-	    '''
+	    #roomba.setState("PASSIVE") #I dont think we have passive declared yet
+
+	   	#Just drive here, and see if we can get the drive function working
+	    driveSide()
+
+
+	
