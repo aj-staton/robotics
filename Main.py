@@ -12,8 +12,10 @@ Length = 2000 #this is in milimeters
 n = 5 #this is number of sides for the polygon
 sleepTime = 0.0125 #this time is in seconds (12.5 miliseconds)
 
-high = 00000000 # calculated for 150 mm/s
-low = 10110110 # calculated for 150 mm/s
+# TODO: Do we need these turning radii still?
+# high = 00000000 # calculated for 150 mm/s
+# low = 10110110 # calculated for 150 mm/s
+
 driveSpeed = 150 # in mm/s 
 ####################################################################
 # Button Opcode 165
@@ -33,9 +35,6 @@ CLOCK = chr(7)
 import RobotInterface
 ####################################################################
 
-
-
-
 class main:
     ###############################################################
     #  Drive() Calculates the Side lengths based off the
@@ -44,10 +43,11 @@ class main:
     #		   
     ###############################################################	
     def driveSide():
-		sideLength = Length/n
-		driveTime = sideLength/driveSpeed
-		roomba.driveDirect(high,low,high,low)
-		time.sleep(driveTime)
+		  sideLength = Length/n
+		  driveTime = sideLength/driveSpeed
+      # TODO: Do the math to convert velocity (mm/s) to (mm)
+		  # roomba.Drive(velocity, radius)
+		  time.sleep(driveTime)
 
     ###############################################################
     #  Rotate() Uses the driveDirect function, but only rotates
@@ -56,10 +56,11 @@ class main:
     #		   
     ###############################################################	
     def rotate():
-		Angle = degrees - degrees/n
-		rotateTime = angle/drivespeed
-		roomba.driveDirect(high,low,high,high) #passing in high b/c its 0s
-		time.sleep(10) # we can adjust this/figure our rotate time
+		  Angle = degrees - degrees/n
+	  	rotateTime = angle/drivespeed
+      # TODO: do the math to make turning radius (in mm) to deg. 
+	  	# roomba.Drive(velocity, radius) #passing in high b/c its 0s
+	  	time.sleep(10) # we can adjust this/figure our rotate time
 
 	
 	###############################################################
@@ -70,8 +71,8 @@ class main:
     #		   
     ###############################################################	
 	def regularPolygon(n):
-		while (ReadButton(CLEAN))
-			for n
+		while (ReadButton(CLEAN)):
+			for n:
 				driveSide()
 				rotate()
 
@@ -83,12 +84,11 @@ class main:
 #		   
 ###############################################################	
 if __name__ == "__main__":
-	    roomba = SerialInterface()
-	    roomba.setState("SAFE")
-	    #roomba.setState("PASSIVE") #I dont think we have passive declared yet
-
-	   	#Just drive here, and see if we can get the drive function working
-	    driveSide()
+	roomba = RobotInterface()
+	roomba.setState("SAFE")
+	#roomba.setState("PASSIVE") #I dont think we have passive declared yet
+	#Just drive here, and see if we can get the drive function working
+	driveSide()
 
 
 	

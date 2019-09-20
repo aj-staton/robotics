@@ -86,8 +86,30 @@ class RobotInterface:
         button_input = self.connection.Read()
         return (button & struct.unpack('B', button_input))
 
+    ###############################################################
+    # Drive() is the main fucntion of movement for the Roomba. It 
+    # will accept values for velocity(mm/s) and turning radius(mm).
+    # To turn in place clockwise, -1 is the value to send as the
+    # turning radius. A value of 1 is sent for a clockwise turn in
+    # place.
+    #
+    # Limitations: The iRobot Create2 can only accept values
+    #              between [-500,500] for the velocity of the robot. 
+    # 
+    # Params: velocity -- the speed and direction of motion that
+    #                     the roomba should travel (between -500
+    #                     and 500, inclusive).
+    # 
+    #         radius   -- the amount to turn the robot (in mm). The
+    #                     radius is measured from the center of the
+    #                     turning circle to the center of the
+    #                     roomba.
+    ###############################################################
     def Drive(self, velocity, radius):
-	data = struct.pack('>B2H', DRIVE, velocity, radius)
-        # Pack all of the bytes at once.
-        self.connection.Write(data)
+        if (velocity >= -500 or velocity <= 500):
+	        data = struct.pack('>B2H', DRIVE, velocity, radius)
+            self.connection.Write(data)
+        else:
+            print("Invalid Drive() speed given.")
+            sys.exit()
 	    
