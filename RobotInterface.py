@@ -55,17 +55,17 @@ class RobotInterface:
     #                  string.
     ################################################################
     def SetState(self, state): 
-        if state == "STOP"
+        if state == "STOP":
 	    self.connection.Write(STOP)
-        else if state == "RESET":
+        elif state == "RESET":
             self.connection.Write(RESET)
-        else if state == "START":
+        elif state == "START":
             self.connection.Write(START)
-        else if state == "PASSIVE":
+        elif state == "PASSIVE":
             self.connection.Write(PASSIVE)
-        else if state == "SAFE":
+        elif state == "SAFE":
             self.connection.Write(SAFE)
-        else
+        else:
             print "Invalid state input into the SetState function"
             sys.exit()
 
