@@ -31,8 +31,8 @@ SAFE = chr(131)
 # Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
 #                  [Radius high byte] [Radius low byte]
 #
-# Right wheel velocity (-500 – 500 mm/s)
-# Left wheel velocity (-500 – 500 mm/s)
+# Right wheel velocity (-500 to 500 mm/s)
+# Left wheel velocity (-500 to 500 mm/s)
 #
 ####################################################################
 DRIVE = chr(137)
