@@ -40,7 +40,7 @@ DRIVE = chr(137)
 
 class RobotInterface:
     
-    def __Init__(self):
+    def __init__(self):
 	self.connection = SerialInterface()
 
     ################################################################
