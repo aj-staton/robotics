@@ -20,14 +20,14 @@ _omega_ = 1.2766 # 2*_velocity_/235
 # Bit Number:  7	6	5	4	3	2	1	0
 # Bit Number Value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
 ####################################################################
-CLEAN = chr(0)
-SPOT = chr(1)
-DOCK = chr(2)
-MINUTE = chr(3)
-HOUR = chr(4)
-DAY = chr(5)
-SCHEDULE = chr(6)
-CLOCK = chr(7)
+CLEAN = 0
+SPOT = 1
+DOCK = 2
+MINUTE = 3
+HOUR = 4
+DAY = 5
+SCHEDULE = 6
+CLOCK = 7
 
 ####################################################################
 # Imports
