@@ -72,9 +72,9 @@ def rotate(roomba, n)
 #		   
 ###############################################################	
 def regularPolygon(roomba, n):
-		for i in range (n):
-			driveSide(roomba, n)
-			rotate(roomba, n)
+	for i in range (n):
+		driveSide(roomba, n)
+		rotate(roomba, n)
 
 
 ###############################################################
@@ -89,8 +89,8 @@ def main():
     #roomba.setState("PASSIVE") #I dont think we have passive declared yet
     #Just drive here, and see if we can get the drive function working
     x = True
-    while (x)
-	readButton(CLEAN)
+    while (x):
+	if(readButton(CLEAN)):
 		x = False
     regularPolygon(roomba, _n_)
 
