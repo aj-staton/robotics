@@ -16,7 +16,9 @@ sleepTime = 0.0125 #this time is in seconds (12.5 miliseconds)
 # high = 00000000 # calculated for 150 mm/s
 # low = 10110110 # calculated for 150 mm/s
 
-driveSpeed = 150 # in mm/s 
+velocity = 150 # in mm/s 
+#Omega = 2*velocity/235
+Omega = 1.2766
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -32,49 +34,58 @@ SCHEDULE = chr(6)
 CLOCK = chr(7)
 ####################################################################
 # Imports
-import RobotInterface
+from RobotInterface import *
+from time import sleep
+import math
 ####################################################################
 
-class main:
-    ###############################################################
-    #  Drive() Calculates the Side lengths based off the
-    # 		   total perimeter of 2000mm, and the drives for the 
-    #		   correct amount of time asuming 150 mm/s veloctiy.
-    #		   
-    ###############################################################	
-    def driveSide():
-		  sideLength = Length/n
-		  driveTime = sideLength/driveSpeed
-      # TODO: Do the math to convert velocity (mm/s) to (mm)
-		  # roomba.Drive(velocity, radius)
-		  time.sleep(driveTime)
+###############################################################
+#  Drive() Calculates the Side lengths based off the
+# 		   total perimeter of 2000mm, and the drives for the 
+#		   correct amount of time asuming 150 mm/s veloctiy.
+#		   
+###############################################################	
+def driveSide(roomba):
+	sideLength = float(Length)/n
+	driveTime = float(sideLength)/velocity
+	# TODO: Do the math to convert velocity (mm/s) to (mm)
+	roomba.Drive(velocity, 0)
+	time.sleep(driveTime)
+	roomba.Drive(0, 0)
 
-    ###############################################################
-    #  Rotate() Uses the driveDirect function, but only rotates
-    # 		    one wheel, allowing us to turn
-    #		   
-    #		   
-    ###############################################################	
-    def rotate():
-		  Angle = degrees - degrees/n
-	  	rotateTime = angle/drivespeed
-      # TODO: do the math to make turning radius (in mm) to deg. 
-	  	# roomba.Drive(velocity, radius) #passing in high b/c its 0s
-	  	time.sleep(10) # we can adjust this/figure our rotate time
+###############################################################
+#  Rotate() Uses the driveDirect function, but only rotates
+# 		    one wheel, allowing us to turn
+#		   
+#		   
+###############################################################	
+def rotate(roomba):
+	'''
+	Angle = degrees - degrees/n
+	rotateTime = Angle/velocity
+        # TODO: do the math to make turning radius (in mm) to deg. 
+        # roomba.Drive(velocity, radius) #passing in high b/c its 0s
+        time.sleep(rotateTime) # we can adjust this/figure our rotate time
+	roomba.Drive(0,0)
+	'''
+	AngleRadians = math.pi - float(2*math.pi)/n
+	rotateTime = float(AngleRadians)/Omega
+	roomba.Drive(150, 1)
+	time.sleep(rotateTime)
+	roomba.Drive(0, 0)
 
-	
-	###############################################################
-    #  regularPolygon() Once the robot is powered on, this method
-    # 		   			waits for the clean button to be pressed.
-    #		   			Once pressed - it drives the length of a 
-    #					side and turns. Repeats this N times.
-    #		   
-    ###############################################################	
-	def regularPolygon(n):
-		while (ReadButton(CLEAN)):
-			for n:
-				driveSide()
-				rotate()
+
+###############################################################
+#  regularPolygon() Once the robot is powered on, this method
+#  waits for the clean button to be pressed.
+#  Once pressed - it drives the length of a 
+#  side and turns. Repeats this N times.
+#		   
+###############################################################	
+def regularPolygon(roomba, n):
+	for i in range (n):
+                driveSide(roomba)
+                rotate(roomba)
 
 
 ###############################################################
@@ -83,12 +94,12 @@ class main:
 #		   
 #		   
 ###############################################################	
-if __name__ == "__main__":
-	roomba = RobotInterface()
-	roomba.setState("SAFE")
-	#roomba.setState("PASSIVE") #I dont think we have passive declared yet
-	#Just drive here, and see if we can get the drive function working
-	driveSide()
+def main():
+    roomba = RobotInterface()
+    roomba.SetState("SAFE")
+    #roomba.setState("PASSIVE") #I dont think we have passive declared yet
+    #Just drive here, and see if we can get the drive function working
+    regularPolygon(roomba, 6)
 
 
-	
+main()

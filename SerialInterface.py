@@ -19,7 +19,7 @@ class SerialInterface:
 
     # This function will read data from the serial connection.
     # Param: data -- specifes the number of bytes to be read back. 
-    def Read(self, data):
+    def Read(self, data=1):
         return self.connection.read(data)
     
     # This function sends data thorugh a serial connection. 

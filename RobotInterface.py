@@ -37,6 +37,7 @@ SAFE = 131
 ####################################################################
 DRIVE = 137
 
+SENSORS = 142
 
 class RobotInterface:
     def __init__(self):
@@ -82,7 +83,7 @@ class RobotInterface:
     ###############################################################
     def ReadButton(self, button):
         # Send a request to read the pressed button.
-        self.connection.Write(BUTTONS)
+        self.connection.Write(chr(SENSORS))
         button_input = self.connection.Read()
         return (button & struct.unpack('B', button_input))
 
@@ -105,8 +106,6 @@ class RobotInterface:
     #                     turning circle to the center of the
     #                     roomba.
     ###############################################################
-	
-    # We may want to add checks for radius, 1 or 0 only (rotate or drive straight)
     def Drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
 	    data = struct.pack('>B2H', DRIVE, velocity, radius)
