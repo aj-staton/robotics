@@ -56,7 +56,7 @@ def driveSide(roomba, n):
 #		   
 #		   
 ###############################################################	
-def rotate(roomba, n)
+def rotate(roomba, n):
 	AngleRadians = math.pi - float(2*math.pi)/n
 	rotateTime = float(AngleRadians)/_omega_
 	roomba.drive(150, 1)
