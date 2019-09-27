@@ -37,9 +37,9 @@ import math
 ####################################################################
 
 ###############################################################
-#  Drive() Calculates the Side lengths based off the
-# 		   total perimeter of 2000mm, and the drives for the 
-#		   correct amount of time asuming 150 mm/s veloctiy.
+# driveSide() calculates the Side lengths based off the
+# total perimeter of 2000mm, and the drives for the 
+# correct amount of time asuming 150 mm/s veloctiy.
 #		   
 ###############################################################	
 def driveSide(roomba, n):
@@ -52,17 +52,15 @@ def driveSide(roomba, n):
 
 ###############################################################
 #  Rotate() Uses the driveDirect function, but only rotates
-# 		    one wheel, allowing us to turn
+#  one wheel, allowing us to turn
 #		   
 #		   
 ###############################################################	
 def rotate(roomba, n):
-	AngleRadians = math.pi - float(2*math.pi)/n
-	rotateTime = float(AngleRadians)/_omega_
-	roomba.drive(150, 1)
+	rotateTime = float(2*math.pi/n)/_omega_
+	roomba.drive(_velocity_, 1)
 	time.sleep(rotateTime)
 	roomba.drive(0, 0)
-
 
 ###############################################################
 #  regularPolygon() Once the robot is powered on, this method
@@ -74,6 +72,8 @@ def rotate(roomba, n):
 def regularPolygon(roomba, n):
 	for i in range (n):
 		driveSide(roomba, n)
+		if(i == n):
+			break
 		rotate(roomba, n)
 
 
