@@ -90,7 +90,7 @@ def main():
     #Just drive here, and see if we can get the drive function working
     x = True
     while (x):
-	if(readButton(CLEAN)):
+	if(roomba.readButton(CLEAN)):
 		x = False
     regularPolygon(roomba, _n_)
 
