@@ -7,18 +7,14 @@
 #
 ####################################################################
 # Magic number Variables
-degrees = 360 #this is in degrees
-Length = 2000 #this is in milimeters
-n = 5 #this is number of sides for the polygon
-sleepTime = 0.0125 #this time is in seconds (12.5 miliseconds)
+_n_ = 5 #this is number of sides for the polygon
 
-# TODO: Do we need these turning radii still?
-# high = 00000000 # calculated for 150 mm/s
-# low = 10110110 # calculated for 150 mm/s
+_degrees_ = 360 #this is in degrees
+_length_ = 2000 #this is in milimeters
+_sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
+_velocity_ = 150 # in mm/s 
+_omega_ = 1.2766 # 2*_velocity_/235
 
-velocity = 150 # in mm/s 
-#Omega = 2*velocity/235
-Omega = 1.2766
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -32,6 +28,7 @@ HOUR = chr(4)
 DAY = chr(5)
 SCHEDULE = chr(6)
 CLOCK = chr(7)
+
 ####################################################################
 # Imports
 from RobotInterface import *
@@ -45,11 +42,11 @@ import math
 #		   correct amount of time asuming 150 mm/s veloctiy.
 #		   
 ###############################################################	
-def driveSide(roomba):
-	sideLength = float(Length)/n
-	driveTime = float(sideLength)/velocity
+def driveSide(roomba, n):
+	sideLength = float(_length_)/n
+	driveTime = float(sideLength)/_velocity_
 	# TODO: Do the math to convert velocity (mm/s) to (mm)
-	roomba.Drive(velocity, 0)
+	roomba.Drive(_velocity_, 0)
 	time.sleep(driveTime)
 	roomba.Drive(0, 0)
 
@@ -59,17 +56,9 @@ def driveSide(roomba):
 #		   
 #		   
 ###############################################################	
-def rotate(roomba):
-	'''
-	Angle = degrees - degrees/n
-	rotateTime = Angle/velocity
-        # TODO: do the math to make turning radius (in mm) to deg. 
-        # roomba.Drive(velocity, radius) #passing in high b/c its 0s
-        time.sleep(rotateTime) # we can adjust this/figure our rotate time
-	roomba.Drive(0,0)
-	'''
+def rotate(roomba, n)
 	AngleRadians = math.pi - float(2*math.pi)/n
-	rotateTime = float(AngleRadians)/Omega
+	rotateTime = float(AngleRadians)/_omega_
 	roomba.Drive(150, 1)
 	time.sleep(rotateTime)
 	roomba.Drive(0, 0)
@@ -84,8 +73,8 @@ def rotate(roomba):
 ###############################################################	
 def regularPolygon(roomba, n):
 	for i in range (n):
-                driveSide(roomba)
-                rotate(roomba)
+                driveSide(roomba, n)
+                rotate(roomba, n)
 
 
 ###############################################################
@@ -99,7 +88,7 @@ def main():
     roomba.SetState("SAFE")
     #roomba.setState("PASSIVE") #I dont think we have passive declared yet
     #Just drive here, and see if we can get the drive function working
-    regularPolygon(roomba, 6)
+    regularPolygon(roomba, _n_)
 
 
 main()
