@@ -17,15 +17,15 @@ import struct
 # Bit Number:  7	6	5	4	3	2	1	0
 # Bit Number Value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
 ####################################################################
-BUTTONS = 165
+_BUTTONS_ = 165
 ####################################################################
 # State Opcodes
 ####################################################################
-START = 128
-RESET = 7
-STOP = 173
-PASSIVE = 128
-SAFE = 131
+_START_ = 128
+_RESET_ = 7
+_STOP_ = 173
+_PASSIVE_ = 128
+_SAFE_ = 131
 ####################################################################
 # Drive Opcode 137
 # Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
@@ -35,9 +35,9 @@ SAFE = 131
 # Left wheel velocity (-500 to 500 mm/s)
 #
 ####################################################################
-DRIVE = 137
+_DRIVE_ = 137
 # Told to use this by classmate on 09/26
-SENSORS = 142
+_SENSORS_ = 142
 
 class RobotInterface:
     def __init__(self):
@@ -56,15 +56,15 @@ class RobotInterface:
     ################################################################
     def setState(self, state): 
         if state == "STOP":
-	    self.connection.write(chr(STOP))
+	    self.connection.write(chr(_STOP_))
         elif state == "RESET":
-            self.connection.write(chr(RESET))
+            self.connection.write(chr(_RESET_))
         elif state == "START":
-            self.connection.write(chr(START))
+            self.connection.write(chr(_START_))
         elif state == "PASSIVE":
-            self.connection.write(chr(PASSIVE))
+            self.connection.write(chr(_PASSIVE_))
         elif state == "SAFE":
-            self.connection.write(chr(SAFE))
+            self.connection.write(chr(_SAFE_))
         else:
             print "Invalid state input into the SetState function"
             sys.exit()
@@ -83,7 +83,7 @@ class RobotInterface:
     ###############################################################
     def readButton(self, button):
         # Send a request to read the pressed button.
-        self.connection.write(chr(SENSORS))
+        self.connection.write(chr(_SENSORS_))
         button_input = self.connection.read()
         return (button & struct.unpack('B', button_input))
 
@@ -108,7 +108,7 @@ class RobotInterface:
     ###############################################################
     def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-	    data = struct.pack('>B2H', DRIVE, velocity, radius)
+	    data = struct.pack('>B2H', _DRIVE_, velocity, radius)
             self.connection.write(data)
         else:
             print("Invalid Drive() speed given.")
