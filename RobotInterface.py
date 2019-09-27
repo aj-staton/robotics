@@ -83,9 +83,9 @@ class RobotInterface:
     ###############################################################
     def readButton(self, button):
         # Send a request to read the pressed button.
-        self.connection.write(chr(_SENSORS_))
-        button_input = self.connection.read()
-        return (button & struct.unpack('B', button_input))
+        self.connection.write(chr(_SENSORS_) + chr(18))
+        button_input = self.connection.read(1)
+        return bool(struct.unpack('B', button_input)[button])
 
     ###############################################################
     # Drive() is the main fucntion of movement for the Roomba. It 
