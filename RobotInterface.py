@@ -36,7 +36,7 @@ SAFE = 131
 #
 ####################################################################
 DRIVE = 137
-
+# Told to use this by classmate on 09/26
 SENSORS = 142
 
 class RobotInterface:
@@ -54,17 +54,17 @@ class RobotInterface:
     #  Param: state -- The robot's state in plain english, as a 
     #                  string.
     ################################################################
-    def SetState(self, state): 
+    def setState(self, state): 
         if state == "STOP":
-	    self.connection.Write(chr(STOP))
+	    self.connection.write(chr(STOP))
         elif state == "RESET":
-            self.connection.Write(chr(RESET))
+            self.connection.write(chr(RESET))
         elif state == "START":
-            self.connection.Write(chr(START))
+            self.connection.write(chr(START))
         elif state == "PASSIVE":
-            self.connection.Write(chr(PASSIVE))
+            self.connection.write(chr(PASSIVE))
         elif state == "SAFE":
-            self.connection.Write(chr(SAFE))
+            self.connection.write(chr(SAFE))
         else:
             print "Invalid state input into the SetState function"
             sys.exit()
@@ -81,10 +81,10 @@ class RobotInterface:
     #                   This will be passed as a hex value to later
     #                   be ANDed with the robot's returned byte.  
     ###############################################################
-    def ReadButton(self, button):
+    def readButton(self, button):
         # Send a request to read the pressed button.
-        self.connection.Write(chr(SENSORS))
-        button_input = self.connection.Read()
+        self.connection.write(chr(SENSORS))
+        button_input = self.connection.read()
         return (button & struct.unpack('B', button_input))
 
     ###############################################################
@@ -106,10 +106,10 @@ class RobotInterface:
     #                     turning circle to the center of the
     #                     roomba.
     ###############################################################
-    def Drive(self, velocity, radius):
+    def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
 	    data = struct.pack('>B2H', DRIVE, velocity, radius)
-            self.connection.Write(data)
+            self.connection.write(data)
         else:
             print("Invalid Drive() speed given.")
             sys.exit()
