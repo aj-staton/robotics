@@ -46,9 +46,9 @@ def driveSide(roomba, n):
 	sideLength = float(_length_)/n
 	driveTime = float(sideLength)/_velocity_
 	# TODO: Do the math to convert velocity (mm/s) to (mm)
-	roomba.Drive(_velocity_, 0)
+	roomba.drive(_velocity_, 0)
 	time.sleep(driveTime)
-	roomba.Drive(0, 0)
+	roomba.drive(0, 0)
 
 ###############################################################
 #  Rotate() Uses the driveDirect function, but only rotates
@@ -59,9 +59,9 @@ def driveSide(roomba, n):
 def rotate(roomba, n)
 	AngleRadians = math.pi - float(2*math.pi)/n
 	rotateTime = float(AngleRadians)/_omega_
-	roomba.Drive(150, 1)
+	roomba.drive(150, 1)
 	time.sleep(rotateTime)
-	roomba.Drive(0, 0)
+	roomba.drive(0, 0)
 
 
 ###############################################################
@@ -85,10 +85,9 @@ def regularPolygon(roomba, n):
 ###############################################################	
 def main():
     roomba = RobotInterface()
-    roomba.SetState("SAFE")
+    roomba.setState("SAFE")
     #roomba.setState("PASSIVE") #I dont think we have passive declared yet
     #Just drive here, and see if we can get the drive function working
     regularPolygon(roomba, _n_)
-
 
 main()
