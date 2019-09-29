@@ -1,8 +1,8 @@
 ####################################################################
-# This the main program that will be running and Interacting
-# with the robot
+# This the main program that will be running and interacting
+# with the robot in Project 1. 
 #
-# Typed by: Robert Carff, Austin Statin, Miles Ziemer 
+# Written by: Robert Carff, Austin Statin, Miles Ziemer 
 #			-- September 15th, 2019
 #
 ####################################################################
@@ -20,14 +20,14 @@ _omega_ = 1.2766 # 2*_velocity_/235
 # Bit Number:  7	6	5	4	3	2	1	0
 # Bit Number Value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
 ####################################################################
-CLEAN = 0
-SPOT = 1
-DOCK = 2
-MINUTE = 3
-HOUR = 4
-DAY = 5
-SCHEDULE = 6
-CLOCK = 7
+_CLEAN_ = 0
+_SPOT_ = 1
+_DOCK_ = 2
+_MINUTE_ = 3
+_HOUR_ = 4
+_DAY_ = 5
+_SCHEDULE_ = 6
+_CLOCK_ = 7
 
 ####################################################################
 # Imports
@@ -45,15 +45,13 @@ import math
 def driveSide(roomba, n):
 	sideLength = float(_length_)/n
 	driveTime = float(sideLength)/_velocity_
-	# TODO: Do the math to convert velocity (mm/s) to (mm)
 	roomba.drive(_velocity_, 0)
 	time.sleep(driveTime)
 	roomba.drive(0, 0)
 
 ###############################################################
-#  Rotate() Uses the driveDirect function, but only rotates
-#  one wheel, allowing us to turn
-#		   
+#  rotate() uses the drive() function, but only rotates
+#  one wheel, allowing us to turn counter-clockwise.
 #		   
 ###############################################################	
 def rotate(roomba, n):
@@ -78,20 +76,21 @@ def regularPolygon(roomba, n):
 
 
 ###############################################################
-#  Main() Sets the robot into safe and passive mode, and then
-# 		   runs our draw regularPolygon() method
-#		   
+#  main() controls all actions of execution, including calling
+#  for the drawing of the N-sided polygon for Project 1.
 #		   
 ###############################################################	
 def main():
     roomba = RobotInterface()
     roomba.setState("SAFE")
-    #roomba.setState("PASSIVE") #I dont think we have passive declared yet
-    #Just drive here, and see if we can get the drive function working
     x = True
+    # Listen for the press of the Clean button, which will begin
+    # the drawing of the polygon.
     while (x):
-	if(roomba.readButton(CLEAN)):
+	if(roomba.readButton(_CLEAN_)):
 		x = False
+    #TODO: need to read button state (even when robot is moving)
     regularPolygon(roomba, _n_)
+
 
 main()
