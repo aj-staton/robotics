@@ -44,7 +44,7 @@ class RobotInterface:
 	self.connection = SerialInterface()
 
     ################################################################
-    #  SetState() will change the mode of operation on the iRobot. A 
+    #  setState() will change the mode of operation on the iRobot. A 
     #  string will be inputted into the function to enhance the 
     #  readability in other files using this interface. The Robot
     #  Interface will handle the conversion of this state, inputted 
@@ -70,7 +70,7 @@ class RobotInterface:
             sys.exit()
 
     ###############################################################
-    #  ReadButton() reads the byte that is returned from the iRobot
+    #  readButton() reads the byte that is returned from the iRobot
     #  when a button on the robot is pressed. This byte will then
     #  be ANDed (bitwise) with the parameter, 'button', which will
     #  pass in the intended button to read. A true/false value for
@@ -88,7 +88,7 @@ class RobotInterface:
         return bool(struct.unpack('B', button_input)[button])
 
     ###############################################################
-    # Drive() is the main fucntion of movement for the Roomba. It 
+    # drive() is the main fucntion of movement for the Roomba. It 
     # will accept values for velocity(mm/s) and turning radius(mm).
     # To turn in place clockwise, -1 is the value to send as the
     # turning radius. A value of 1 is sent for a clockwise turn in

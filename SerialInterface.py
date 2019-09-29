@@ -1,5 +1,5 @@
 '''
-' This class will interface with the Serial Connection. Very basic,
+' This class will interface with a Serial Connection. Very basic,
 ' passthrough opertaions.
 '
 ' Written by: IJ Salman
