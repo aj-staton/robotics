@@ -15,6 +15,9 @@ _sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
 _velocity_ = 150 # in mm/s 
 _omega_ = 1.2766 # 2*_velocity_/235
 
+isDriving = true #our global state
+lock = threading.Lock()
+
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -46,7 +49,11 @@ def driveSide(roomba, n):
 	sideLength = float(_length_)/n
 	driveTime = float(sideLength)/_velocity_
 	roomba.drive(_velocity_, 0)
+	sideDriven = 0
 	time.sleep(driveTime)
+	while(not isDriving):
+		time.sleep(.012)
+		continue
 	roomba.drive(0, 0)
 
 ###############################################################
@@ -74,6 +81,15 @@ def regularPolygon(roomba, n):
 			break
 		rotate(roomba, n)
 
+###############################################################
+#  this methods checks the buttons for us 
+#		   
+###############################################################	
+def controlThread(roomba):
+	while(True)
+		time.sleep(.10)
+		if(roomba.readButton(_CLEAN_)):
+			isDriving = not isDriving
 
 ###############################################################
 #  main() controls all actions of execution, including calling
@@ -89,8 +105,10 @@ def main():
     while (x):
 	if(roomba.readButton(_CLEAN_)):
 		x = False
-    #TODO: need to read button state (even when robot is moving)
-    regularPolygon(roomba, _n_)
 
+    #TODO: need to read button state (even when robot is moving)
+    button = threading.Thread(target = controlThread, args = (1,), name = "button")
+    button.start();
+    regularPolygon(roomba,_n_)
 
 main()
