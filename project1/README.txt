@@ -37,12 +37,13 @@ Each file is listed and described below:
 ---------
 Execution
 ---------
-To execute this program, thus instructing the iRobot to
-create a polygon, do the following:
+Limitations:
 ** I am assuming the user is on a Debian-based Linux
    operating system. If this prerequisite is not met, the
    below actions will not preoduce their desired result.
 
+To execute this program, thus instructing the iRobot to
+create a polygon, do the following:
   1. Ensure that all listed files (above) are stored in the
      same folder/directory. We have not accounted for the
      manueverability of files.
