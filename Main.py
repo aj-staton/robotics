@@ -37,6 +37,7 @@ _CLOCK_ = 7
 from RobotInterface import *
 from time import sleep
 import math
+import thread
 ####################################################################
 
 ###############################################################
@@ -107,8 +108,9 @@ def main():
 		x = False
 
     #TODO: need to read button state (even when robot is moving)
-    button = threading.Thread(target = controlThread, args = (1,), name = "button")
+    button = threading.Thread(target = controlThread)
     button.start();
+    #this should check the global flag that is changed within our thread
     regularPolygon(roomba,_n_)
 
 main()
