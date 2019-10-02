@@ -1,19 +1,19 @@
-------------------
-CSCE 274 Project 1
-------------------
+--------------------
+-CSCE 274 Project 1-
+--------------------
 The primary goal of the first project was to draw an N-sided
 polygon (for all valid values of N). 
 
 All work was completed by Robert Carff, Miles Ziemer, and
 Austin Staton for this assignment. The teaching assistant,
 Ibrahim Salman, offered some guidance; however, any sub-
-stance to this work was preformed by the formerly mentioned
+stance to this work was performed by the formerly mentioned
 contributers.
 
------
-Files
------
-Each file is listed and described below:
+-------
+-Files-
+-------
+Each needed file is listed and described below:
   SerialInterface.py -- this file transfers data to the
                      iRobot Create2 via Serial Communi-
                      cation. It serves as the interface
@@ -34,9 +34,9 @@ Each file is listed and described below:
                    for drawing the N-sided polygon lies in
                    this file.
 
----------
-Execution
----------
+-----------
+-Execution-
+-----------
 Limitations:
 ** I am assuming the user is on a Debian-based Linux
    operating system. If this prerequisite is not met, the
