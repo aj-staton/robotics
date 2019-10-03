@@ -42,6 +42,7 @@ _SENSORS_ = 142
 class RobotInterface:
     def __init__(self):
         self.connection = SerialInterface()
+        self.isDriving = False
 
     ################################################################
     #  setState() will change the mode of operation on the iRobot. A 
@@ -107,7 +108,7 @@ class RobotInterface:
     #                     roomba.
     ###############################################################
     def drive(self, velocity, radius):
-        if (velocity >= -500 or velocity <= 500):
+            if (velocity >= -500 or velocity <= 500):
         data = struct.pack('>B2H', _DRIVE_, velocity, radius)
             self.connection.write(data)
         else:

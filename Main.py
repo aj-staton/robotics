@@ -14,8 +14,6 @@ _length_ = 2000 #this is in milimeters
 _sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
 _velocity_ = 150 # in mm/s 
 _omega_ = 1.2766 # 2*_velocity_/235
-
-isDriving = True #our global state
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -50,7 +48,7 @@ def driveSide(roomba, n):
 	roomba.drive(_velocity_, 0)
 	sideDriven = 0
 	time.sleep(driveTime)
-	while(not isDriving):
+	while(not roomba.isDriving):
 		time.sleep(.012)
 		continue
 	roomba.drive(0, 0)
@@ -76,7 +74,7 @@ def rotate(roomba, n):
 def regularPolygon(roomba, n):
 	for i in range (n):
 		driveSide(roomba, n)
-		if(i == n):
+		if(i == n-1):
 			break
 		rotate(roomba, n)
 
@@ -88,12 +86,11 @@ def controlThread(roomba):
 	while(True):
 		time.sleep(.10)
 		if(roomba.readButton(_CLEAN_)):
-			isDriving = not isDriving
+			roomba.isDriving = not roomba.isDriving
 
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
-#		   
 ###############################################################	
 def main():
     roomba = RobotInterface()
@@ -104,11 +101,9 @@ def main():
     while (x):
         if(roomba.readButton(_CLEAN_)):
             x = False
-
     #TODO: need to read button state (even when robot is moving)
-    button = threading.Thread(target = controlThread)
+    button = threading.Thread(target = controlThread(roomba))
     button.start();
     #this should check the global flag that is changed within our thread
     regularPolygon(roomba,_n_)
-
 main()
