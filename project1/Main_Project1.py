@@ -70,8 +70,10 @@ def rotate(roomba, n):
 def regularPolygon(roomba, n):
 	for i in range (n):
 		driveSide(roomba, n)
-		if(i == n):
-			break
+                # We use this conditional to prevent to robot
+                # from rotating after the last side.
+		if(i == (n - 1)):
+		    break
 		rotate(roomba, n)
 
 
