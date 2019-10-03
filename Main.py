@@ -15,9 +15,7 @@ _sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
 _velocity_ = 150 # in mm/s 
 _omega_ = 1.2766 # 2*_velocity_/235
 
-isDriving = true #our global state
-lock = threading.Lock()
-
+isDriving = True #our global state
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -37,7 +35,7 @@ _CLOCK_ = 7
 from RobotInterface import *
 from time import sleep
 import math
-import thread
+import threading
 ####################################################################
 
 ###############################################################
@@ -87,7 +85,7 @@ def regularPolygon(roomba, n):
 #		   
 ###############################################################	
 def controlThread(roomba):
-	while(True)
+	while(True):
 		time.sleep(.10)
 		if(roomba.readButton(_CLEAN_)):
 			isDriving = not isDriving
@@ -104,8 +102,8 @@ def main():
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     while (x):
-	if(roomba.readButton(_CLEAN_)):
-		x = False
+        if(roomba.readButton(_CLEAN_)):
+            x = False
 
     #TODO: need to read button state (even when robot is moving)
     button = threading.Thread(target = controlThread)
