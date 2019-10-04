@@ -116,4 +116,6 @@ def main():
     button.start();
     # This should check the global flag that is changed within our thread.
     regularPolygon()
+    button.join()
+    stopRoomba()
 main()
