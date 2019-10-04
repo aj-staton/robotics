@@ -13,24 +13,20 @@ from time import sleep
 import math
 from threading import Thread
 ####################################################################
-
 # Magic number Variables
 _N_ = 5 #this is number of sides for the polygon
-
 _degrees_ = 360 #this is in degrees
 _length_ = 2000 #this is in milimeters
 _sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
 _velocity_ = 150 # in mm/s
 _l_ = 235 #distance between wheels
 _omega_ =  float(2*_velocity_)/_l_ #angular velocity
-ROTATE = 1 #Tells the roomba to rotate
-NOROTATE = 0 #Tells the roomba to not rotate
+_ROTATE_ = 1 #Tells the roomba to rotate
+_NOROTATE_ = 0 #Tells the roomba to not rotate
 _sideLength_ = float(_length_)/_N_ #Side length of polygon
 _driveTime_ = float(_sideLength_)/_velocity_ #Time of driving along a side
 _rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
-
 roomba = RobotInterface() #Initialize the robot interface
-
 _isDriving_ = True #The state of the roomba, if it is driving or not
 ####################################################################
 # Button Opcode 165
@@ -47,60 +43,66 @@ _SCHEDULE_ = 6
 _CLOCK_ = 7
 
 ###############################################################
+# stopRoomba() sends the drive command with zero velocity and
+# zero turning radius.
+#
+###############################################################	
+def stopRoomba():
+    roomba.drive(0,0)
+
+###############################################################
 # driveSide() calculates the Side lengths based off the
 # total perimeter of 2000mm, and the drives for the 
 # correct amount of time asuming 150 mm/s veloctiy.
-#		   
-###############################################################	
-def stopRoomba():
-	roomba.drive(0,0)
-
+#                  
+############################################################### 
 def driveSide():
-	roomba.drive(_velocity_, NOROTATE)
-	time.sleep(_driveTime_)
-	while(not _isDriving_):
-		time.sleep(.012)
-		stopRoomba()
+    roomba.drive(_velocity_, _NOROTATE_)
+    time.sleep(_driveTime_)
+    while(not _isDriving_):
+	time.sleep(.012)
+	stopRoomba()
+
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
 #  one wheel, allowing us to turn counter-clockwise.
 #		   
 ###############################################################	
 def rotate():
-	roomba.drive(_velocity_, 1)
-	time.sleep(_rotateTime_)
-	stopRoomba()
+    roomba.drive(_velocity_, 1)
+    time.sleep(_rotateTime_)
+    stopRoomba()
+
 ###############################################################
-#  regularPolygon() Once the robot is powered on, this method
-#  waits for the clean button to be pressed.
+#  regularPolygon() -- Once the robot is powered on, this
+#  method waits for the clean button to be pressed.
 #  Once pressed - it drives the length of a 
 #  side and turns. Repeats this N times.
 #		   
 ###############################################################	
-
 def regularPolygon():
-	for i in range (_N_):
-		driveSide()
-		if(i == _N_-1):
-			break
-		rotate()
-
+    for i in range (_N_):
+	driveSide()
+	if(i == _N_-1):
+	    break
+	rotate()
 
 ###############################################################
-#  this methods checks the buttons for us 
+#  controlThread() is what checks the iRobot's clean button
+#  during execution. It does this with threading.
 #		   
 ###############################################################	
-
 def controlThread():
-	while(True):
-                global _isDriving_
-		time.sleep(.10)
-		if(roomba.readButton(_CLEAN_)):
-			_isDriving_ = not _isDriving_
+    while(True):
+        global _isDriving_
+	time.sleep(.10)
+	if(roomba.readButton(_CLEAN_)):
+	    _isDriving_ = not _isDriving_
 
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
+#
 ###############################################################	
 def main():
     roomba.setState("SAFE")
@@ -112,6 +114,6 @@ def main():
             x = False
     button = Thread(target = controlThread)
     button.start();
-    #this should check the global flag that is changed within our thread
+    # This should check the global flag that is changed within our thread.
     regularPolygon()
 main()
