@@ -108,8 +108,8 @@ class RobotInterface:
     #                     roomba.
     ###############################################################
     def drive(self, velocity, radius):
-            if (velocity >= -500 or velocity <= 500):
-        data = struct.pack('>B2H', _DRIVE_, velocity, radius)
+        if (velocity >= -500 or velocity <= 500):
+            data = struct.pack('>B2H', _DRIVE_, velocity, radius)
             self.connection.write(data)
         else:
             print("Invalid Drive() speed given.")
