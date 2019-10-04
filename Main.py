@@ -24,9 +24,9 @@ _velocity_ = 150 # in mm/s
 _omega_ = 1.2766 # 2*_velocity_/235
 ROTATE = 1
 NOROTATE = 0
-_sideLength_ = float(_length_)/N
+_sideLength_ = float(_length_)/_N_
 _driveTime_ = float(_sideLength_)/_velocity_
-_rotateTime_ = float(2*math.pi/N)/_omega_
+_rotateTime_ = float(2*math.pi/_N_)/_omega_
 
 roomba = RobotInterface()
 ####################################################################
@@ -66,7 +66,7 @@ def driveSide():
 ###############################################################	
 def rotate():
 	roomba.drive(_velocity_, 1)
-	time.sleep(rotateTime)
+	time.sleep(_rotateTime_)
 	stopRoomba()
 ###############################################################
 #  regularPolygon() Once the robot is powered on, this method
@@ -108,5 +108,5 @@ def main():
     button = Thread(target = controlThread)
     button.start();
     #this should check the global flag that is changed within our thread
-    regularPolygon(roomba,_N_)
+    regularPolygon()
 main()
