@@ -41,7 +41,7 @@ _SENSORS_ = 142
 
 class RobotInterface:
     def __init__(self):
-	self.connection = SerialInterface()
+        self.connection = SerialInterface()
 
     ################################################################
     #  setState() will change the mode of operation on the iRobot. A 
@@ -56,7 +56,7 @@ class RobotInterface:
     ################################################################
     def setState(self, state): 
         if state == "STOP":
-	    self.connection.write(chr(_STOP_))
+            self.connection.write(chr(_STOP_))
         elif state == "RESET":
             self.connection.write(chr(_RESET_))
         elif state == "START":
@@ -66,7 +66,7 @@ class RobotInterface:
         elif state == "SAFE":
             self.connection.write(chr(_SAFE_))
         else:
-            print "Invalid state input into the SetState function"
+            print ("Invalid state input into the SetState function")
             sys.exit()
 
     ###############################################################
@@ -108,9 +108,9 @@ class RobotInterface:
     ###############################################################
     def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-	    data = struct.pack('>B2H', _DRIVE_, velocity, radius)
+            data = struct.pack('>B2H', _DRIVE_, velocity, radius)
             self.connection.write(data)
         else:
             print("Invalid Drive() speed given.")
             sys.exit()
-	    
+
