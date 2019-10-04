@@ -16,8 +16,8 @@ _velocity_ = 150 # in mm/s
 _omega_ = 1.2766 # 2*_velocity_/235
 ROTATE = 1
 NOROTATE = 0
-_sidelength_ = float(_length)/N
-_driveTime_ = float(sideLength)/_velocity_
+_sidelength_ = float(_length_)/N
+_driveTime_ = float(_sideLength_)/_velocity_
 _rotateTime_ = float(2*math.pi/N)/_omega_
 
 
@@ -55,7 +55,7 @@ def stopRoomba():
 
 def driveSide():
 	roomba.drive(_velocity_, NOROTATE)
-	time.sleep(driveTime)
+	time.sleep(_driveTime_)
 	while(not roomba.isDriving):
 		time.sleep(.012)
 		continue
@@ -66,7 +66,7 @@ def driveSide():
 #		   
 ###############################################################	
 def rotate():
-	roomba.drive(_velocity_, )
+	roomba.drive(_velocity_, 1)
 	time.sleep(rotateTime)
 	stopRoomba()
 ###############################################################
@@ -106,7 +106,6 @@ def main():
     while (x):
         if(roomba.readButton(_CLEAN_)):
             x = False
-    #TODO: need to read button state (even when robot is moving)
     button = Thread(target = controlThread)
     button.start();
     #this should check the global flag that is changed within our thread
