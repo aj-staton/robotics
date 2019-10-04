@@ -42,7 +42,6 @@ _SENSORS_ = 142
 class RobotInterface:
     def __init__(self):
         self.connection = SerialInterface()
-        self.isDriving = False
 
     ################################################################
     #  setState() will change the mode of operation on the iRobot. A 

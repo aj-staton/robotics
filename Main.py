@@ -20,15 +20,18 @@ _N_ = 5 #this is number of sides for the polygon
 _degrees_ = 360 #this is in degrees
 _length_ = 2000 #this is in milimeters
 _sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
-_velocity_ = 150 # in mm/s 
-_omega_ = 1.2766 # 2*_velocity_/235
-ROTATE = 1
-NOROTATE = 0
-_sideLength_ = float(_length_)/_N_
-_driveTime_ = float(_sideLength_)/_velocity_
-_rotateTime_ = float(2*math.pi/_N_)/_omega_
+_velocity_ = 150 # in mm/s
+_l_ = 235 #distance between wheels
+_omega_ =  float(2*_velocity_)/l #angular velocity
+ROTATE = 1 #Tells the roomba to rotate
+NOROTATE = 0 #Tells the roomba to not rotate
+_sideLength_ = float(_length_)/_N_ #Side length of polygon
+_driveTime_ = float(_sideLength_)/_velocity_ #Time of driving along a side
+_rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
 
-roomba = RobotInterface()
+roomba = RobotInterface() #Initialize the robot interface
+
+_isDriving_ = True #The state of the roomba, if it is driving or not
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -57,7 +60,6 @@ def driveSide():
 	time.sleep(_driveTime_)
 	while(not roomba.isDriving):
 		time.sleep(.012)
-		continue
 		stopRoomba()
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
@@ -89,9 +91,10 @@ def regularPolygon():
 
 def controlThread():
 	while(True):
+                global isDriving
 		time.sleep(.10)
 		if(roomba.readButton(_CLEAN_)):
-			roomba.isDriving = not roomba.isDriving
+			isDriving = not isDriving
 
 ###############################################################
 #  main() controls all actions of execution, including calling
