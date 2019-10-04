@@ -6,8 +6,16 @@
 #			-- September 15th, 2019
 #
 ####################################################################
+####################################################################
+# Imports
+from RobotInterface import *
+from time import sleep
+import math
+from threading import Thread
+####################################################################
+
 # Magic number Variables
-N = 5 #this is number of sides for the polygon
+_N_ = 5 #this is number of sides for the polygon
 
 _degrees_ = 360 #this is in degrees
 _length_ = 2000 #this is in milimeters
@@ -16,10 +24,9 @@ _velocity_ = 150 # in mm/s
 _omega_ = 1.2766 # 2*_velocity_/235
 ROTATE = 1
 NOROTATE = 0
-_sidelength_ = float(_length_)/N
+_sideLength_ = float(_length_)/N
 _driveTime_ = float(_sideLength_)/_velocity_
 _rotateTime_ = float(2*math.pi/N)/_omega_
-
 
 roomba = RobotInterface()
 ####################################################################
@@ -35,14 +42,6 @@ _HOUR_ = 4
 _DAY_ = 5
 _SCHEDULE_ = 6
 _CLOCK_ = 7
-
-####################################################################
-# Imports
-from RobotInterface import *
-from time import sleep
-import math
-from threading import Thread
-####################################################################
 
 ###############################################################
 # driveSide() calculates the Side lengths based off the
@@ -77,9 +76,9 @@ def rotate():
 #		   
 ###############################################################	
 def regularPolygon():
-	for i in range (N):
+	for i in range (_N_):
 		driveSide()
-		if(i == N-1):
+		if(i == _N_-1):
 			break
 		rotate()
 
@@ -109,5 +108,5 @@ def main():
     button = Thread(target = controlThread)
     button.start();
     #this should check the global flag that is changed within our thread
-    regularPolygon(roomba,_n_)
+    regularPolygon(roomba,_N_)
 main()
