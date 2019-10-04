@@ -77,23 +77,14 @@ def rotate():
 #  side and turns. Repeats this N times.
 #		   
 ###############################################################	
-<<<<<<< HEAD:project1/Main_Project1.py
-def regularPolygon(roomba, n):
-	for i in range (n):
-		driveSide(roomba, n)
-                # We use this conditional to prevent to robot
-                # from rotating after the last side.
-		if(i == (n - 1)):
-		    break
-		rotate(roomba, n)
-=======
+
 def regularPolygon():
 	for i in range (_N_):
 		driveSide()
 		if(i == _N_-1):
 			break
 		rotate()
->>>>>>> CleanButtonRead:Main.py
+
 
 ###############################################################
 #  this methods checks the buttons for us 
