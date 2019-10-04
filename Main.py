@@ -31,7 +31,7 @@ _rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
 
 roomba = RobotInterface() #Initialize the robot interface
 
-_isDriving_ = False #The state of the roomba, if it is driving or not
+_isDriving_ = True #The state of the roomba, if it is driving or not
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7	6	5	4	3	2	1	0
@@ -58,7 +58,7 @@ def stopRoomba():
 def driveSide():
 	roomba.drive(_velocity_, NOROTATE)
 	time.sleep(_driveTime_)
-	while(_isDriving_ == False):
+	while(not _isDriving_):
 		time.sleep(.012)
 		stopRoomba()
 ###############################################################
