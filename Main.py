@@ -48,7 +48,7 @@ def driveSide(roomba, n):
 	roomba.drive(_velocity_, 0)
 	sideDriven = 0
 	time.sleep(driveTime)
-	while(not roomba.isDriving):
+	while(roomba.isDriving == False):
 		time.sleep(.012)
 		continue
 	roomba.drive(0, 0)
@@ -83,10 +83,9 @@ def regularPolygon(roomba, n):
 #		   
 ###############################################################	
 def controlThread(roomba):
-	while(True):
-		time.sleep(.10)
-		if(roomba.readButton(_CLEAN_)):
-			roomba.isDriving = not roomba.isDriving
+    time.sleep(.10)
+    if(roomba.readButton(_CLEAN_)):
+	roomba.isDriving = not roomba.isDriving
 
 ###############################################################
 #  main() controls all actions of execution, including calling
