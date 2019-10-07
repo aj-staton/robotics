@@ -3,7 +3,7 @@
 # with the robot in Project 1. 
 #
 # Written by: Robert Carff, Austin Statin, Miles Ziemer 
-#			-- September 15th, 2019
+#           -- September 15th, 2019
 #
 ####################################################################
 ####################################################################
@@ -27,10 +27,10 @@ _sideLength_ = float(_length_)/_N_ #Side length of polygon
 _driveTime_ = float(_sideLength_)/_velocity_ #Time of driving along a side
 _rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
 roomba = RobotInterface() #Initialize the robot interface
-_isDriving_ = True #The state of the roomba, if it is driving or not
+#_isDriving_ = True #The state of the roomba, if it is driving or not
 ####################################################################
 # Button Opcode 165
-# Bit Number:  7	6	5	4	3	2	1	0
+# Bit Number:  7    6   5   4   3   2   1   0
 # Bit Number Value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
 ####################################################################
 _CLEAN_ = 0
@@ -46,7 +46,7 @@ _CLOCK_ = 7
 # stopRoomba() sends the drive command with zero velocity and
 # zero turning radius.
 #
-###############################################################	
+############################################################### 
 def stopRoomba():
     roomba.drive(0,0)
 
@@ -59,15 +59,16 @@ def stopRoomba():
 def driveSide():
     roomba.drive(_velocity_, _NOROTATE_)
     time.sleep(_driveTime_)
-    while(not _isDriving_):
-	time.sleep(.012)
-	stopRoomba()
+    #while(not _isDriving_):
+    while(not roomba.isDriving):
+    time.sleep(.012)
+    stopRoomba()
 
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
 #  one wheel, allowing us to turn counter-clockwise.
-#		   
-###############################################################	
+#          
+############################################################### 
 def rotate():
     roomba.drive(_velocity_, 1)
     time.sleep(_rotateTime_)
@@ -78,32 +79,33 @@ def rotate():
 #  method waits for the clean button to be pressed.
 #  Once pressed - it drives the length of a 
 #  side and turns. Repeats this N times.
-#		   
-###############################################################	
+#          
+############################################################### 
 def regularPolygon():
     for i in range (_N_):
-	driveSide()
-	if(i == _N_-1):
-	    break
-	rotate()
+    driveSide()
+    if(i == _N_-1):
+        break
+    rotate()
 
 ###############################################################
 #  controlThread() is what checks the iRobot's clean button
 #  during execution. It does this with threading.
-#		   
-###############################################################	
+#          
+############################################################### 
 def controlThread():
     while(True):
-        global _isDriving_
-	time.sleep(.10)
-	if(roomba.readButton(_CLEAN_)):
-	    _isDriving_ = not _isDriving_
+        #global _isDriving_
+    time.sleep(.10)
+    if(roomba.readButton(_CLEAN_, chr(18))):
+        #_isDriving_ = not _isDriving_
+        roomba.isDriving = not roomba.isDriving
 
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
 #
-###############################################################	
+############################################################### 
 def main():
     roomba.setState("SAFE")
     x = True

@@ -11,10 +11,9 @@ import time
 import sys
 from SerialInterface import *
 import struct
-
 ####################################################################
 # Button Opcode 165
-# Bit Number:  7	6	5	4	3	2	1	0
+# Bit Number:  7    6   5   4   3   2   1   0
 # Bit Number Value: CLOCK SCHEDULE DAY HOUR MINUTE DOCK SPOT CLEAN
 ####################################################################
 _BUTTONS_ = 165
@@ -26,6 +25,7 @@ _RESET_ = 7
 _STOP_ = 173
 _PASSIVE_ = 128
 _SAFE_ = 131
+_FULL_ = 132 
 ####################################################################
 # Drive Opcode 137
 # Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
@@ -36,12 +36,14 @@ _SAFE_ = 131
 #
 ####################################################################
 _DRIVE_ = 137
+_DRIVE_DIRECT_ = 145
 # Told to use this by classmate on 09/26
 _SENSORS_ = 142
 
 class RobotInterface:
     def __init__(self):
-	self.connection = SerialInterface()
+    self.connection = SerialInterface()
+    self.isDriving = True
 
     ################################################################
     #  setState() will change the mode of operation on the iRobot. A 
@@ -53,10 +55,12 @@ class RobotInterface:
     #
     #  Param: state -- The robot's state in plain english, as a 
     #                  string.
+    #
+    # added full mode for project 2
     ################################################################
     def setState(self, state): 
         if state == "STOP":
-	    self.connection.write(chr(_STOP_))
+        self.connection.write(chr(_STOP_))
         elif state == "RESET":
             self.connection.write(chr(_RESET_))
         elif state == "START":
@@ -108,9 +112,23 @@ class RobotInterface:
     ###############################################################
     def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-	    data = struct.pack('>B2H', _DRIVE_, velocity, radius)
+        data = struct.pack('>B2H', _DRIVE_, velocity, radius)
             self.connection.write(data)
         else:
             print("Invalid Drive() speed given.")
             sys.exit()
-	    
+        
+    ###############################################################
+    #
+    # This method will implement driveDirect for Project 2
+    #
+    ###############################################################
+    def driveDirect(self, velocity, radius):
+        if (velocity >= -500 or velocity <= 500):
+        data = struct.pack('>B2H', _DRIVE_DIRECT_, velocity, radius)
+            self.connection.write(data)
+        else:
+            print("Invalid Drive() speed given.")
+            sys.exit()
+
+
