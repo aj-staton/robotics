@@ -42,8 +42,11 @@ _SENSORS_ = 142
 
 class RobotInterface:
     def __init__(self):
-    self.connection = SerialInterface()
-    self.isDriving = True
+        self.connection = SerialInterface()
+        self.isDriving = True
+
+    def setDriving():
+        self.isDriving = not isDriving
 
     ################################################################
     #  setState() will change the mode of operation on the iRobot. A 
@@ -60,7 +63,7 @@ class RobotInterface:
     ################################################################
     def setState(self, state): 
         if state == "STOP":
-        self.connection.write(chr(_STOP_))
+            self.connection.write(chr(_STOP_))
         elif state == "RESET":
             self.connection.write(chr(_RESET_))
         elif state == "START":
@@ -92,6 +95,17 @@ class RobotInterface:
         return bool(struct.unpack('B', button_input)[button])
 
     ###############################################################
+
+    ###############################################################
+
+
+    def readBumper(self, ID):
+        # Send a request to read the pressed button.
+        self.connection.write(chr(_SENSORS_) + chr(7))
+        button_input = self.connection.read(1)
+        return bool(struct.unpack('B', button_input)[button])
+
+    ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
     # will accept values for velocity(mm/s) and turning radius(mm).
     # To turn in place clockwise, -1 is the value to send as the
@@ -112,7 +126,7 @@ class RobotInterface:
     ###############################################################
     def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-        data = struct.pack('>B2H', _DRIVE_, velocity, radius)
+            data = struct.pack('>B2H', _DRIVE_, velocity, radius)
             self.connection.write(data)
         else:
             print("Invalid Drive() speed given.")
@@ -125,7 +139,7 @@ class RobotInterface:
     ###############################################################
     def driveDirect(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-        data = struct.pack('>B2H', _DRIVE_DIRECT_, velocity, radius)
+            data = struct.pack('>B2H', _DRIVE_DIRECT_, velocity, radius)
             self.connection.write(data)
         else:
             print("Invalid Drive() speed given.")

@@ -60,8 +60,8 @@ def driveSide():
     roomba.drive(_velocity_, _NOROTATE_)
     time.sleep(_driveTime_)
     #while(not _isDriving_):
-    while(not roomba.isDriving):
-    time.sleep(.012)
+    while(not roomba.isDriving)
+        time.sleep(.012)
     stopRoomba()
 
 ###############################################################
@@ -83,10 +83,10 @@ def rotate():
 ############################################################### 
 def regularPolygon():
     for i in range (_N_):
-    driveSide()
-    if(i == _N_-1):
-        break
-    rotate()
+        driveSide()
+        if(i == _N_-1):
+            break
+        rotate()
 
 ###############################################################
 #  controlThread() is what checks the iRobot's clean button
@@ -96,10 +96,10 @@ def regularPolygon():
 def controlThread():
     while(True):
         #global _isDriving_
-    time.sleep(.10)
-    if(roomba.readButton(_CLEAN_, chr(18))):
-        #_isDriving_ = not _isDriving_
-        roomba.isDriving = not roomba.isDriving
+        time.sleep(.10)
+        if(roomba.readButton(_CLEAN_, chr(18))):
+            #_isDriving_ = not _isDriving_
+            roomba.setDrive()
 
 ###############################################################
 #  main() controls all actions of execution, including calling
@@ -120,4 +120,5 @@ def main():
     regularPolygon()
     button.join()
     stopRoomba()
+
 main()
