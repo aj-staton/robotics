@@ -1,8 +1,7 @@
 --------------------
--CSCE 274 Project 1-
+-CSCE 274 Project -
 --------------------
-The primary goal of the first project was to draw an N-sided
-polygon (for all valid values of N). 
+The primary goal of the first project was to ... 
 
 All work was completed by Robert Carff, Miles Ziemer, and
 Austin Staton for this assignment. The teaching assistant,
@@ -27,12 +26,7 @@ Each needed file is listed and described below:
                     controlling the robot's: movement, mode
                     of opertaion, sensors, and actuators.
 
-  Main_Project1.py -- all executable actions are performed
-                   within this file. It relys on both the
-                   Robot and Serial interface to properly
-                   execute all needed actions. The logic
-                   for drawing the N-sided polygon lies in
-                   this file.
+  Main_Project2.py --
 
 -----------
 -Execution-
@@ -77,4 +71,4 @@ create a polygon, do the following:
      Pi (see 'SerialInterface.py' above). Do this by
      typing the following into the Raspberry Pi's terminal
      (controlled with the SSH):
-       $ python Main_Project1.py
+       $ python Main_Project2.py
