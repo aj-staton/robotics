@@ -22,6 +22,7 @@ _sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
 _velocity_ = 150 # in mm/s
 _l_ = 235 #distance between wheels
 _omega_ =  float(2*_velocity_)/_l_ #angular velocity
+_ROTATECW_ = 1 #Tells the roomba to rotate
 _ROTATE_ = 1 #Tells the roomba to rotate
 _NOROTATE_ = 0 #Tells the roomba to not rotate
 _sideLength_ = float(_length_)/_N_ #Side length of polygon
@@ -88,16 +89,33 @@ def rotateRandom():
     stopRoomba()
 
 ###############################################################
-#  How do we make sure we are always checking the sensors         
+# mainDrive() continuously checks the boolean values of our 
+# sensors to see if they have been pressed. If so, an action
+# taken.         
 ############################################################### 
 def mainDrive():
-    while(True)
-        #drive
-        #check sensors
-        #drive
-        #check sensors
-        #if (bumper or cliff pressed):
-            #rotateRandom()
+roomba.setDrive() # setting driving to true
+roomba.drive(_velocity_, _NOROTATE_) # actually driving
+
+    while(roomba.isDriving):
+        roomba.sleep(.015)
+        #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPER
+        if(leftBumperPressed):
+            write(getDistance) # this method write to output
+            rotateRandom()
+            roomba.drive(_velocity_, _NOROTATE_)
+        else if(rightBumperPressed):
+            write(getDistance) # this method write to output
+            rotateRandom()
+            roomba.drive(_velocity_, _NOROTATE_)
+
+
+        else if (clean button pressed):
+            stopRoomba()
+            roomba.setDrive() # setting driving to false
+            break
+        else:
+            continue
 
 ###############################################################
 #  readCleanButtonThread() is what checks the iRobot's clean button
@@ -114,19 +132,17 @@ def readCleanButtonThread():
             
 ###############################################################
 #  readBumperThread() calls our readBumper method in the Interface 
-#  the method in the interface already sets out global variables
-#          
+#  the method in the interface already sets out global variables      
 ############################################################### 
 def readBumperThread():
     while(True):
         time.sleep(.10)
-        # this method sets out 4 global variables
+        # this method sets our 4 global variables
         roomba.readBumper()
 
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
-#
 ############################################################### 
 def main():
     # setting states
@@ -137,17 +153,16 @@ def main():
     # starting threads
     button.start();
     bump.start();
-
     # waiting to start 
     x = True
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     while (x):
-        # ALSO CHECK IF THE WHEEL DROPS
+        # ALSO CHECK IF THE WHEEL DROPS AND CLIFFS ARE ACTIVATED
         if(roomba.readButton(_CLEAN_)):
             x = False
 
-    #mainDrive()
+    mainDrive() #drive and turn a bunch
 
     # end our threads and stop the roomba
     button.join()
