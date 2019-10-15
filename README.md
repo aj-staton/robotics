@@ -14,7 +14,7 @@ Table of Contents
 Our robot drives around a [mufukin](https://drive.google.com/file/d/1qV1KdgdLvN7GdSB7fDuzNeR2KqT55yui/view) regular polygon of N sides.
 
 ### Project_Two
-
+Our robot reads lots of [sensors](https://drive.google.com/file/d/17pS6uIGC5stqJetbmv9jQ1DKY17KgW3i/view).
 
 ### Project_Three
 
