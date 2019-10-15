@@ -88,11 +88,10 @@ def rotateRandom():
     stopRoomba()
 
 ###############################################################
-# 
 #  How do we make sure we are always checking the sensors         
 ############################################################### 
 def mainDrive():
-    #while(True)
+    while(True)
         #drive
         #check sensors
         #drive
@@ -130,30 +129,29 @@ def readBumperThread():
 #
 ############################################################### 
 def main():
+    # setting states
     roomba.setState("SAFE")
+    # declaring threads
+    button = Thread(target = readCleanButtonThread)
+    bump = Thread(target = readBumperThread) 
+    # starting threads
+    button.start();
+    bump.start();
+
+    # waiting to start 
     x = True
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     while (x):
+        # ALSO CHECK IF THE WHEEL DROPS
         if(roomba.readButton(_CLEAN_)):
             x = False
 
-    button = Thread(target = readCleanButtonThread)
-    bump = Thread(target = readBumperThread)
+    #mainDrive()
 
-    button.start();
-    bump.start();
-
-
-
-    # Drive and Turn code goes here
-
-
-
-
+    # end our threads and stop the roomba
     button.join()
     bump.join()
-
     stopRoomba()
-
+    sys.exit()
 main()
