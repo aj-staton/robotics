@@ -43,6 +43,12 @@ _idCLIFFLEFT_ 9
 _idCLIFFRIGHT_ 12
 _idCLIFFFRONTRIGHT_ = 10
 _idCLIFFFRONTLEFT_ = 11
+##########################################################
+# From Roomba: Read the state of Roomba’s built-in sensors,
+#  every 15 ms.  Do not send these commands more
+#  frequently than that.
+_DELAY_ = 0.015 # 15 ms = 0.015 s
+###########################################################
 
 class RobotInterface:
     def __init__(self):
@@ -60,9 +66,19 @@ class RobotInterface:
     # getDistance() returns the distance that the Roomba has travel-
     # ed, in millimeters, since the last time the distance was re-
     # quested. So, getDistance() must be called at initalization.
+    # 
+    # This fuction will return the distance traveled, in mm.
     ################################################################
     def getDistance(self):
-        
+        # Send the request for data.
+        sentData = struct.pack('>B2H', _SENSORS_, _idDISTANCE_)
+        self.connection.write(sentData)
+        # Retrieve the data.
+        distanceBin = self.connection.read(2)[0]
+        time.sleep(_DELAY_)
+        # Interpret the bytes, where the 2^15 bit is the sign.
+        distanceInt = struct.unpack('>h', distanceBin)
+
 
     ################################################################
     # Setters for driving
@@ -214,7 +230,6 @@ class RobotInterface:
             sys.exit()
         
     ###############################################################
-    #
     # This method will implement driveDirect for Project 2
     #
     ###############################################################
@@ -234,8 +249,9 @@ class RobotInterface:
     #                       the song for the roomba to play.
     ###############################################################
     def playSong(self, songNumber){
-        data = strict.pack('>B2H', _PLAY_, songNumber)
-        self.connection.write(data)
+        if (songNumber >= 0 and songNumber <= 4):
+            data = struct.pack('>B2H', _PLAY_, songNumber)
+            self.connection.write(data)
     }
 
 
