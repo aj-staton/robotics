@@ -167,7 +167,9 @@ def main():
         if(roomba.readButton(_CLEAN_)):
             x = False
 
-    mainDrive() #drive and turn a bunch
+
+    stopRoomba()
+    #mainDrive() #drive and turn a bunch
 
     # end our threads and stop the roomba
     button.join()
