@@ -1,9 +1,9 @@
 ####################################################################
-# This the main program that will be running and interacting
-# with the robot in Project 1. 
+# This the main program that will be interacting
+# with the robot in Project 2. 
 #
 # Written by: Robert Carff, Austin Statin, Miles Ziemer 
-#           -- September 15th, 2019
+#           -- October 5th, 2019
 #
 ####################################################################
 ####################################################################
@@ -15,7 +15,7 @@ from threading import Thread
 import random
 ####################################################################
 # Magic number Variables
-_N_ = 5 #this is number of sides for the polygon
+_N_ = 4 #this is number of sides for the polygon
 _degrees_ = 360 #this is in degrees
 _length_ = 2000 #this is in milimeters
 _sleepTime_ = 0.0125 #this time is in seconds (12.5 miliseconds)
@@ -28,7 +28,7 @@ _sideLength_ = float(_length_)/_N_ #Side length of polygon
 _driveTime_ = float(_sideLength_)/_velocity_ #Time of driving along a side
 _rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
 
-#assuming we're driving at 150 mm/s still
+# Lets assuming we're driving at 150 mm/s still
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
 
@@ -52,7 +52,7 @@ _CLOCK_ = 7
 
 ###############################################################
 # stopRoomba() sends the drive command with zero velocity and
-# zero turning radius.
+# zero turning radius, thus, stopping the robot.
 #
 ############################################################### 
 def stopRoomba():
@@ -67,7 +67,6 @@ def stopRoomba():
 def driveSide():
     roomba.drive(_velocity_, _NOROTATE_)
     time.sleep(_driveTime_)
-    #while(not _isDriving_):
     while(not roomba.isDriving):
         time.sleep(.012)
     stopRoomba()
