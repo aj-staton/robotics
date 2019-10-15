@@ -18,23 +18,15 @@ import struct
 ####################################################################
 _BUTTONS_ = 165
 ####################################################################
-# State Opcodes
+# Opcodes
 ####################################################################
 _START_ = 128
 _RESET_ = 7
+_PLAY_ = 141
 _STOP_ = 173
 _PASSIVE_ = 128
 _SAFE_ = 131
 _FULL_ = 132 
-####################################################################
-# Drive Opcode 137
-# Serial sequence: [137] [Velocity high byte] [Velocity low byte] 
-#                  [Radius high byte] [Radius low byte]
-#
-# Right wheel velocity (-500 to 500 mm/s)
-# Left wheel velocity (-500 to 500 mm/s)
-#
-####################################################################
 _DRIVE_ = 137
 _DRIVE_DIRECT_ = 145
 _SENSORS_ = 142
@@ -111,7 +103,7 @@ class RobotInterface:
     #  Param: state -- The robot's state in plain english, as a 
     #                  string.
     #
-    # added full mode for project 2
+    #
     ################################################################
     def setState(self, state): 
         if state == "STOP":
@@ -230,9 +222,17 @@ class RobotInterface:
         else:
             print("Invalid Drive() speed given.")
             sys.exit()
-
-    def playWarningSong(self){
-     #play the warning song here
+    
+    ###############################################################
+    # playSong() will tell the rommba to play a song. iRobots have
+    # pre-made songs to choose from, which people can select.
+    # 
+    # Params: songNumber -- an integer from [0, 4] which represents
+    #                       the song for the roomba to play.
+    ###############################################################
+    def playSong(self, songNumber){
+        data = strict.pack('>B2H', _PLAY_, songNumber)
+        self.connection.write(data)
     }
 
 
