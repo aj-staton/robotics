@@ -78,7 +78,7 @@ class RobotInterface:
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
         distanceInt = struct.unpack('>h', distanceBin)
-
+        # **How do I read a signed pair of bits??
 
     ################################################################
     # Setters for driving
