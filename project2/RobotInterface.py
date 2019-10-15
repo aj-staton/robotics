@@ -37,8 +37,20 @@ _FULL_ = 132
 ####################################################################
 _DRIVE_ = 137
 _DRIVE_DIRECT_ = 145
-# Told to use this by classmate on 09/26
 _SENSORS_ = 142
+###################################
+# The use of _SENSORS_ is followed
+# with the packet ID of the needed
+# sensor data. These IDs are below:
+###################################
+_idBUMPSANDDROPS_ = 7
+_idBUTTONS_ = 18
+_idDISTANCE_ = 19
+_idANGLE_ = 20
+_idCLIFFLEFT_ 9
+_idCLIFFRIGHT_ 12
+_idCLIFFFRONTRIGHT_ = 10
+_idCLIFFFRONTLEFT_ = 11
 
 class RobotInterface:
     def __init__(self):
@@ -49,8 +61,16 @@ class RobotInterface:
         self.isDriving = True
         self.bumpLeft = False
         self.bumpRight = False
-        self.WheelDropLeft = False
-        self.WheelDropRight = False
+        self.wheelDropLeft = False
+        self.wheelDropRight = False
+
+    ################################################################
+    # getDistance() returns the distance that the Roomba has travel-
+    # ed, in millimeters, since the last time the distance was re-
+    # quested. So, getDistance() must be called at initalization.
+    ################################################################
+    def getDistance(self):
+        
 
     ################################################################
     # Setters for driving
@@ -71,10 +91,10 @@ class RobotInterface:
     # Setters for wheel drops
     ################################################################
     def setWheelDropLeft(self):
-        self.WheelDropLeft = not WheelDropLeft
+        self.wheelDropLeft = not wheelDropLeft
 
     def setWheelDropRight(self):
-        self.WheelDropRight = not WheelDropRight
+        self.wheelDropRight = not wheelDropRight
 
     ################################################################
     # Setters for CliffPackets here?
@@ -96,16 +116,24 @@ class RobotInterface:
     def setState(self, state): 
         if state == "STOP":
             self.connection.write(chr(_STOP_))
+            print "iRobot Mode: STOP"
         elif state == "RESET":
             self.connection.write(chr(_RESET_))
+            print "iRobot Mode: RESET"
         elif state == "START":
             self.connection.write(chr(_START_))
+            print "iRobot Mode: START"
         elif state == "PASSIVE":
             self.connection.write(chr(_PASSIVE_))
+            print "iRobot Mode: PASSIVE"
         elif state == "SAFE":
             self.connection.write(chr(_SAFE_))
+            print "iRobot Mode: SAFE"
+        elif state == "FULL":
+            self.connection.write(chr(_FULL_))
+            print "iRobot Mode: FULL"
         else:
-            print "Invalid state input into the SetState function"
+            print "Invalid state input in the setState() function"
             sys.exit()
 
     ###############################################################
@@ -122,29 +150,25 @@ class RobotInterface:
     ###############################################################
     def readButton(self, button):
         # Send a request to read the pressed button.
-        self.connection.write(chr(_SENSORS_) + chr(18))
+        self.connection.write(chr(_SENSORS_) + chr(_idBUTTONS_))
         button_input = self.connection.read(1)
         return bool(struct.unpack('B', button_input)[button])
 
     ###############################################################
-    # this method takes in the Packet ID we need from the sensors 
+    # readBumper() takes in the Packet ID we need from the sensors 
     # **** It returns a byte that we need to still unpack
     ###############################################################
     def readBumper(self, ID):
         # Send a request to read the pressed button.
-        self.connection.write(chr(_SENSORS_) + chr(7))
+        self.connection.write(chr(_SENSORS_) + chr(_idBUMPSANDDROPS))
         bumper = self.connection.read(1)
-        #return bool(struct.unpack('B', bumper)[button])
-        # set each of the init global variables here??
-        '''
-        Do we even need to cast this as a bool? it 
-        it should be a 1 or a 0 (intrinsically a bool)
-
+        
+        # Set boolean sensor values based on the respective bit values. 
         BumpRight = bool(struct.unpack('B', bumper)[0])
         BumpLeft = bool(struct.unpack('B', bumper)[1])
         WheelDropRight = bool(struct.unpack('B', bumper)[2])
         WheelDropLeft = bool(struct.unpack('B', bumper)[3])
-        
+        '''
         now we have our states set and we can just thread this method
         then we just check in main:
             if(WheelDropLeft):
