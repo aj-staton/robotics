@@ -13,6 +13,7 @@ from time import sleep
 import math
 from threading import Thread
 import random
+import logging
 ####################################################################
 # Magic number Variables
 _N_ = 4 #this is number of sides for the polygon
@@ -58,6 +59,7 @@ _CLOCK_ = 7
 ############################################################### 
 def stopRoomba():
     roomba.drive(0,0)
+    logging.info("testing")
 
 ###############################################################
 # driveSide() calculates the Side lengths based off the
@@ -150,6 +152,9 @@ def main():
     # declaring threads
     button = Thread(target = readCleanButtonThread)
     bump = Thread(target = readBumperThread) 
+    # declaring our log file
+    logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
+
     # starting threads
     button.start();
     bump.start();
@@ -169,4 +174,7 @@ def main():
     bump.join()
     stopRoomba()
     sys.exit()
+
+
 main()
+
