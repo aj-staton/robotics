@@ -50,7 +50,7 @@ class RobotInterface:
         self.bumpLeft = False
         self.bumpRight = False
         self.WheelDropLeft = False
-        self.WheelDropRight - False
+        self.WheelDropRight = False
 
     ################################################################
     # Setters for driving
