@@ -131,29 +131,20 @@ def readBumperThread():
 ############################################################### 
 def main():
     roomba.setState("SAFE")
+    button = Thread(target = readCleanButtonThread)
+    bump = Thread(target = readBumperThread)
+
     x = True
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     while (x):
         if(roomba.readButton(_CLEAN_)):
             x = False
-
-    button = Thread(target = readCleanButtonThread)
-    bump = Thread(target = readBumperThread)
-
     button.start();
     bump.start();
-
-
-
     # Drive and Turn code goes here
-
-
-
-
     button.join()
     bump.join()
-
     stopRoomba()
 
 main()
