@@ -162,12 +162,15 @@ class RobotInterface:
         # Send a request to read the pressed button.
         self.connection.write(chr(_SENSORS_) + chr(_idBUMPSANDDROPS))
         bumper = self.connection.read(1)
-        
         # Set boolean sensor values based on the respective bit values. 
         BumpRight = bool(struct.unpack('B', bumper)[0])
+        print(BumpRight)
         BumpLeft = bool(struct.unpack('B', bumper)[1])
+        print(bumpLeft)
         WheelDropRight = bool(struct.unpack('B', bumper)[2])
+        print(wheelDropRight)
         WheelDropLeft = bool(struct.unpack('B', bumper)[3])
+        print(wheelDropLeft)
         '''
         now we have our states set and we can just thread this method
         then we just check in main:
