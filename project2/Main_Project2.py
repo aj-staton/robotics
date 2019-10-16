@@ -24,9 +24,6 @@ _omega_ =  float(2*_velocity_)/_l_ #angular velocity
 _ROTATECW_ = 1 #Tells the roomba to rotate
 _ROTATE_ = 1 #Tells the roomba to rotate
 _NOROTATE_ = 0 #Tells the roomba to not rotate
-_sideLength_ = float(_length_)/_N_ #Side length of polygon
-_driveTime_ = float(_sideLength_)/_velocity_ #Time of driving along a side
-_rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
 # Lets assuming we're driving at 150 mm/s still
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
@@ -82,7 +79,7 @@ def driveSide():
 def rotateRandom(direction): #direction is global CW or CCW
     roomba.drive(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
-        turnTime = random.randint(_rotateLowTime_,_rotateHighTime_)
+    turnTime = random.randint(_rotateLowTime_,_rotateHighTime_)
     # turn for that amount of time    
     time.sleep(turnTime)
     stopRoomba()
@@ -92,7 +89,7 @@ def rotateRandom(direction): #direction is global CW or CCW
 # sensors to see if they have been pressed. If so, an action
 # taken.         
 ############################################################### 
-def mainDrive:
+def mainDrive():
     roomba.setDriving(True) # setting driving to true
     roomba.drive(_velocity_, _NOROTATE_) # actually driving
 
@@ -110,7 +107,7 @@ def mainDrive:
             rotateRandom()
             roomba.drive(_velocity_, _NOROTATE_)
 
-        elif ((roomba.readButton(_CLEAN_)):
+        elif (roomba.readButton(_CLEAN_)):
             stopRoomba()
             roomba.setDriving(False) # setting driving to false
             while (not roomba.readButton(_CLEAN_)):

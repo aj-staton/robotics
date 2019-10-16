@@ -39,8 +39,8 @@ _idBUMPSANDDROPS_ = 7
 _idBUTTONS_ = 18
 _idDISTANCE_ = 19
 _idANGLE_ = 20
-_idCLIFFLEFT_ 9
-_idCLIFFRIGHT_ 12
+_idCLIFFLEFT_ = 9
+_idCLIFFRIGHT_ = 12
 _idCLIFFFRONTRIGHT_ = 10
 _idCLIFFFRONTLEFT_ = 11
 ##########################################################
@@ -61,7 +61,7 @@ class RobotInterface:
         self.wheelDropLeft = False
         self.wheelDropRight = False
         
-      ###############################################################
+    ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
     # will accept values for velocity(mm/s) and turning radius(mm).
     # To turn in place clockwise, -1 is the value to send as the
@@ -146,15 +146,15 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_) + chr(_idBUMPSANDDROPS_))
         bumper = self.connection.read(1)
         # Set boolean sensor values based on the respective bit values. 
-        reading = (struct.unpack('B', bumper)[0])
+        reading = (struct.unpack('B', bumper))[0]
         print(reading)
-        bumpRight = bool(reading & 0x00)
+        bumpRight = bool(reading & 0x01)
         print("BR: " + str(bumpRight))
-        bumpLeft = bool(reading & 0x01)
+        bumpLeft = bool(reading & 0x02)
         print("BL: " + str(bumpLeft))
-        wheelDropRight = bool(reading & 0x02)
+        wheelDropRight = bool(reading & 0x04)
         print("WDR: " + str(wheelDropRight))
-        wheelDropLeft = bool(reading & 0x03)
+        wheelDropLeft = bool(reading & 0x08)
         print("WDL: " + str(wheelDropLeft))
         print("*********")
 
