@@ -96,8 +96,8 @@ def rotateRandom():
 # taken.         
 ############################################################### 
 def mainDrive():
-roomba.setDrive() # setting driving to true
-roomba.drive(_velocity_, _NOROTATE_) # actually driving
+    roomba.setDrive() # setting driving to true
+    roomba.drive(_velocity_, _NOROTATE_) # actually driving
 
     while(roomba.isDriving):
         roomba.sleep(.015)
