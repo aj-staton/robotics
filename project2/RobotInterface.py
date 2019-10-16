@@ -156,9 +156,9 @@ class RobotInterface:
         print("WDR: " + str(wheelDropRight))
         wheelDropLeft = bool(reading & 0x03)
         print("WDL: " + str(wheelDropLeft))
-        print()
+        print("*********")
 
-        time.sleep(0.015)
+        time.sleep(_DELAY_)
         '''
         now we have our states set and we can just thread this method
         then we just check in main:

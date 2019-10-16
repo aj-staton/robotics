@@ -30,8 +30,14 @@ _rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
 # Lets assuming we're driving at 150 mm/s still
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
+
 roomba = RobotInterface() #Initialize the robot interface
 #_isDriving_ = True #The state of the roomba, if it is driving or not
+##########################################################
+#  Read the sensor state of the Roomba every 15 ms.  Do
+#  not send these commands more frequently than that.
+##########################################################
+_DELAY_ = 0.015 # 15 ms = 0.015 s
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7    6   5   4   3   2   1   0
@@ -51,7 +57,7 @@ _CLOCK_ = 7
 ############################################################### 
 def stopRoomba():
     roomba.drive(0,0)
-    logging.info("testing")
+    logging.info("Stop Roomba")
     
 ###############################################################
 # driveSide() calculates the Side lengths based off the
@@ -107,9 +113,10 @@ def mainDrive:
         elif ((roomba.readButton(_CLEAN_)):
             stopRoomba()
             roomba.setDriving(False) # setting driving to false
-            while(not roomba.readButton(_CLEAN_)):
+            while (not roomba.readButton(_CLEAN_)):
               roomba.sleep(.015)
-            roomba.setDriving(True) # setting driving to true          
+            roomba.setDriving(True) # setting driving to true   
+
         else:
             continue
             
@@ -120,7 +127,7 @@ def mainDrive:
 def readCleanButtonThread():
     while(True):
         #global _isDriving_
-        time.sleep(.10)
+        time.sleep(_DELAY_)
         if(roomba.readButton(_CLEAN_, chr(18))):
             #_isDriving_ = not _isDriving_
             roomba.setDrive()
@@ -131,7 +138,7 @@ def readCleanButtonThread():
 ############################################################### 
 def readBumperThread():
     while(True):
-        time.sleep(.10)
+        time.sleep(_DELAY_)
         # this method sets our 4 global variables
         roomba.readBumper()
 
@@ -149,8 +156,8 @@ def main():
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
 
     # starting threads
-    button.start();
-    bump.start();
+    button.start()
+    bump.start()
     # waiting to start 
     x = True
     # Listen for the press of the Clean button, which will begin
