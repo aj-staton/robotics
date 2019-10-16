@@ -127,9 +127,10 @@ class RobotInterface:
     # Params: songNumber -- an integer from [0, 4] which represents
     #                       the song for the roomba to play.
     ###############################################################
+    # TODO: TEST THIS
     def playSong(self, songNumber):
         if (songNumber >= 0 and songNumber <= 4):
-            data = struct.pack('>B2H', _PLAY_, songNumber)
+            data = struct.pack('BB', _PLAY_, songNumber)
             self.connection.write(data)
 
     ###############################################################
@@ -147,16 +148,16 @@ class RobotInterface:
         bumper = self.connection.read(1)
         # Set boolean sensor values based on the respective bit values. 
         reading = (struct.unpack('B', bumper))[0]
-        print(reading)
+        #print(reading)
         bumpRight = bool(reading & 0x01)
-        print("BR: " + str(bumpRight))
+        #print("BR: " + str(bumpRight))
         bumpLeft = bool(reading & 0x02)
-        print("BL: " + str(bumpLeft))
+        #print("BL: " + str(bumpLeft))
         wheelDropRight = bool(reading & 0x04)
-        print("WDR: " + str(wheelDropRight))
+        #print("WDR: " + str(wheelDropRight))
         wheelDropLeft = bool(reading & 0x08)
-        print("WDL: " + str(wheelDropLeft))
-        print("*********")
+        #print("WDL: " + str(wheelDropLeft))
+        #print("*********")
 
         time.sleep(_DELAY_)
         '''

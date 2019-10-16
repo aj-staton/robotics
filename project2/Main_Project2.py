@@ -125,9 +125,9 @@ def readCleanButtonThread():
     while(True):
         #global _isDriving_
         time.sleep(_DELAY_)
-        if(roomba.readButton(_CLEAN_, chr(18))):
+        if(roomba.readButton(_CLEAN_)):
             #_isDriving_ = not _isDriving_
-            roomba.setDrive()
+            roomba.setDriving()
             
 ###############################################################
 #  readBumperThread() calls our readBumper method in the Interface 
@@ -146,6 +146,7 @@ def readBumperThread():
 def main():
     # setting states
     roomba.setState("SAFE")
+    roomba.playSong(3)
     # declaring threads
     button = Thread(target = readCleanButtonThread)
     bump = Thread(target = readBumperThread) 
