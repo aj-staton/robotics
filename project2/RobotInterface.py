@@ -171,17 +171,19 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_) + chr(_idBUMPSANDDROPS_))
         bumper = self.connection.read(1)
         # Set boolean sensor values based on the respective bit values. 
-        readingInt = (struct.unpack('B', bumper)[0])
-        readingBin = bin(readingInt)
-
-        bumpRight = bool(readingBin & 0x00)
+        reading = (struct.unpack('B', bumper)[0])
+        print(reading)
+        bumpRight = bool(reading & 0x00)
         print("BR: " + str(bumpRight))
-        bumpLeft = bool(readingBin & 0x01)
+        bumpLeft = bool(reading & 0x01)S
         print("BL: " + str(bumpLeft))
-        wheelDropRight = bool(readingBin & 0x02)
+        wheelDropRight = bool(reading & 0x02)
         print("WDR: " + str(wheelDropRight))
-        wheelDropLeft = bool(readingBin & 0x03)
+        wheelDropLeft = bool(reading & 0x03)
         print("WDL: " + str(wheelDropLeft))
+        print()
+
+        delay(0.25)
         '''
         now we have our states set and we can just thread this method
         then we just check in main:
