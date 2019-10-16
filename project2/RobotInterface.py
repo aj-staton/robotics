@@ -39,12 +39,12 @@ _idBUMPSANDDROPS_ = 7
 _idBUTTONS_ = 18
 _idDISTANCE_ = 19
 _idANGLE_ = 20
-_idCLIFFLEFT_ 9
-_idCLIFFRIGHT_ 12
+_idCLIFFLEFT_ = 9
+_idCLIFFRIGHT_ = 12
 _idCLIFFFRONTRIGHT_ = 10
 _idCLIFFFRONTLEFT_ = 11
 ##########################################################
-# From Roomba: Read the state of Roomba’s built-in sensors,
+# Read the state of the sensors.
 #  every 15 ms.  Do not send these commands more
 #  frequently than that.
 _DELAY_ = 0.015 # 15 ms = 0.015 s
@@ -166,19 +166,22 @@ class RobotInterface:
     # readBumper() takes in the Packet ID we need from the sensors 
     # **** It returns a byte that we need to still unpack
     ###############################################################
-    def readBumper(self, ID):
+    def readBumper(self):
         # Send a request to read the pressed button.
-        self.connection.write(chr(_SENSORS_) + chr(_idBUMPSANDDROPS))
+        self.connection.write(chr(_SENSORS_) + chr(_idBUMPSANDDROPS_))
         bumper = self.connection.read(1)
         # Set boolean sensor values based on the respective bit values. 
-        BumpRight = bool(struct.unpack('B', bumper)[0])
-        print(BumpRight)
-        BumpLeft = bool(struct.unpack('B', bumper)[1])
-        print(bumpLeft)
-        WheelDropRight = bool(struct.unpack('B', bumper)[2])
-        print(wheelDropRight)
-        WheelDropLeft = bool(struct.unpack('B', bumper)[3])
-        print(wheelDropLeft)
+        readingInt = (struct.unpack('B', bumper)[0])
+        readingBin = bin(readingInt)
+
+        bumpRight = bool(readingBin & 0x00)
+        print("BR: " + str(bumpRight))
+        bumpLeft = bool(readingBin & 0x01)
+        print("BL: " + str(bumpLeft))
+        wheelDropRight = bool(readingBin & 0x02)
+        print("WDR: " + str(wheelDropRight))
+        wheelDropLeft = bool(readingBin & 0x03)
+        print("WDL: " + str(wheelDropLeft))
         '''
         now we have our states set and we can just thread this method
         then we just check in main:
@@ -248,10 +251,10 @@ class RobotInterface:
     # Params: songNumber -- an integer from [0, 4] which represents
     #                       the song for the roomba to play.
     ###############################################################
-    def playSong(self, songNumber){
+    def playSong(self, songNumber):
         if (songNumber >= 0 and songNumber <= 4):
             data = struct.pack('>B2H', _PLAY_, songNumber)
             self.connection.write(data)
-    }
+    
 
 

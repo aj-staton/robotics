@@ -95,6 +95,7 @@ def rotateRandom():
 # sensors to see if they have been pressed. If so, an action
 # taken.         
 ############################################################### 
+'''
 def mainDrive():
     roomba.setDrive() # setting driving to true
     roomba.drive(_velocity_, _NOROTATE_) # actually driving
@@ -118,7 +119,7 @@ def mainDrive():
             break
         else:
             continue
-
+'''
 ###############################################################
 #  readCleanButtonThread() is what checks the iRobot's clean button
 #  during execution. It does this with threading.
