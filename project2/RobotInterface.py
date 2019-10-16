@@ -175,7 +175,7 @@ class RobotInterface:
         print(reading)
         bumpRight = bool(reading & 0x00)
         print("BR: " + str(bumpRight))
-        bumpLeft = bool(reading & 0x01)S
+        bumpLeft = bool(reading & 0x01)
         print("BL: " + str(bumpLeft))
         wheelDropRight = bool(reading & 0x02)
         print("WDR: " + str(wheelDropRight))
@@ -183,7 +183,7 @@ class RobotInterface:
         print("WDL: " + str(wheelDropLeft))
         print()
 
-        delay(0.25)
+        time.sleep(0.015)
         '''
         now we have our states set and we can just thread this method
         then we just check in main:
