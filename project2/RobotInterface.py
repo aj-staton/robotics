@@ -3,9 +3,8 @@ This file's purpose is to define an interface to communicate with the
 iRobot Roomba Create2 robot. This will include changing the mode of operation
 on the robot, reading input from the robot's physical buttons, and moving
 the robot.
-
 Written by: Miles Ziemer, Robby Carff, and Austin Staton for use in CSCE 274
-Date: September 15th, 2019
+Date: October 5th, 2019
 he
 '''
 import time
@@ -24,6 +23,7 @@ _BUTTONS_ = 165
 _START_ = 128
 _RESET_ = 7
 _PLAY_ = 141
+_SONG_ = 140
 _STOP_ = 173
 _PASSIVE_ = 128
 _SAFE_ = 131
@@ -39,10 +39,13 @@ _idBUMPSANDDROPS_ = 7
 _idBUTTONS_ = 18
 _idDISTANCE_ = 19
 _idANGLE_ = 20
+_idCLIFFS_ = [9,10,11,12]
+'''
 _idCLIFFLEFT_ = 9
 _idCLIFFRIGHT_ = 12
 _idCLIFFFRONTRIGHT_ = 10
 _idCLIFFFRONTLEFT_ = 11
+'''
 ##########################################################
 #  Read the sensor state of the Roomba every 15 ms.  Do
 #  not send these commands more frequently than that.
@@ -60,6 +63,8 @@ class RobotInterface:
         self.bumpRight = False
         self.wheelDropLeft = False
         self.wheelDropRight = False
+        self.cliffs = []
+        self.writeSong()
         
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
@@ -114,24 +119,28 @@ class RobotInterface:
         sentData = struct.pack('>B2H', _SENSORS_, _idDISTANCE_)
         self.connection.write(sentData)
         # Retrieve the data.
-        distanceBin = self.connection.read(2)[0]
+        reading = self.connection.read(2)[0]
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
-        distanceInt = struct.unpack('>h', distanceBin)
-        # **How do I read a signed pair of bits??
+        distance = struct.unpack('>h', reading)[0]
+        # TODO: log this -> print(distance)
+        # More TODO: is this going to be DISTANCE
+        return distance
 
     ###############################################################
     # playSong() will tell the rommba to play a song. iRobots have
-    # pre-made songs to choose from, which people can select.
+    # require you to create your own song. See writeSong() to view
+    # this created song. This function will have song number '0'
+    # pre-programmed in, since we are only composing one song in
+    # writeSong()
     # 
     # Params: songNumber -- an integer from [0, 4] which represents
     #                       the song for the roomba to play.
     ###############################################################
-    # TODO: TEST THIS
-    def playSong(self, songNumber):
-        if (songNumber >= 0 and songNumber <= 4):
-            data = struct.pack('BB', _PLAY_, songNumber)
-            self.connection.write(data)
+    def playSong(self):
+        songNumber = 0
+        data = struct.pack('BB', _PLAY_, songNumber)
+        self.connection.write(data)
 
     ###############################################################
     # readBumper() gets the value for the iRobot's front left and
@@ -149,13 +158,13 @@ class RobotInterface:
         # Set boolean sensor values based on the respective bit values. 
         reading = (struct.unpack('B', bumper))[0]
         #print(reading)
-        bumpRight = bool(reading & 0x01)
+        self.bumpRight = bool(reading & 0x01)
         #print("BR: " + str(bumpRight))
-        bumpLeft = bool(reading & 0x02)
+        self.bumpLeft = bool(reading & 0x02)
         #print("BL: " + str(bumpLeft))
-        wheelDropRight = bool(reading & 0x04)
+        self.wheelDropRight = bool(reading & 0x04)
         #print("WDR: " + str(wheelDropRight))
-        wheelDropLeft = bool(reading & 0x08)
+        self.wheelDropLeft = bool(reading & 0x08)
         #print("WDL: " + str(wheelDropLeft))
         #print("*********")
 
@@ -188,18 +197,20 @@ class RobotInterface:
         return bool(struct.unpack('B', button_input)[button])
       
     ###############################################################
-    # we need to read cliff sensors, 9-13
-    # they return a 1 bit value (as a byte though)
-    # no need to decode byte
+    # readCliff() will read the left, right, front left, and front
+    # right sensors. These readings are then stored in a list of
+    # boolean values, roomba.cliffs[].
     ###############################################################
-    # TODO FIGURE OUT THIS METHOD
-    def readCliff(self, ID):
+    def readCliff(self):
         # the ID should be 9-13, can run it through a loop
-        self.connection.write(chr(_SENSORS_) + chr(ID))
-        cliff = self.connection.read(1)
-        # how do we want to declare the cliff global variables
-        # array?
-        cliff[ID] = struct.unpack('B', cliff)   
+        for ID in _idCLIFFS_:
+            self.connection.write(chr(_SENSORS_) + chr(ID))
+            cliff = self.connection.read(1)
+            # how do we want to declare the cliff global variables
+            # array?
+            self.cliffs[_idCLIFFS_.index(ID)] = bool(0x01 & \
+                                    struct.unpack('B', cliff)[0])
+          time.sleep(_DELAY_) # Don't read too fast.
 
     ################################################################
     # Setters for Bumpers
@@ -261,6 +272,34 @@ class RobotInterface:
             print "iRobot Mode: FULL"
         else:
             print "Invalid state input in the setState() function"
-            sys.exit()   
-    
-    
+            sys.exit() 
+     #################################################################
+     # writeSong() will make the song for the playSong() function to
+     # retrieve. This function will write the song to the Roomba's
+     # song index of 0.
+     #################################################################
+     def writeSong(self):
+        # Three note song, therefore it will be 7 bytes to write.
+        # Hence, the 7 B's for signifying 7 unsigned character bytes.
+        songNumber = 0
+        songLength = 3 # length of the song, as a quantitify of notes
+        songNote1 = 32
+        songNote1Length = 125
+        songNote2 = 126
+        songNote2Length = 60
+        # Create the 3-note song.
+        data = struct.pack('>BBBBBBBBB', _SONG_, songNumber, songLength\
+                          songNote1, songNote1Length, songNote2, \
+                          songNote2Length, songNote1, songNote1Length)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      
