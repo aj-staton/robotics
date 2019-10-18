@@ -138,39 +138,39 @@ def main():
 	# declaring threads
 	drive = Thread(target = mainDrive)
 	bump = Thread(target = readBumperThread)
-		# declaring our log file
-		logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
-		# starting threads
-		drive.start();
-			bump.start();
-			# waiting to start
-			x = True
-				# Listen for the press of the Clean button, which will begin
-				# the drawing of the polygon.
-				while (x):
-					# ALSO CHECK IF THE WHEEL DROPS AND CLIFFS ARE ACTIVATED
-					if(roomba.readButton(_CLEAN_)):
-						x = False
-							while(True):
-								time.sleep(_DELAY_)
-					if(roomba.readButton(_CLEAN_) && not(lock.locked())):
-						lock.aquire()
-						roomba.setDriving()
-						stopRoomba()
-					elif(roomba.readButton(_CLEAN_) && lock.locked()):
-						lock.release()
-						roomba.setDriving()
-						roomba.drive(_velocity_,_NOROTATE_)
-						
-						stopRoomba()
-						#mainDrive() #drive and turn a bunch
-						
-						# end our threads and stop the roomba
-						drive.join()
-						bump.join()
-						stopRoomba()
-						sys.exit()
+	# declaring our log file
+	logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
+	# starting threads
+	drive.start()
+	bump.start()
+	# waiting to start
+	x = True
+	# Listen for the press of the Clean button, which will begin
+	# the drawing of the polygon.
+	while (x):
+	    # ALSO CHECK IF THE WHEEL DROPS AND CLIFFS ARE ACTIVATED
+	    if(roomba.readButton(_CLEAN_)):
+	        x = False
+	while(True):
+	    time.sleep(_DELAY_)
+	    if(roomba.readButton(_CLEAN_) && not(lock.locked())):
+		lock.aquire()
+		roomba.setDriving()
+		stopRoomba()
+	    elif(roomba.readButton(_CLEAN_) && lock.locked()):
+		lock.release()
+		roomba.setDriving()
+		roomba.drive(_velocity_,_NOROTATE_)				
+		stopRoomba()
+	        #mainDrive() #drive and turn a bunch
+				    
+		# end our threads and stop the roomba
+		drive.join()
+		bump.join()
+		stopRoomba()
+		sys.exit()
 
 
-main()
+if __name__ == __main__:
+    main()
 
