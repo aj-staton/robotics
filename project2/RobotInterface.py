@@ -87,12 +87,12 @@ class RobotInterface:
     ############################################################### 
     def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-            data = struct.pack('>B2H', _DRIVE_, velocity, radius)
+            data = struct.pack('>Bhh', _DRIVE_, velocity, radius)
             self.connection.write(data)
             # WE CAN SET THE DRIVING BOOL HERE
             # setDriving(True)
         else:
-            print("Invalid Drive() speed given.")
+            print("Invalid drive() speed given.")
             sys.exit()
       
     ###############################################################
@@ -101,10 +101,12 @@ class RobotInterface:
     ###############################################################
     def driveDirect(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-            data = struct.pack('>B2H', _DRIVE_DIRECT_, velocity, radius)
+            data = struct.pack('>Bhh', _DRIVE_, velocity, radius)
             self.connection.write(data)
+            # WE CAN SET THE DRIVING BOOL HERE
+            # setDriving(True)
         else:
-            print("Invalid Drive() speed given.")
+            print("Invalid driveDirect() speed given.")
             sys.exit()
 
     ################################################################
@@ -122,7 +124,7 @@ class RobotInterface:
         reading = self.connection.read(2)[0]
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
-        distance = struct.unpack('>h', reading)[0]
+        distance = struct.unpack('h', reading)[0]
         # TODO: log this -> print(distance)
         # More TODO: is this going to be DISTANCE
         return distance
@@ -234,11 +236,6 @@ class RobotInterface:
 
     def setWheelDropRight(self, TorF):
         self.wheelDropRight = bool(TorF)
-
-    ################################################################
-    # Setters for CliffPackets here?
-    ################################################################
-
     ################################################################
     #  setState() will change the mode of operation on the iRobot. A 
     #  string will be inputted into the function to enhance the 
@@ -290,6 +287,7 @@ class RobotInterface:
         data = struct.pack('>BBBBBBBBB', _SONG_, songNumber, songLength,\
                           songNote1, songNote1Length, songNote2, \
                           songNote2Length, songNote1, songNote1Length)
+        self.connection.write(data)
         
         
         

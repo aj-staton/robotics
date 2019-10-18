@@ -22,9 +22,8 @@ _velocity_ = 150 # in mm/s
 _l_ = 235 #distance between wheels
 _omega_ = float(2*_velocity_)/_l_ #angular velocity
 _ROTATECW_ = 1 #Tells the roomba to rotate
-_ROTATE_ = 1 #Tells the roomba to rotate
+_ROTATECCW_ = - 1 #Tells the roomba to rotate
 _NOROTATE_ = 0 #Tells the roomba to not rotate
-_rotateTime_ = float(2*math.pi/_N_)/_omega_ #Time of rotating
 # Lets assuming we're driving at 150 mm/s still
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
@@ -51,7 +50,7 @@ lock = Lock() #Initialize lock variable
 ###############################################################
 def stopRoomba():
     roomba.drive(0,0)
-    logging.info("testing")
+    logging.info("Testing")
 
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
@@ -62,41 +61,42 @@ def stopRoomba():
 ###############################################################
 def rotateRandom(direction): #direction is global CW or CCW
     roomba.drive(_velocity_, direction)
-        # pick a random wait time for 135-225 degrees
-        turnTime = random.randint(_rotateLowTime_,_rotateHighTime_)
-            # turn for that amount of time
-            time.sleep(turnTime)
-            stopRoomba()
+    # pick a random wait time for 135-225 degrees
+    turnTime = random.randint(_rotateLowTime_,_rotateHighTime_)
+    # turn for that amount of time
+    time.sleep(turnTime)
+    stopRoomba()
 
 ###############################################################
 # mainDrive() continuously checks the boolean values of our
 # sensors to see if they have been pressed. If so, an action
 # taken.
 ###############################################################
-def mainDrive:
+def mainDrive():
     roomba.setDriving(True) # setting driving to true
     roomba.drive(_velocity_, _NOROTATE_) # actually driving
 
-    while(True): # while the roomba is driving
-roomba.sleep(_DELAY_)
+    while(True): 
+        time.sleep(2*_DELAY_)
 
-    #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
-    if(roomba.bumpLeft && roomba.bumpRight):
-        stopRoomba()
-            write(getDistance) # this method write to output
+        #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
+        if(roomba.bumpLeft and roomba.bumpRight):
+            stopRoomba()
+            #TODO: log getDistnce()
             rotateRandom(_ROTATECW_)
             roomba.drive(_velocity_, _NOROTATE_)
 
-if(roomba.bumpLeft):
-    stopRoomba()
-        write(getDistance) # this method write to output
-        rotateRandom(_ROTATECCW_)
-        roomba.drive(_velocity_, _NOROTATE_)
+        if(roomba.bumpLeft):
+            stopRoomba()
+            #TODO: log getDistnce()
+            rotateRandom(_ROTATECCW_)
+            roomba.drive(_velocity_, _NOROTATE_)
 
-    if(roomba.bumpRight):
-        stopRoomba()
-            write(getDistance) # this method write to output
-            rotateRandom()
+        if(roomba.bumpRight):
+            stopRoomba()
+            #TODO: print getDistance() to log. 
+            rotateRandom(_ROTATECW_)
+            stopRoomba()
             roomba.drive(_velocity_, _NOROTATE_)
 
 ###############################################################
@@ -126,7 +126,7 @@ def readBumperThread():
     while(True):
         time.sleep(_DELAY_)
         # this method sets our 4 global variables
-    roomba.readBumper()
+        roomba.readBumper()
 
 ###############################################################
 #  main() controls all actions of execution, including calling
@@ -141,36 +141,39 @@ def main():
     # declaring our log file
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     # starting threads
-    drive.start()
     bump.start()
     # waiting to start
     x = True
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     while (x):
-        # ALSO CHECK IF THE WHEEL DROPS AND CLIFFS ARE ACTIVATED
+        # TODO: CHECK IF THE WHEEL DROPS AND CLIFFS ARE ACTIVATED
         if(roomba.readButton(_CLEAN_)):
             x = False
+        time.sleep(2*_DELAY_)
+
+    drive.start()
+    print("STARTING")
+
     while(True):
-        time.sleep(_DELAY_)
-        if(roomba.readButton(_CLEAN_) && not(lock.locked())):
-        lock.aquire()
-        roomba.setDriving()
-        stopRoomba()
-        elif(roomba.readButton(_CLEAN_) && lock.locked()):
-        lock.release()
-        roomba.setDriving()
-        roomba.drive(_velocity_,_NOROTATE_)             
-        stopRoomba()
+        if(roomba.readButton(_CLEAN_) and not(lock.locked())):
+            lock.acquire()
+            roomba.setDriving(False)
+            stopRoomba()
+            time.sleep(1)
+
+        elif(roomba.readButton(_CLEAN_) and lock.locked()):
+            lock.release()
+            roomba.setDriving(True)
+            roomba.drive(_velocity_,_NOROTATE_)             
             #mainDrive() #drive and turn a bunch
-                    
-        # end our threads and stop the roomba
-        drive.join()
-        bump.join()
-        stopRoomba()
-        sys.exit()
-#fixed spaces
+        time.sleep(_DELAY_)
 
-if __name__ == __main__:
-    main()
+    # End our threads and stop the roomba.
+    drive.join()
+    bump.join()
+    stopRoomba()
+    sys.exit()
 
+
+main()
