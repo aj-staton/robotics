@@ -208,9 +208,8 @@ class RobotInterface:
             cliff = self.connection.read(1)
             # how do we want to declare the cliff global variables
             # array?
-            self.cliffs[_idCLIFFS_.index(ID)] = bool(0x01 & \
-                                    struct.unpack('B', cliff)[0])
-          time.sleep(_DELAY_) # Don't read too fast.
+            self.cliffs[_idCLIFFS_.index(ID)] = bool(0x01 & struct.unpack('B', cliff)[0])
+            time.sleep(_DELAY_) # Don't read too fast.
 
     ################################################################
     # Setters for Bumpers
