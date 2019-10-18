@@ -272,12 +272,12 @@ class RobotInterface:
         else:
             print "Invalid state input in the setState() function"
             sys.exit() 
-     #################################################################
-     # writeSong() will make the song for the playSong() function to
-     # retrieve. This function will write the song to the Roomba's
-     # song index of 0.
-     #################################################################
-     def writeSong(self):
+    #################################################################
+    # writeSong() will make the song for the playSong() function to
+    # retrieve. This function will write the song to the Roomba's
+    # song index of 0.
+    #################################################################
+    def writeSong(self):
         # Three note song, therefore it will be 7 bytes to write.
         # Hence, the 7 B's for signifying 7 unsigned character bytes.
         songNumber = 0
@@ -287,7 +287,7 @@ class RobotInterface:
         songNote2 = 126
         songNote2Length = 60
         # Create the 3-note song.
-        data = struct.pack('>BBBBBBBBB', _SONG_, songNumber, songLength\
+        data = struct.pack('>BBBBBBBBB', _SONG_, songNumber, songLength,\
                           songNote1, songNote1Length, songNote2, \
                           songNote2Length, songNote1, songNote1Length)
         
