@@ -1,7 +1,8 @@
 --------------------
 -CSCE 274 Project -
 --------------------
-The primary goal of the first project was to ... 
+The primary goal of the second project was to read main
+sensors 
 
 All work was completed by Robert Carff, Miles Ziemer, and
 Austin Staton for this assignment. The teaching assistant,
