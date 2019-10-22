@@ -50,7 +50,6 @@ lock = Lock() #Initialize lock variable
 ###############################################################
 def stopRoomba():
     roomba.drive(0,0)
-    logging.info("Testing")
 
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
@@ -63,6 +62,7 @@ def rotateRandom(direction): #direction is global CW or CCW
     roomba.drive(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
     turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
+    #theta = turnTime * _omega_
     # turn for that amount of time
     print("Rotate: " + str(turnTime) + " ms")
     time.sleep(turnTime)
@@ -74,31 +74,38 @@ def rotateRandom(direction): #direction is global CW or CCW
 # taken.
 ###############################################################
 def mainDrive():
-    roomba.setDriving(True) # setting driving to true
-    roomba.drive(_velocity_, _NOROTATE_) # actually driving
-
     while(True): 
         time.sleep(2*_DELAY_)
-
         #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
-            #TODO: log getDistnce()
             rotateRandom(_ROTATECW_)
-            roomba.drive(_velocity_, _NOROTATE_)
+            getAngle()
+            #checking to make sure we are safe now
+            if((roomba.bumpLeft and roomba.bumpRight) = False):
+                # LOGGING THE DISTANCE AND ANGLE
+                getDistance()
+                roomba.drive(_velocity_, _NOROTATE_)
 
         if(roomba.bumpLeft):
             stopRoomba()
-            #TODO: log getDistnce()
             rotateRandom(_ROTATECCW_)
-            roomba.drive(_velocity_, _NOROTATE_)
+            getAngle()
+            #checking to make sure we are safe now
+            if(roomba.bumpLeft = False):
+                # LOGGING THE DISTANCE AND ANGLE
+                getDistance()
+                roomba.drive(_velocity_, _NOROTATE_)
 
         if(roomba.bumpRight):
             stopRoomba()
-            #TODO: print getDistance() to log. 
             rotateRandom(_ROTATECW_)
-            stopRoomba()
-            roomba.drive(_velocity_, _NOROTATE_)
+            getAngle()
+            #checking to make sure we are safe now
+            if(roomba.bumpRight = False):
+                # LOGGING THE DISTANCE AND ANGLE
+                getDistance()
+                roomba.drive(_velocity_, _NOROTATE_)
 
 ###############################################################
 #  readCleanButtonThread() is what checks the iRobot's clean button
@@ -166,12 +173,19 @@ def main():
     print("STARTING")
 
     while(True):
+
+        if((roomba.bumpRight or roomba.bumpLeft or (True in roomba.cliffs)) = False)
+            roomba.drive(_velocity_,_NOROTATE_)      
+            roomba.setDriving(True)
+
+       # Handles clean button being pressing IN MOTION
         if(roomba.readButton(_CLEAN_) and not(lock.locked())):
             lock.acquire()
             roomba.setDriving(False)
             stopRoomba()
             time.sleep(1)
 
+       # Handles clean button being pressing IN NON_MOTION
         elif(roomba.readButton(_CLEAN_) and lock.locked()):
             lock.release()
             roomba.setDriving(True)
