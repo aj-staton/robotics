@@ -62,9 +62,9 @@ def stopRoomba():
 def rotateRandom(direction): #direction is global CW or CCW
     roomba.drive(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
-    turnTime = random.randint(_rotateLowTime_,_rotateHighTime_)
+    turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
     # turn for that amount of time
-    print("Rotate: " + str(turnTime) + " ms")_
+    print("Rotate: " + str(turnTime) + " ms")
     time.sleep(turnTime)
     stopRoomba()
 
