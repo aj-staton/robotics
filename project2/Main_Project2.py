@@ -129,6 +129,11 @@ def readBumperThread():
         # this method sets our 4 global variables
         roomba.readBumper()
 
+def readCliffThread():
+    while(True):
+        time.sleep(2*_DELAY_)
+        readCliff()
+
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
@@ -139,17 +144,21 @@ def main():
     # declaring threads
     drive = Thread(target = mainDrive)
     bump = Thread(target = readBumperThread)
+    cliff = Thread(target = readCliffThread )
     # declaring our log file
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     # starting threads
     bump.start()
+    cliff.start()
     # waiting to start
     x = True
     # Listen for the press of the Clean button, which will begin
-    # the drawing of the polygon.
+    # the drawing of the polygon. Also, make sure there are no wheel
+    # drops or cliffs activated.
     while (x):
-        # TODO: CHECK IF THE WHEEL DROPS AND CLIFFS ARE ACTIVATED
-        if(roomba.readButton(_CLEAN_)):
+        if(roomba.readButton(_CLEAN_) and roomba.wheelDropLeft == False and\
+            roomba.wheelDropRight == False and roomba.cliffs == [False, False\
+                False, False]):
             x = False
         time.sleep(2*_DELAY_)
 
@@ -173,6 +182,7 @@ def main():
     # End our threads and stop the roomba.
     drive.join()
     bump.join()
+    cliff.join()
     stopRoomba()
     sys.exit()
 
