@@ -50,7 +50,6 @@ lock = Lock() #Initialize lock variable
 ###############################################################
 def stopRoomba():
     roomba.drive(0,0)
-    logging.info("Testing")
 
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
@@ -81,26 +80,32 @@ def mainDrive():
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
             rotateRandom(_ROTATECW_)
-            # LOGGING THE DISTANCE AND ANGLE
-            getDistance()
             getAngle()
-            roomba.drive(_velocity_, _NOROTATE_)
+            #checking to make sure we are safe now
+            if((roomba.bumpLeft and roomba.bumpRight) = False):
+                # LOGGING THE DISTANCE AND ANGLE
+                getDistance()
+                roomba.drive(_velocity_, _NOROTATE_)
 
         if(roomba.bumpLeft):
             stopRoomba()
             rotateRandom(_ROTATECCW_)
-            # LOGGING THE DISTANCE AND ANGLE
-            getDistance()
             getAngle()
-            roomba.drive(_velocity_, _NOROTATE_)
+            #checking to make sure we are safe now
+            if(roomba.bumpLeft = False):
+                # LOGGING THE DISTANCE AND ANGLE
+                getDistance()
+                roomba.drive(_velocity_, _NOROTATE_)
 
         if(roomba.bumpRight):
             stopRoomba()
             rotateRandom(_ROTATECW_)
-            # LOGGING THE DISTANCE AND ANGLE
-            getDistance()
             getAngle()
-            roomba.drive(_velocity_, _NOROTATE_)
+            #checking to make sure we are safe now
+            if(roomba.bumpRight = False):
+                # LOGGING THE DISTANCE AND ANGLE
+                getDistance()
+                roomba.drive(_velocity_, _NOROTATE_)
 
 ###############################################################
 #  readCleanButtonThread() is what checks the iRobot's clean button
