@@ -229,7 +229,7 @@ class RobotInterface:
     ###############################################################
     def readCliff(self):
         # the ID should be 9-13, can run it through a loop
-        for ID in range(9,12):
+        for ID in range(9,13):
             self.connection.write(chr(_SENSORS_) + chr(ID))
             cliff = self.connection.read(1)
             # Unpack
