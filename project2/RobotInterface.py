@@ -142,7 +142,7 @@ class RobotInterface:
     ################################################################
     def getDistance(self):
         # Send the request for data.
-        sentData = struct.pack('>B2H', _SENSORS_, _idDISTANCE_)
+        sentData = struct.pack('>BH', _SENSORS_, _idDISTANCE_)
         self.connection.write(sentData)
         # Retrieve the data.
         reading = self.connection.read(2)[0]

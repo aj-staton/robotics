@@ -76,13 +76,14 @@ def rotateRandom(direction): #direction is global CW or CCW
 def mainDrive():
     while(True): 
         time.sleep(2*_DELAY_)
+        
         #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
             rotateRandom(_ROTATECW_)
             getAngle()
             #checking to make sure we are safe now
-            if((roomba.bumpLeft and roomba.bumpRight) = False):
+            if((roomba.bumpLeft and roomba.bumpRight) == False):
                 # LOGGING THE DISTANCE AND ANGLE
                 getDistance()
                 roomba.drive(_velocity_, _NOROTATE_)
@@ -92,7 +93,7 @@ def mainDrive():
             rotateRandom(_ROTATECCW_)
             getAngle()
             #checking to make sure we are safe now
-            if(roomba.bumpLeft = False):
+            if(roomba.bumpLeft == False):
                 # LOGGING THE DISTANCE AND ANGLE
                 getDistance()
                 roomba.drive(_velocity_, _NOROTATE_)
@@ -102,7 +103,7 @@ def mainDrive():
             rotateRandom(_ROTATECW_)
             getAngle()
             #checking to make sure we are safe now
-            if(roomba.bumpRight = False):
+            if(roomba.bumpRight == False):
                 # LOGGING THE DISTANCE AND ANGLE
                 getDistance()
                 roomba.drive(_velocity_, _NOROTATE_)
@@ -164,8 +165,7 @@ def main():
     # drops or cliffs activated.
     while (x):
         if(roomba.readButton(_CLEAN_) and roomba.wheelDropLeft == False and\
-            roomba.wheelDropRight == False and roomba.cliffs == [False, False\
-                False, False]):
+            roomba.wheelDropRight == False and not (True in roomba.cliffs)):
             x = False
         time.sleep(2*_DELAY_)
 
@@ -173,8 +173,8 @@ def main():
     print("STARTING")
 
     while(True):
-
-        if((roomba.bumpRight or roomba.bumpLeft or (True in roomba.cliffs)) = False)
+        #making sure the bumps and cliffs are false
+        if((roomba.bumpRight or roomba.bumpLeft or (True in roomba.cliffs)) == False):
             roomba.drive(_velocity_,_NOROTATE_)      
             roomba.setDriving(True)
 
