@@ -53,13 +53,16 @@ _idCLIFFFRONTLEFT_ = 11
 ##########################################################
 _DELAY_ = 0.015 # 15 ms = 0.015 s
 
+logging.basicConfig(level=logging.DEBUG,\
+            filename="execution.log",filemode="w")
+
 class RobotInterface:
     def __init__(self):
         self.connection = SerialInterface()
         self.writeSong()
         self.getDistance()
         self.getAngle()
-        self.logging.basicConfig(level=logging.DEBUG,\
+        logging.basicConfig(level=logging.DEBUG,\
             filename="execution.log",filemode="w")
         ###########################
         # Flags for sensor states
@@ -123,14 +126,14 @@ class RobotInterface:
     ################################################################
     def getAngle(self):
         # Send the request for data.
-        sentData = struct.pack('>B2H', _SENSORS_, _idANGLE_)
+        sentData = struct.pack('h', _SENSORS_, _idANGLE_)
         self.connection.write(sentData)
         # Retrieve the data.
-        reading = self.connection.read(2)[0]
+        reading = self.connection.read(2)
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
         angle = struct.unpack('h', reading)[0]
-        self.logging.info("ANGLE: " + str(angle))
+        logging.info("ANGLE: " + str(angle))
         return angle
 
     ################################################################
@@ -142,15 +145,15 @@ class RobotInterface:
     ################################################################
     def getDistance(self):
         # Send the request for data.
-        sentData = struct.pack('>BH', _SENSORS_, _idDISTANCE_)
+        sentData = struct.pack('h', _SENSORS_, _idDISTANCE_)
         self.connection.write(sentData)
         # Retrieve the data.
-        reading = self.connection.read(2)[0]
+        reading = self.connection.read(2)
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
         distance = struct.unpack('h', reading)[0]
         # TODO: log this -> print(distance)
-        self.logging.info("DIST: " + str(distance))
+        logging.info("DIST: " + str(distance))
         return distance
 
     ###############################################################
@@ -194,7 +197,7 @@ class RobotInterface:
         #print("WDL: " + str(wheelDropLeft))
         #print("*********")
         if (wheelDropLeft or wheelDropRight or bumpRight or bumpLeft == True):
-            self.logging.info("UNSAFE")
+            logging.info("UNSAFE")
         time.sleep(_DELAY_)
 
       
@@ -216,7 +219,7 @@ class RobotInterface:
         button_input = self.connection.read(1)
         ret = bool(struct.unpack('B', button_input)[button])
         if (ret == True):
-            self.logging.info("BUTTON")
+            logging.info("BUTTON")
         return ret
       
     ###############################################################
@@ -235,7 +238,7 @@ class RobotInterface:
                 struct.unpack('B', cliff)[0])
             time.sleep(_DELAY_) # Don't read too fast.
         if (True in cliffs):
-            self.logging.info("UNSAFE")
+            logging.info("UNSAFE")
 
     ################################################################
     # Setters for Bumpers
