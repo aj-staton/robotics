@@ -81,31 +81,31 @@ def mainDrive():
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
             rotateRandom(_ROTATECW_)
-            getAngle()
+            roomba.getAngle()
             #checking to make sure we are safe now
             if((roomba.bumpLeft and roomba.bumpRight) == False):
                 # LOGGING THE DISTANCE AND ANGLE
-                getDistance()
+                roomba.getDistance()
                 roomba.drive(_velocity_, _NOROTATE_)
 
         if(roomba.bumpLeft):
             stopRoomba()
             rotateRandom(_ROTATECCW_)
-            getAngle()
+            roomba.getAngle()
             #checking to make sure we are safe now
             if(roomba.bumpLeft == False):
                 # LOGGING THE DISTANCE AND ANGLE
-                getDistance()
+                roomba.getDistance()
                 roomba.drive(_velocity_, _NOROTATE_)
 
         if(roomba.bumpRight):
             stopRoomba()
             rotateRandom(_ROTATECW_)
-            getAngle()
+            roomba.getAngle()
             #checking to make sure we are safe now
             if(roomba.bumpRight == False):
                 # LOGGING THE DISTANCE AND ANGLE
-                getDistance()
+                roomba.getDistance()
                 roomba.drive(_velocity_, _NOROTATE_)
 
 ###############################################################
@@ -140,7 +140,7 @@ def readBumperThread():
 def readCliffThread():
     while(True):
         time.sleep(2*_DELAY_)
-        readCliff()
+        roomba.readCliff()
 
 ###############################################################
 #  main() controls all actions of execution, including calling
