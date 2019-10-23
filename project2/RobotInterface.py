@@ -72,7 +72,7 @@ class RobotInterface:
         self.bumpRight = False
         self.wheelDropLeft = False
         self.wheelDropRight = False
-        self.cliffs = []
+        self.cliffs = [False,False,False,False]
         
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
@@ -126,13 +126,13 @@ class RobotInterface:
     ################################################################
     def getAngle(self):
         # Send the request for data.
-        sentData = struct.pack('h', _SENSORS_, _idANGLE_)
+        sentData = struct.pack('Bb', _SENSORS_, _idANGLE_)
         self.connection.write(sentData)
         # Retrieve the data.
         reading = self.connection.read(2)
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
-        angle = struct.unpack('h', reading)[0]
+        angle = struct.unpack('Bb', reading)[0]
         logging.info("ANGLE: " + str(angle))
         return angle
 
@@ -168,7 +168,7 @@ class RobotInterface:
     ###############################################################
     def playSong(self):
         songNumber = 0
-        data = struct.pack('Bb', _PLAY_, songNumber)
+        data = struct.pack('BB', _PLAY_, songNumber)
         self.connection.write(data)
 
     ###############################################################
@@ -235,9 +235,9 @@ class RobotInterface:
             # Unpack
             cliffdata = struct.unpack('B', cliff)[0]
             # index of 9 = 0 
-            self.cliffs[_idCLIFFS_.index(ID)] = bool(0x01 & cliffdata)
+            self.cliffs[ID - 9] = bool(0x01 & cliffdata)
             time.sleep(_DELAY_) # Don't read too fast.
-        if (True in cliffs):
+        if (True in self.cliffs):
             logging.info("UNSAFE")
 
     ################################################################
