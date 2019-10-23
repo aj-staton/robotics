@@ -196,7 +196,7 @@ class RobotInterface:
         self.wheelDropLeft = bool(reading & 0x08)
         #print("WDL: " + str(wheelDropLeft))
         #print("*********")
-        if (wheelDropLeft or wheelDropRight or bumpRight or bumpLeft == True):
+        if (self.wheelDropLeft or self.wheelDropRight or self.bumpRight or self.bumpLeft == True):
             logging.info("UNSAFE")
         time.sleep(_DELAY_)
 
