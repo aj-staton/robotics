@@ -145,13 +145,13 @@ class RobotInterface:
     ################################################################
     def getDistance(self):
         # Send the request for data.
-        sentData = struct.pack('h', _SENSORS_, _idDISTANCE_)
+        sentData = struct.pack('Bb', _SENSORS_, _idDISTANCE_)
         self.connection.write(sentData)
         # Retrieve the data.
         reading = self.connection.read(2)
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
-        distance = struct.unpack('h', reading)[0]
+        distance = struct.unpack('Bb', reading)[0]
         # TODO: log this -> print(distance)
         logging.info("DIST: " + str(distance))
         return distance
@@ -168,7 +168,7 @@ class RobotInterface:
     ###############################################################
     def playSong(self):
         songNumber = 0
-        data = struct.pack('BB', _PLAY_, songNumber)
+        data = struct.pack('Bb', _PLAY_, songNumber)
         self.connection.write(data)
 
     ###############################################################
@@ -229,13 +229,13 @@ class RobotInterface:
     ###############################################################
     def readCliff(self):
         # the ID should be 9-13, can run it through a loop
-        for ID in _idCLIFFS_:
+        for ID in range(9,12):
             self.connection.write(chr(_SENSORS_) + chr(ID))
             cliff = self.connection.read(1)
-            # how do we want to declare the cliff global variables
-            # array?
-            self.cliffs[_idCLIFFS_.index(ID)] = bool(0x01 & \
-                struct.unpack('B', cliff)[0])
+            # Unpack
+            cliffdata = struct.unpack('B', cliff)[0]
+            # index of 9 = 0 
+            self.cliffs[_idCLIFFS_.index(ID)] = bool(0x01 & cliffdata)
             time.sleep(_DELAY_) # Don't read too fast.
         if (True in cliffs):
             logging.info("UNSAFE")
@@ -314,6 +314,7 @@ class RobotInterface:
         data = struct.pack('>BBBBBBBBB', _SONG_, songNumber, songLength,\
                           songNote1, songNote1Length, songNote2, \
                           songNote2Length, songNote1, songNote1Length)
+
         self.connection.write(data)
         
         
