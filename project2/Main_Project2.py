@@ -79,23 +79,22 @@ def mainDrive():
     #roomba.drive(_velocity_, _NOROTATE_) # actually driving
 
     time.sleep(2*_DELAY_)
-
+    if(roomba.isDriving):
         #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
-    if(roomba.bumpLeft and roomba.bumpRight):
-        stopRoomba()
+        if(roomba.bumpLeft and roomba.bumpRight):
+            stopRoomba()
             #TODO: log getDistnce()
-        rotateRandom(_ROTATECW_)
+            rotateRandom(_ROTATECW_)
 
-    if(roomba.bumpLeft):
-        stopRoomba()
+        if(roomba.bumpLeft):
+            stopRoomba()
             #TODO: log getDistnce()
-        rotateRandom(_ROTATECCW_)
+            rotateRandom(_ROTATECCW_)
 
-    if(roomba.bumpRight):
-        stopRoomba()
+        if(roomba.bumpRight):
+            stopRoomba()
             #TODO: print getDistance() to log. 
-        rotateRandom(_ROTATECW_)
-        stopRoomba()
+            rotateRandom(_ROTATECW_)
 
 
 ###############################################################
@@ -145,6 +144,7 @@ def readCliffThread():
 ###############################################################
 def main():
     # setting states
+    roomba.setState("START")
     roomba.setState("SAFE")
     # declaring threads
 
@@ -166,22 +166,20 @@ def main():
             roomba.drive(_velocity_,_NOROTATE_)      
             roomba.setDriving(True)
             x = False
+            roomba.setPressed(False)
         time.sleep(2*_DELAY_)
 
     check.start()
     print("STARTING")
     while(True):
-
-        if(roomba.readButton(_CLEAN_)):
+        if(roomba.buttonPressed and roomba.isDriving):
+            roomba.setPressed(False)
             roomba.setDriving(False)
             stopRoomba()
-
-
-        elif(roomba.readButton(_CLEAN_)):
-
+        elif(roomba.buttonPressed and not(roomba.isDriving)):
+            roomba.setPressed(False)
             roomba.setDriving(True)
-            roomba.drive(_velocity_,_NOROTATE_)             
-            #mainDrive() #drive and turn a bunch
+            roomba.driveDirect(_velocity_,_NOROTATE_)
         time.sleep(_DELAY_)
 
     # End our threads and stop the roomba.

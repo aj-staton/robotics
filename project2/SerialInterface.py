@@ -12,6 +12,8 @@ class SerialInterface:
     def __init__(self):
         # Accesses needed port and sets data transfer rate.
         self.connection = serial.Serial(port='/dev/ttyUSB0', baudrate=115200)
+	self.connection.flushInput()
+        self.connection.flushOutput()
 
     def close(self):
         self.connection.close()

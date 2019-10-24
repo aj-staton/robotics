@@ -32,6 +32,7 @@ _FULL_ = 132
 _DRIVE_ = 137
 _DRIVE_DIRECT_ = 145
 _SENSORS_ = 142
+_CLEAN_ = 0
 #########################################################
 # The use of _SENSORS_ is followed with the packet ID of
 # the needed sensor data. These IDs are below:
@@ -68,6 +69,7 @@ class RobotInterface:
         # Flags for sensor states
         ###########################
         self.isDriving = True
+        self.buttonPressed = False
         self.bumpLeft = False
         self.bumpRight = False
         self.wheelDropLeft = False
@@ -198,6 +200,7 @@ class RobotInterface:
         #print("WDL: " + str(wheelDropLeft))
         #print("*********")
         if (self.wheelDropLeft or self.wheelDropRight or self.bumpRight or self.bumpLeft == True):
+            print("bumper")
             logging.info("UNSAFE BUMPER")
         time.sleep(_DELAY_)
 
@@ -220,8 +223,12 @@ class RobotInterface:
         button_input = self.connection.read(1)
         pressed = bool(struct.unpack('B',button_input)[button])
         if(pressed):
+            self.buttonPressed = True
             print("Button pressed")
         return pressed
+
+    def setPressed(self,pressed):
+        self.buttonPressed = pressed
     ###############################################################
     # readCliff() will read the left, right, front left, and front
     # right sensors. These readings are then stored in a list of
@@ -242,8 +249,9 @@ class RobotInterface:
             logging.info("UNSAFE CLIFF")
 
     def readSensors(self):
-        readCliff()
-        readBumper()
+        self.readButton(_CLEAN_)
+        #self.readCliff()
+        self.readBumper()
     ################################################################
     # Setters for Bumpers
     ################################################################
