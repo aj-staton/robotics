@@ -63,9 +63,11 @@ class RobotInterface:
         self.bumpRight = False
         self.wheelDropLeft = False
         self.wheelDropRight = False
-        self.cliffs = []
+        self.cliffs = [False,False,False,False]
         self.writeSong()
         
+
+
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
     # will accept values for velocity(mm/s) and turning radius(mm).
@@ -196,7 +198,10 @@ class RobotInterface:
         # Send a request to read the pressed button.
         self.connection.write(chr(_SENSORS_) + chr(_idBUTTONS_))
         button_input = self.connection.read(1)
-        return bool(struct.unpack('B', button_input)[button])
+        pressed = bool(struct.unpack('B',button_input)[button])
+        if(pressed):
+            print("Button pressed")
+        return pressed
       
     ###############################################################
     # readCliff() will read the left, right, front left, and front
@@ -205,14 +210,19 @@ class RobotInterface:
     ###############################################################
     def readCliff(self):
         # the ID should be 9-13, can run it through a loop
-        for ID in _idCLIFFS_:
+        for ID in range(9,13):
             self.connection.write(chr(_SENSORS_) + chr(ID))
             cliff = self.connection.read(1)
             # how do we want to declare the cliff global variables
             # array?
-            self.cliffs[_idCLIFFS_.index(ID)] = bool(0x01 & struct.unpack('B', cliff)[0])
+            self.cliffs[ID - 9] = bool(0x01 & struct.unpack('B', cliff)[0])
+            if(True in self.cliffs):
+                print("Cliff")
             time.sleep(_DELAY_) # Don't read too fast.
 
+    def readSensors(self):
+        readCliff()
+        readBumper()
     ################################################################
     # Setters for Bumpers
     ################################################################

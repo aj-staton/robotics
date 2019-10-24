@@ -67,6 +67,7 @@ def rotateRandom(direction): #direction is global CW or CCW
     print("Rotate: " + str(turnTime) + " ms")
     time.sleep(turnTime)
     stopRoomba()
+    roomba.drive(_velocity_,_NOROTATE_)
 
 ###############################################################
 # mainDrive() continuously checks the boolean values of our
@@ -74,31 +75,27 @@ def rotateRandom(direction): #direction is global CW or CCW
 # taken.
 ###############################################################
 def mainDrive():
-    roomba.setDriving(True) # setting driving to true
-    roomba.drive(_velocity_, _NOROTATE_) # actually driving
+    #roomba.setDriving(True) # setting driving to true
+    #roomba.drive(_velocity_, _NOROTATE_) # actually driving
 
-    while(True): 
-        time.sleep(2*_DELAY_)
+    time.sleep(2*_DELAY_)
 
         #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
-        if(roomba.bumpLeft and roomba.bumpRight):
-            stopRoomba()
+    if(roomba.bumpLeft and roomba.bumpRight):
+        stopRoomba()
             #TODO: log getDistnce()
-            rotateRandom(_ROTATECW_)
-            roomba.drive(_velocity_, _NOROTATE_)
+        rotateRandom(_ROTATECW_)
 
-        if(roomba.bumpLeft):
-            stopRoomba()
+    if(roomba.bumpLeft):
+        stopRoomba()
             #TODO: log getDistnce()
-            rotateRandom(_ROTATECCW_)
-            roomba.drive(_velocity_, _NOROTATE_)
+        rotateRandom(_ROTATECCW_)
 
-        if(roomba.bumpRight):
-            stopRoomba()
+    if(roomba.bumpRight):
+        stopRoomba()
             #TODO: print getDistance() to log. 
-            rotateRandom(_ROTATECW_)
-            stopRoomba()
-            roomba.drive(_velocity_, _NOROTATE_)
+        rotateRandom(_ROTATECW_)
+        stopRoomba()
 
 ###############################################################
 #  readCleanButtonThread() is what checks the iRobot's clean button
@@ -123,6 +120,13 @@ def mainDrive():
 #  readBumperThread() calls our readBumper method in the Interface
 #  the method in the interface already sets out global variables
 ###############################################################
+def readSensors():
+    while(True):
+        time.sleep(_DELAY_)
+        roomba.readSensors()
+        mainDrive()
+
+
 def readBumperThread():
     while(True):
         time.sleep(_DELAY_)
@@ -137,12 +141,12 @@ def main():
     # setting states
     roomba.setState("SAFE")
     # declaring threads
-    drive = Thread(target = mainDrive)
-    bump = Thread(target = readBumperThread)
+    #drive = Thread(target = mainDrive)
+    #bump = Thread(target = readBumperThread)
     # declaring our log file
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     # starting threads
-    bump.start()
+    check = Thread(target = readSensors)
     # waiting to start
     x = True
     # Listen for the press of the Clean button, which will begin
@@ -153,26 +157,22 @@ def main():
             x = False
         time.sleep(2*_DELAY_)
 
-    drive.start()
+    check.start()
     print("STARTING")
 
     while(True):
-        if(roomba.readButton(_CLEAN_) and not(lock.locked())):
-            lock.acquire()
+        if(roomba.readButton(_CLEAN_)):
             roomba.setDriving(False)
             stopRoomba()
-            time.sleep(1)
 
-        elif(roomba.readButton(_CLEAN_) and lock.locked()):
-            lock.release()
+        elif(roomba.readButton(_CLEAN_)):
             roomba.setDriving(True)
             roomba.drive(_velocity_,_NOROTATE_)             
             #mainDrive() #drive and turn a bunch
         time.sleep(_DELAY_)
 
     # End our threads and stop the roomba.
-    drive.join()
-    bump.join()
+    check.join()
     stopRoomba()
     sys.exit()
 
