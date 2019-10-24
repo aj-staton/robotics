@@ -200,7 +200,7 @@ class RobotInterface:
         #print("WDL: " + str(wheelDropLeft))
         #print("*********")
         if (self.wheelDropLeft or self.wheelDropRight or self.bumpRight or self.bumpLeft == True):
-            print("bumper")
+            print("Bumper")
             logging.info("UNSAFE BUMPER")
         time.sleep(_DELAY_)
 
@@ -224,7 +224,8 @@ class RobotInterface:
         pressed = bool(struct.unpack('B',button_input)[button])
         if(pressed):
             self.buttonPressed = True
-            print("Button pressed")
+            print("Button")
+            logging.info("BUTTON")
         return pressed
 
     def setPressed(self,pressed):
@@ -252,6 +253,7 @@ class RobotInterface:
         self.readButton(_CLEAN_)
         #self.readCliff()
         self.readBumper()
+
     ################################################################
     # Setters for Bumpers
     ################################################################
@@ -308,6 +310,7 @@ class RobotInterface:
         else:
             print "Invalid state input in the setState() function"
             sys.exit() 
+
     #################################################################
     # writeSong() will make the song for the playSong() function to
     # retrieve. This function will write the song to the Roomba's
@@ -318,25 +321,14 @@ class RobotInterface:
         # Hence, the 7 B's for signifying 7 unsigned character bytes.
         songNumber = 0
         songLength = 3 # length of the song, as a quantitify of notes
-        songNote1 = 32
-        songNote1Length = 125
-        songNote2 = 126
-        songNote2Length = 60
+        songNote1 = 75
+        songNote1Length = 60
+        songNote2 = 55
+        songNote2Length = 30
         # Create the 3-note song.
         data = struct.pack('>BBBBBBBBB', _SONG_, songNumber, songLength,\
                           songNote1, songNote1Length, songNote2, \
                           songNote2Length, songNote1, songNote1Length)
 
         self.connection.write(data)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
       

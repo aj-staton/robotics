@@ -49,7 +49,7 @@ lock = Lock() #Initialize lock variable
 # zero turning radius, thus, stopping the robot.
 ###############################################################
 def stopRoomba():
-    roomba.drive(0,0)
+    roomba.driveDirect(0,0)
 
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
@@ -59,7 +59,7 @@ def stopRoomba():
 #   so turn (135 - 225)
 ###############################################################
 def rotateRandom(direction): #direction is global CW or CCW
-    roomba.drive(_velocity_, direction)
+    roomba.driveDirect(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
     turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
     #theta = turnTime * _omega_
@@ -83,39 +83,27 @@ def mainDrive():
         #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
-            #TODO: log getDistnce()
+            roomba.getDistance()
             rotateRandom(_ROTATECW_)
+            roomba.getAngle()
 
         if(roomba.bumpLeft):
             stopRoomba()
-            #TODO: log getDistnce()
+            roomba.getDistance()
             rotateRandom(_ROTATECCW_)
+ 	    roomba.getAngle()
 
         if(roomba.bumpRight):
             stopRoomba()
-            #TODO: print getDistance() to log. 
+            roomba.getDistance()
             rotateRandom(_ROTATECW_)
+            roomba.getAngle()
 
+        if (roomba.wheelDropLeft or roomba.wheelDropRight):
+            stopRoomba()
+            roomba.playSong()
+            print("WheelDrop--Playing Song")
 
-###############################################################
-#  readCleanButtonThread() is what checks the iRobot's clean button
-#  during execution. It does this with threading.
-###############################################################
-'''
-    def readCleanButtonThread():
-    while(True):
-    #global _isDriving_
-    time.sleep(.10)
-    if(roomba.readButton(_CLEAN_, chr(18)) && not(lock.locked())):
-    lock.aquire()
-    #_isDriving_ = not _isDriving_
-    roomba.setDriving()
-    stopRoomba()
-    elif(roomba.readButton(_CLEAN_,chr(18)) && lock.locked()):
-    lock.release()
-    roomba.setDriving()
-    roomba.drive(_velocity_,_NOROTATE_)
-    '''
 ###############################################################
 #  readBumperThread() calls our readBumper method in the Interface
 #  the method in the interface already sets out global variables
@@ -146,6 +134,7 @@ def main():
     # setting states
     roomba.setState("START")
     roomba.setState("SAFE")
+    roomba.playSong()
     # declaring threads
 
     #drive = Thread(target = mainDrive)
