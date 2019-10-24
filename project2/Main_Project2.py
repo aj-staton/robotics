@@ -165,8 +165,7 @@ def main():
     # drops or cliffs activated.
     while (x):
         if(roomba.readButton(_CLEAN_) and roomba.wheelDropLeft == False and\
-            roomba.wheelDropRight == False and not (True in roomba.cliffs)):
-        
+            roomba.wheelDropRight == False and (True in roomba.cliffs) == False):
             roomba.drive(_velocity_,_NOROTATE_)      
             roomba.setDriving(True)
             x = False
@@ -174,11 +173,7 @@ def main():
 
     drive.start()
     print("STARTING")
-
-
     while(True):
-
-
        # Handles clean button being pressing IN MOTION
         if(roomba.readButton(_CLEAN_) and not(lock.locked())):
             lock.acquire()

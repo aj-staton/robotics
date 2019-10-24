@@ -132,7 +132,7 @@ class RobotInterface:
         reading = self.connection.read(2)
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
-        angle = struct.unpack('Bb', reading)[0]
+        angle = struct.unpack('h', reading)[0]
         logging.info("ANGLE: " + str(angle))
         return angle
 
@@ -151,7 +151,7 @@ class RobotInterface:
         reading = self.connection.read(2)
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
-        distance = struct.unpack('Bb', reading)[0]
+        distance = struct.unpack('h', reading)[0]
         # TODO: log this -> print(distance)
         logging.info("DIST: " + str(distance))
         return distance
@@ -197,7 +197,7 @@ class RobotInterface:
         #print("WDL: " + str(wheelDropLeft))
         #print("*********")
         if (self.wheelDropLeft or self.wheelDropRight or self.bumpRight or self.bumpLeft == True):
-            logging.info("UNSAFE")
+            logging.info("UNSAFE BUMPER")
         time.sleep(_DELAY_)
 
       
@@ -238,7 +238,7 @@ class RobotInterface:
             self.cliffs[ID - 9] = bool(0x01 & cliffdata)
             time.sleep(_DELAY_) # Don't read too fast.
         if (True in self.cliffs):
-            logging.info("UNSAFE")
+            logging.info("UNSAFE CLIFF")
 
     ################################################################
     # Setters for Bumpers
