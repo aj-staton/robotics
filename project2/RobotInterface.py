@@ -73,7 +73,8 @@ class RobotInterface:
         self.wheelDropLeft = False
         self.wheelDropRight = False
         self.cliffs = [False,False,False,False]
-        
+        self.writeSong()
+
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
     # will accept values for velocity(mm/s) and turning radius(mm).
@@ -217,11 +218,10 @@ class RobotInterface:
         # Send a request to read the pressed button.
         self.connection.write(chr(_SENSORS_) + chr(_idBUTTONS_))
         button_input = self.connection.read(1)
-        ret = bool(struct.unpack('B', button_input)[button])
-        if (ret == True):
-            logging.info("BUTTON")
-        return ret
-      
+        pressed = bool(struct.unpack('B',button_input)[button])
+        if(pressed):
+            print("Button pressed")
+        return pressed
     ###############################################################
     # readCliff() will read the left, right, front left, and front
     # right sensors. These readings are then stored in a list of
@@ -232,14 +232,18 @@ class RobotInterface:
         for ID in range(9,13):
             self.connection.write(chr(_SENSORS_) + chr(ID))
             cliff = self.connection.read(1)
-            # Unpack
-            cliffdata = struct.unpack('B', cliff)[0]
-            # index of 9 = 0 
-            self.cliffs[ID - 9] = bool(0x01 & cliffdata)
+            # how do we want to declare the cliff global variables
+            # array?
+            self.cliffs[ID - 9] = bool(0x01 & struct.unpack('B', cliff)[0])
+            if(True in self.cliffs):
+                print("Cliff")
             time.sleep(_DELAY_) # Don't read too fast.
         if (True in self.cliffs):
             logging.info("UNSAFE CLIFF")
 
+    def readSensors(self):
+        readCliff()
+        readBumper()
     ################################################################
     # Setters for Bumpers
     ################################################################
