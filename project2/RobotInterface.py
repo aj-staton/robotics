@@ -11,6 +11,7 @@ import time
 import sys
 from SerialInterface import *
 import struct
+import logging
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7    6   5   4   3   2   1   0
@@ -52,12 +53,20 @@ _idCLIFFFRONTLEFT_ = 11
 ##########################################################
 _DELAY_ = 0.015 # 15 ms = 0.015 s
 
+logging.basicConfig(level=logging.DEBUG,\
+            filename="execution.log",filemode="w")
+
 class RobotInterface:
     def __init__(self):
         self.connection = SerialInterface()
-        ###########################################################
+        self.writeSong()
+        self.getDistance()
+        self.getAngle()
+        logging.basicConfig(level=logging.DEBUG,\
+            filename="execution.log",filemode="w")
+        ###########################
         # Flags for sensor states
-        ###########################################################
+        ###########################
         self.isDriving = True
         self.bumpLeft = False
         self.bumpRight = False
@@ -65,8 +74,6 @@ class RobotInterface:
         self.wheelDropRight = False
         self.cliffs = [False,False,False,False]
         self.writeSong()
-        
-
 
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
@@ -112,6 +119,25 @@ class RobotInterface:
             sys.exit()
 
     ################################################################
+    # getAngle() returns the angle that the Roomba has turned,
+    # in degrees, since the last time the angle was re-
+    # quested. So, getAngle() must be called at initalization.
+    # 
+    # This fuction will return the angle turned, in degrees.
+    ################################################################
+    def getAngle(self):
+        # Send the request for data.
+        sentData = struct.pack('Bb', _SENSORS_, _idANGLE_)
+        self.connection.write(sentData)
+        # Retrieve the data.
+        reading = self.connection.read(2)
+        time.sleep(_DELAY_)
+        # Interpret the bytes, where the 2^15 bit is the sign.
+        angle = struct.unpack('h', reading)[0]
+        logging.info("ANGLE: " + str(angle))
+        return angle
+
+    ################################################################
     # getDistance() returns the distance that the Roomba has travel-
     # ed, in millimeters, since the last time the distance was re-
     # quested. So, getDistance() must be called at initalization.
@@ -120,15 +146,15 @@ class RobotInterface:
     ################################################################
     def getDistance(self):
         # Send the request for data.
-        sentData = struct.pack('>B2H', _SENSORS_, _idDISTANCE_)
+        sentData = struct.pack('Bb', _SENSORS_, _idDISTANCE_)
         self.connection.write(sentData)
         # Retrieve the data.
-        reading = self.connection.read(2)[0]
+        reading = self.connection.read(2)
         time.sleep(_DELAY_)
         # Interpret the bytes, where the 2^15 bit is the sign.
         distance = struct.unpack('h', reading)[0]
         # TODO: log this -> print(distance)
-        # More TODO: is this going to be DISTANCE
+        logging.info("DIST: " + str(distance))
         return distance
 
     ###############################################################
@@ -171,16 +197,10 @@ class RobotInterface:
         self.wheelDropLeft = bool(reading & 0x08)
         #print("WDL: " + str(wheelDropLeft))
         #print("*********")
-
+        if (self.wheelDropLeft or self.wheelDropRight or self.bumpRight or self.bumpLeft == True):
+            logging.info("UNSAFE BUMPER")
         time.sleep(_DELAY_)
-        '''
-        now we have our states set and we can just thread this method
-        then we just check in main:
-            if(WheelDropLeft):
-                turn 45 right
-            if(WheelDropRight):
-                turn 45 left
-        '''
+
       
     ###############################################################
     #  readButton() reads the byte that is returned from the iRobot
@@ -202,7 +222,6 @@ class RobotInterface:
         if(pressed):
             print("Button pressed")
         return pressed
-      
     ###############################################################
     # readCliff() will read the left, right, front left, and front
     # right sensors. These readings are then stored in a list of
@@ -219,6 +238,8 @@ class RobotInterface:
             if(True in self.cliffs):
                 print("Cliff")
             time.sleep(_DELAY_) # Don't read too fast.
+        if (True in self.cliffs):
+            logging.info("UNSAFE CLIFF")
 
     def readSensors(self):
         readCliff()
@@ -297,6 +318,7 @@ class RobotInterface:
         data = struct.pack('>BBBBBBBBB', _SONG_, songNumber, songLength,\
                           songNote1, songNote1Length, songNote2, \
                           songNote2Length, songNote1, songNote1Length)
+
         self.connection.write(data)
         
         

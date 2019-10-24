@@ -50,7 +50,6 @@ lock = Lock() #Initialize lock variable
 ###############################################################
 def stopRoomba():
     roomba.drive(0,0)
-    logging.info("Testing")
 
 ###############################################################
 #  rotate() uses the drive() function, but only rotates
@@ -63,6 +62,7 @@ def rotateRandom(direction): #direction is global CW or CCW
     roomba.drive(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
     turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
+    #theta = turnTime * _omega_
     # turn for that amount of time
     print("Rotate: " + str(turnTime) + " ms")
     time.sleep(turnTime)
@@ -96,6 +96,7 @@ def mainDrive():
             #TODO: print getDistance() to log. 
         rotateRandom(_ROTATECW_)
         stopRoomba()
+
 
 ###############################################################
 #  readCleanButtonThread() is what checks the iRobot's clean button
@@ -133,6 +134,11 @@ def readBumperThread():
         # this method sets our 4 global variables
         roomba.readBumper()
 
+def readCliffThread():
+    while(True):
+        time.sleep(2*_DELAY_)
+        roomba.readCliff()
+
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
@@ -141,38 +147,47 @@ def main():
     # setting states
     roomba.setState("SAFE")
     # declaring threads
+
     #drive = Thread(target = mainDrive)
     #bump = Thread(target = readBumperThread)
     # declaring our log file
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     # starting threads
     check = Thread(target = readSensors)
+
     # waiting to start
     x = True
     # Listen for the press of the Clean button, which will begin
-    # the drawing of the polygon.
+    # the drawing of the polygon. Also, make sure there are no wheel
+    # drops or cliffs activated.
     while (x):
-        # TODO: CHECK IF THE WHEEL DROPS AND CLIFFS ARE ACTIVATED
-        if(roomba.readButton(_CLEAN_)):
+        if(roomba.readButton(_CLEAN_) and roomba.wheelDropLeft == False and\
+            roomba.wheelDropRight == False and (True in roomba.cliffs) == False):
+            roomba.drive(_velocity_,_NOROTATE_)      
+            roomba.setDriving(True)
             x = False
         time.sleep(2*_DELAY_)
 
     check.start()
     print("STARTING")
-
     while(True):
+
         if(roomba.readButton(_CLEAN_)):
             roomba.setDriving(False)
             stopRoomba()
 
+
         elif(roomba.readButton(_CLEAN_)):
+
             roomba.setDriving(True)
             roomba.drive(_velocity_,_NOROTATE_)             
             #mainDrive() #drive and turn a bunch
         time.sleep(_DELAY_)
 
     # End our threads and stop the roomba.
+
     check.join()
+
     stopRoomba()
     sys.exit()
 
