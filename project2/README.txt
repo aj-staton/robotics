@@ -1,19 +1,21 @@
 --------------------
--CSCE 274 Project -
+-CSCE 274 Project 2-
 --------------------
-The primary goal of the second project was to read main
-sensors 
+The primary goal of the second project was to read the Create2's
+various sensors and use that data to help the Create2 make
+decisions in its motion.
 
 All work was completed by Robert Carff, Miles Ziemer, and
 Austin Staton for this assignment. The teaching assistant,
-Ibrahim Salman, offered some guidance; however, any sub-
-stance to this work was performed by the formerly mentioned
-contributers.
+Ibrahim Salman, offered some guidance around fixing broken
+sensors; however, any substance to this work was performed
+by the formerly mentioned contributers.
 
 -------
 -Files-
 -------
 Each needed file is listed and described below:
+
   SerialInterface.py -- this file transfers data to the
                      iRobot Create2 via Serial Communi-
                      cation. It serves as the interface
@@ -27,7 +29,10 @@ Each needed file is listed and described below:
                     controlling the robot's: movement, mode
                     of opertaion, sensors, and actuators.
 
-  Main_Project2.py --
+  Main_Project2.py -- this file controls all primary function-
+                   ality of the Create2. For this project, this
+                   includes managing the various threads for
+                   environment sensing and motion.
 
 -----------
 -Execution-
