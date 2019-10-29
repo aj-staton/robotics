@@ -40,7 +40,7 @@ Each needed file is listed and described below:
 Limitations:
 ** I am assuming the user is on a Debian-based Linux
    operating system. If this prerequisite is not met, the
-   below actions will not preoduce their desired result.
+   below actions will not produce their desired result.
 
 To execute this program, thus instructing the iRobot to
 create a polygon, do the following:
