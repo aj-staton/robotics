@@ -17,7 +17,7 @@ Our robot drives around a [mufukin](https://drive.google.com/file/d/1qV1KdgdLvN7
 [Mufukin](https://drive.google.com/file/d/17pS6uIGC5stqJetbmv9jQ1DKY17KgW3i/view) 
 
 ### Project_Three
-The roomba has a [Mufukin](https://drive.google.com/file/d/1RzoDoG3izRddcIuEF-j1B52c0YjJthWL/view) PD controller.
+The roomba has a [mufukin](https://drive.google.com/file/d/1RzoDoG3izRddcIuEF-j1B52c0YjJthWL/view) PD controller.
 
 ### Project_Four
 [Mufukin](https://drive.google.com/file/d/1qV1KdgdLvN7GdSB7fDuzNeR2KqT55yui/view) 
