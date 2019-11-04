@@ -4,8 +4,7 @@ iRobot Roomba Create2 robot. This will include changing the mode of operation
 on the robot, reading input from the robot's physical buttons, and moving
 the robot.
 Written by: Miles Ziemer, Robby Carff, and Austin Staton for use in CSCE 274
-Date: October 5th, 2019
-he
+Date: November 4th, 2019
 '''
 import time
 import sys
@@ -73,6 +72,8 @@ class RobotInterface:
         self.wheelDropRight = False
         self.cliffs = [False,False,False,False]
         self.writeSong()
+        self.leftIRSensor = 0
+        self.rightIRSensor = 0
 
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
@@ -253,12 +254,12 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDLEFT_))
         data = self.connection.read(1)
         data = struct.unpack('B', data)[0]
-        return data
+        self.leftIRSensor = data
     def readInfraredRight(self):
         self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDRIGHT_))
         data = self.connection.read(1)
         data = struct.unpack('B', data)[0]
-        return data
+        self.rightIRSensor = data
 
     ###############################################################
     # readSensors() is the function that will consolidate the other
@@ -268,8 +269,9 @@ class RobotInterface:
     ###############################################################
     def readSensors(self):
         self.readButton(_CLEAN_)
-        #self.readCliff()
         self.readBumper()
+        self.readInfraredLeft()
+        self.readInfraredRight()
 
     ################################################################
     # Setters for Bumpers

@@ -1,9 +1,9 @@
 ####################################################################
 # This the main program that will be interacting
-# with the robot in Project 2.
+# with the robot in Project 3.
 #
 # Written by: Robert Carff, Austin Statin, Miles Ziemer
-#           -- October 5th, 2019
+#           -- November 4th, 2019
 ####################################################################
 ####################################################################
 # Imports
@@ -13,6 +13,8 @@ import math
 from threading import Thread, Lock
 import random
 import logging
+from simple_pid import PID
+
 ####################################################################
 # Magic number Variables
 _degrees_ = 360 #this is in degrees
@@ -44,6 +46,7 @@ _CLOCK_ = 7
 
 roomba = RobotInterface() #Initialize the robot interface
 lock = Lock() #Initialize lock variable
+
 ###############################################################
 # stopRoomba() sends the drive command with zero velocity and
 # zero turning radius, thus, stopping the robot.
@@ -58,7 +61,10 @@ def stopRoomba():
 #   we need to turn 180, and then +-45
 #   so turn (135 - 225)
 ###############################################################
-def rotateRandom(direction): #direction is global CW or CCW
+def rotate(direction):
+    # TODO: make this more directed to correction, not a random
+    # value. 
+    
     roomba.driveDirect(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
     turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
@@ -70,33 +76,36 @@ def rotateRandom(direction): #direction is global CW or CCW
     roomba.drive(_velocity_,_NOROTATE_)
 
 ###############################################################
-# mainDrive() continuously checks the boolean values of our
-# sensors to see if they have been pressed. If so, an action
-# taken.
+# driveLogic() will read all of the bumpers on the roomba
+# collectively. When one of these bumpers is hit, the roomba
+# will turn as needed.
 ###############################################################
-def mainDrive():
-    #roomba.setDriving(True) # setting driving to true
-    #roomba.drive(_velocity_, _NOROTATE_) # actually driving
-
-    time.sleep(2*_DELAY_)
+def driveLogic():
+    time.sleep(_DELAY_) # Used to minorly delay sensor reading.
     if(roomba.isDriving):
-        #WE NEED TO ROTATE LEFT OR RIGHT DEPENDING ON BUMPE
+
+    # TODO: Interpret IR sensor readings, which is already done
+    # in roomba.readSensors() (called by readSensors).
+    # roomba.leftIRSensor...
+    # roomba.rightIRSensor...
+    # TODO: Create PID logic
+
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
             roomba.getDistance()
-            rotateRandom(_ROTATECW_)
+            rotate(_ROTATECW_)
             roomba.getAngle()
 
         if(roomba.bumpLeft):
             stopRoomba()
             roomba.getDistance()
-            rotateRandom(_ROTATECCW_)
- 	    roomba.getAngle()
+            rotate(_ROTATECCW_)
+ 	        roomba.getAngle()
 
         if(roomba.bumpRight):
             stopRoomba()
             roomba.getDistance()
-            rotateRandom(_ROTATECW_)
+            rotate(_ROTATECW_)
             roomba.getAngle()
 
         if (roomba.wheelDropLeft or roomba.wheelDropRight):
@@ -105,61 +114,45 @@ def mainDrive():
             print("WheelDrop--Playing Song")
 
 ###############################################################
-#  readBumperThread() calls our readBumper method in the Interface
-#  the method in the interface already sets out global variables
+# readSensors() iteratively reads all the needed sensors on
+# the roomba. Since sensors cannot be read more frequently than
+# dt = 0.15 ms, a design decision was made to consolidate these
+# into thier own thread.
+# This function ALSO controls the logic for driving, based off
+# of these sensor readings.
 ###############################################################
 def readSensors():
     while(True):
         time.sleep(_DELAY_)
         roomba.readSensors()
-        mainDrive()
-
-
-def readBumperThread():
-    while(True):
-        time.sleep(_DELAY_)
-        # this method sets our 4 global variables
-        roomba.readBumper()
-
-def readCliffThread():
-    while(True):
-        time.sleep(2*_DELAY_)
-        roomba.readCliff()
+        driveLogic()
 
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
 ###############################################################
 def main():
-    # setting states
     roomba.setState("START")
     roomba.setState("SAFE")
-    roomba.playSong()
-    # declaring threads
-
-    #drive = Thread(target = mainDrive)
-    #bump = Thread(target = readBumperThread)
-    # declaring our log file
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
-    # starting threads
-    check = Thread(target = readSensors)
+    
+    check = Thread(target = driveLogic)
 
-    # waiting to start
-    x = True
     # Listen for the press of the Clean button, which will begin
-    # the drawing of the polygon. Also, make sure there are no wheel
-    # drops or cliffs activated.
-    while (x):
-        if(roomba.readButton(_CLEAN_) and roomba.wheelDropLeft == False and\
-            roomba.wheelDropRight == False and (True in roomba.cliffs) == False):
+    # the drawing of the polygon.
+    started = False
+    while (not started):
+        if(roomba.readButton(_CLEAN_)):
             roomba.drive(_velocity_,_NOROTATE_)      
             roomba.setDriving(True)
-            x = False
+            started = True
             roomba.setPressed(False)
-        time.sleep(2*_DELAY_)
+        time.sleep(_DELAY_)
 
     check.start()
     print("STARTING")
+
+    # This while loop reads the 'Clean' button and starts/stops the roomba. 
     while(True):
         if(roomba.buttonPressed and roomba.isDriving):
             roomba.setPressed(False)
@@ -172,11 +165,8 @@ def main():
         time.sleep(_DELAY_)
 
     # End our threads and stop the roomba.
-
     check.join()
-
     stopRoomba()
     sys.exit()
-
 
 main()
