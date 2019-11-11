@@ -251,18 +251,18 @@ class RobotInterface:
     # sensors on the Create2.
     ##############################################################
     def readInfraredLeft(self):
-        self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDLEFT_))
-        data = self.connection.read(1)
+        self.connection.write(chr(_SENSORS_)+chr(46))
+        data = self.connection.read(2)
         print(data)
-        data1 = struct.unpack('B', data)[0]
+        data1 = struct.unpack('<H', data)[0]
         self.leftIRSensor = data1
         print("LEFT: " + str(data1))
 
     def readInfraredRight(self):
-        self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDRIGHT_))
-        data = self.connection.read(1)
+        self.connection.write(chr(_SENSORS_)+chr(50))
+        data = self.connection.read(2)
         print(data)
-        data1 = struct.unpack('B', data)[0]
+        data1 = struct.unpack('<H', data)[0]
         self.rightIRSensor = data1
         print("RIGHT: " + str(data1))
 
