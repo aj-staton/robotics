@@ -255,7 +255,7 @@ class RobotInterface:
         data = self.connection.read(1)
         data1 = struct.unpack('B', data)[0]
         self.leftIRSensor = data1
-        print("LEFT: " + str(roomba.leftIRSensor))
+        print("LEFT: " + str(data1))
 
 
     def readInfraredRight(self):
@@ -263,7 +263,7 @@ class RobotInterface:
         data = self.connection.read(1)
         data1 = struct.unpack('B', data)[0]
         self.rightIRSensor = data1
-        print("RIGHT: " + str(roomba.rightIRSensor))
+        print("RIGHT: " + str(data1))
 
 
     ###############################################################
