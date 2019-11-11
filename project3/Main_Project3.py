@@ -126,11 +126,6 @@ def readSensors():
         time.sleep(_DELAY_)
         roomba.readSensors()
         driveLogic()
-        right = roomba.readInfraredRight()
-        #print("RIGHT: " + str(roomba.rightIRSensor))
-        left = roomba.readInfraredLeft()
-        #print("LEFT: " + str(roomba.leftIRSensor))
-
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
