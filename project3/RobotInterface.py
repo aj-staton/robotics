@@ -41,7 +41,7 @@ _idBUTTONS_ = 18
 _idDISTANCE_ = 19
 _idANGLE_ = 20
 _idINFRAREDLEFT_ = 52
-_isINFRAREDRIGHT_ = 53
+_idINFRAREDRIGHT_ = 53
 _idCLIFFS_ = [9,10,11,12]
 
 ##########################################################
@@ -255,6 +255,7 @@ class RobotInterface:
         data = self.connection.read(1)
         data = struct.unpack('B', data)[0]
         self.leftIRSensor = data
+        
     def readInfraredRight(self):
         self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDRIGHT_))
         data = self.connection.read(1)
