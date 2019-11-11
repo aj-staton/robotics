@@ -253,14 +253,18 @@ class RobotInterface:
     def readInfraredLeft(self):
         self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDLEFT_))
         data = self.connection.read(1)
-        data = struct.unpack('B', data)[0]
-        self.leftIRSensor = data
-        
+        data1 = struct.unpack('B', data)[0]
+        self.leftIRSensor = data1
+        print("LEFT: " + str(roomba.leftIRSensor))
+
+
     def readInfraredRight(self):
         self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDRIGHT_))
         data = self.connection.read(1)
-        data = struct.unpack('B', data)[0]
-        self.rightIRSensor = data
+        data1 = struct.unpack('B', data)[0]
+        self.rightIRSensor = data1
+        print("RIGHT: " + str(roomba.rightIRSensor))
+
 
     ###############################################################
     # readSensors() is the function that will consolidate the other
