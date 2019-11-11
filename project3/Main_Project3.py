@@ -127,9 +127,9 @@ def readSensors():
         roomba.readSensors()
         driveLogic()
         right = roomba.readInfraredRight()
-        print("RIGHT: " + string(roomba.rightIRSensor))
+        print("RIGHT: " + str(roomba.rightIRSensor))
         left = roomba.readInfraredLeft()
-        print("LEFT: " + string(roomba.leftIRSensor))
+        print("LEFT: " + str(roomba.leftIRSensor))
 
 ###############################################################
 #  main() controls all actions of execution, including calling
