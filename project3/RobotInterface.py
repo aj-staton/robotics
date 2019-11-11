@@ -259,7 +259,7 @@ class RobotInterface:
         print("LEFT: " + str(data1))
 
     def readInfraredRight(self):
-        self.connection.write(chr(_SENSORS_)+chr(50))
+        self.connection.write(chr(_SENSORS_)+chr(51))
         data = self.connection.read(2)
         print(data)
         data1 = struct.unpack('<H', data)[0]
