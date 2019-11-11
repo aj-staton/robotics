@@ -126,6 +126,10 @@ def readSensors():
         time.sleep(_DELAY_)
         roomba.readSensors()
         driveLogic()
+        right = roomba.readInfraredRight()
+        print("RIGHT: " + right)
+        left = roomba.readInfraredLeft()
+        print("LEFT: " + left)
 
 ###############################################################
 #  main() controls all actions of execution, including calling
@@ -136,7 +140,7 @@ def main():
     roomba.setState("SAFE")
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     
-    check = Thread(target = driveLogic)
+    check = Thread(target = readSensors)
 
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
