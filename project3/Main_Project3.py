@@ -100,7 +100,7 @@ def driveLogic():
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECCW_)
- 	        roomba.getAngle()
+            roomba.getAngle()
 
         if(roomba.bumpRight):
             stopRoomba()
@@ -127,9 +127,9 @@ def readSensors():
         roomba.readSensors()
         driveLogic()
         right = roomba.readInfraredRight()
-        print("RIGHT: " + right)
+        print("RIGHT: " + int(roomba.rightIRSensor))
         left = roomba.readInfraredLeft()
-        print("LEFT: " + left)
+        print("LEFT: " + int(roomba.leftIRSensor))
 
 ###############################################################
 #  main() controls all actions of execution, including calling
