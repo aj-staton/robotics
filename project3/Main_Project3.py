@@ -78,7 +78,7 @@ def PID():
     _PREVERROR_ = 0
     _CURRENTERROR_ = 0
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-    _CURRENTERROR_ = roomba.getLeftIR - _S_
+    _CURRENTERROR_ = roomba.getLeftIR() - _S_
     # read sensors
     # TODO: Create PID logic
     U = _KP_ * _CURRENTERROR_ # + (_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
