@@ -75,7 +75,8 @@ def rotate(direction):
 
 def PID():
     ####################### PID ####################################
-    _PREVERROR_
+    _PREVERROR_ = 0
+    _CURRENTERROR_ = 0
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     _CURRENTERROR_ = roomba.getLeftIR - _S_
     # read sensors
