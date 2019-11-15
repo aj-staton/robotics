@@ -257,7 +257,7 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_)+chr(46))
         data = self.connection.read(2)
         print(data)
-        data1 = struct.unpack('<H', data)[0]
+        data1 = struct.unpack('H', data)[0]
         self.leftIRSensor = data1
         print("LEFT: " + str(data1))
 
@@ -265,7 +265,7 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_)+chr(51))
         data = self.connection.read(2)
         print(data)
-        data1 = struct.unpack('<H', data)[0]
+        data1 = struct.unpack('H', data)[0]
         self.rightIRSensor = data1
         print("RIGHT: " + str(data1))
 
