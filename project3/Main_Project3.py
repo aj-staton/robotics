@@ -98,10 +98,10 @@ def driveLogic():
     if(roomba.isDriving):
 
         if (PID() > 0):
-            roomba.driveDirect((right) , (left) )
+            roomba.driveDirect((_RIGHT_) , (_LEFT_))
 
         elif (PID() < 0):
-            roomba.driveDirect((right) , (left) )
+            roomba.driveDirect((_RIGHT_) , (_LEFT_))
         ####################### PID ####################################
         
         if(roomba.bumpLeft and roomba.bumpRight):

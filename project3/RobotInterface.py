@@ -99,7 +99,7 @@ class RobotInterface:
     ############################################################### 
     def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-            data = struct.pack('>Bhh', _DRIVE_DIRECT_, velocity, radius)
+            data = struct.pack('>Bhh', _DRIVE_, velocity, radius)
             self.connection.write(data)
             # WE CAN SET THE DRIVING BOOL HERE
             # setDriving(True)
@@ -111,12 +111,9 @@ class RobotInterface:
     # This method will implement driveDirect for Project 2
     ###############################################################
     def driveDirect(self, rightVelocity, leftVelocity):
-        if (velocity >= -500 or velocity <= 500):
-            data = struct.pack('>Bhh', _DRIVE_, rightVelocity, leftVelocity)
-            self.connection.write(data)
-        else:
-            print("go fast eat ass")
-            sys.exit()
+        data = struct.pack('>BHH', _DRIVE_DIRECT_, rightVelocity, leftVelocity)
+        self.connection.write(data)
+        print("go fast eat ass")
 
     ################################################################
     # getAngle() returns the angle that the Roomba has turned,
@@ -253,7 +250,7 @@ class RobotInterface:
     def readInfraredLeft(self):
         self.connection.write(chr(_SENSORS_)+chr(46))
         data = self.connection.read(2)
-        print(data)
+        # print(data)
         data1 = struct.unpack('H', data)[0]
         self.leftIRSensor = data1
         print("LEFT: " + str(data1))
@@ -261,7 +258,7 @@ class RobotInterface:
     def readInfraredRight(self):
         self.connection.write(chr(_SENSORS_)+chr(51))
         data = self.connection.read(2)
-        print(data)
+        # print(data)
         data1 = struct.unpack('H', data)[0]
         self.rightIRSensor = data1
         print("RIGHT: " + str(data1))
