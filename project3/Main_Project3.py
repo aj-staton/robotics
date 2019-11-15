@@ -82,6 +82,8 @@ def rotate(direction):
 ###############################################################
 def driveLogic():
     time.sleep(_DELAY_) # Used to minorly delay sensor reading.
+    global _CURRENTERROR_
+    global _PREVERROR_
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     _CURRENTERROR_ = roomba.leftIRSensor - _S_
     if(roomba.isDriving):
