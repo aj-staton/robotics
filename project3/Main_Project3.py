@@ -76,7 +76,7 @@ def rotate(direction):
 # Right loop
 ####################### PID ####################################
 def PIDRIGHT():
-    _S_ = 10000
+    _S_ = 20000
     _KP_ = 0.005 
     _KD_ = 0.005
     _PREVERROR_ = 0
@@ -87,6 +87,10 @@ def PIDRIGHT():
     # TODO: Create PID logic
     U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)/1# 15 ms = 0.015 s
     # using 
+    if (U > 150):
+        U = 150
+    elif (U < -150):
+        U = -150
     print("Error: " + str(U))
     return U
 
@@ -95,9 +99,9 @@ def PIDRIGHT():
 ####################### PID ####################################
 def PIDLEFT():
     ####################### PID ####################################
-    _S_ = 10000
-    _KP_ = 0.004 
-    _KD_ = 0.004
+    _S_ = 15000
+    _KP_ = 0.005 
+    _KD_ = 0.005
     _PREVERROR_ = 0
     _CURRENTERROR_ = 0
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
@@ -106,6 +110,10 @@ def PIDLEFT():
     # TODO: Create PID logic
     U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)/1# 15 ms = 0.015 s
     # using 
+    if (U > 150):
+        U = 150
+    elif (U < -150):
+        U = -150
     print("Error: " + str(U))
     return U
 ###############################################################
@@ -117,33 +125,38 @@ def driveLogic():
     # _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     if(roomba.isDriving):
 
-        if(_SIDE_ == "left")
-            if (PID() > 0):
+        if(_SIDE_ == "left"):
+            if (PIDLEFT() > 0):
                 roomba.driveDirect((_RIGHT_ + abs(PIDLEFT())) , (_LEFT_ - abs(PIDLEFT())))
 
-            elif (PID() < 0):
+            elif (PIDLEFT() < 0):
                 roomba.driveDirect((_RIGHT_ - abs(PIDLEFT())) , (_LEFT_ + abs(PIDLEFT())))
 
-        if(_SIDE_ == "right")
-            if (PID() > 0):
+        if(_SIDE_ == "right"):
+            if (PIDRIGHT() > 0):
                 roomba.driveDirect((_RIGHT_ + abs(PIDRIGHT())) , (_LEFT_ - abs(PIDRIGHT())))
 
-            elif (PID() < 0):
+            elif (PIDRIGHT() < 0):
                 roomba.driveDirect((_RIGHT_ - abs(PIDRIGHT())) , (_LEFT_ + abs(PIDRIGHT())))
 
         if(roomba.bumpLeft and roomba.bumpRight):
+            print("DOUBLKE BUMPS")
+
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECW_)
             roomba.getAngle()
 
         if(roomba.bumpLeft):
+            print(">EFT BMUYP")
+
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECCW_)
             roomba.getAngle()
 
         if(roomba.bumpRight):
+            print("ROGHT BUMP")
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECW_)
