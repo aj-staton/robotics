@@ -31,7 +31,7 @@ _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
 _DELAY_ = 0.015 # 15 ms = 0.015 s
 # PID CONTROLER VARIABLES
-_S_ = 1000
+_S_ = 7000
 _KP_ = 1 
 _KD_ = 1
 ####################################################################
