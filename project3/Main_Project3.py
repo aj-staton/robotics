@@ -32,8 +32,6 @@ _DELAY_ = 0.015 # 15 ms = 0.015 s
 _S_ = 1000
 _KP_ = 1 
 _KD_ = 1
-_CURRENTERROR_ = 0
-_PREVERROR_ = 0
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7    6   5   4   3   2   1   0
@@ -82,13 +80,16 @@ def rotate(direction):
 ###############################################################
 def driveLogic():
     time.sleep(_DELAY_) # Used to minorly delay sensor reading.
-   # _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-    _CURRENTERROR_ = roomba.leftIRSensor - _S_
+    # _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
+    _PREVERROR_
     if(roomba.isDriving):
         ####################### PID ####################################
+
+        _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
+        _CURRENTERROR_ = roomba.leftIRSensor - _S_
         # read sensors
         # TODO: Create PID logic
-        U = _KP_ * _CURRENTERROR_ + #(_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
+        U = _KP_ * _CURRENTERROR_ # + (_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
         # using 
         print("Error: " + str(U))
 
