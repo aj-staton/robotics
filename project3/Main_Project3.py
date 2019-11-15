@@ -31,7 +31,7 @@ _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
 _DELAY_ = 0.015 # 15 ms = 0.015 s
 # PID CONTROLER VARIABLES
-_S_ = 7000
+_S_ = 10000
 _KP_ = 1 
 _KD_ = 1
 ####################################################################
@@ -83,7 +83,7 @@ def PID():
     _CURRENTERROR_ = roomba.getRightIR() - _S_
     # read sensors
     # TODO: Create PID logic
-    U = _KP_ * _CURRENTERROR_ + (_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
+    U = _KP_ * _CURRENTERROR_ + (_CURRENTERROR_ - _PREVERROR_)/1# 15 ms = 0.015 s
     # using 
     print("Error: " + str(U))
     return U
@@ -101,7 +101,7 @@ def driveLogic():
             roomba.driveDirect((_RIGHT_ + abs(PID())*0.0005) , (_LEFT_ - abs(PID())*0.0005))
 
         elif (PID() < 0):
-            roomba.driveDirect((_RIGHT_ - abs(PID())*0.0005) , (_LEFT_ + abs(PID())*0.0005)
+            roomba.driveDirect((_RIGHT_ - abs(PID())*0.0005) , (_LEFT_ + abs(PID())*0.0005))
         ####################### PID ####################################
         
         if(roomba.bumpLeft and roomba.bumpRight):
