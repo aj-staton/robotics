@@ -68,9 +68,9 @@ def stopRoomba():
 def rotate(direction):
     # TODO: make this more directed to correction, not a random
     # value. 
-    roomba.driveDirect(_velocity_, direction)
+    roomba.drive(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
-    turnTime = .25
+    turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
     time.sleep(turnTime)
     stopRoomba()
     roomba.drive(_velocity_,_NOROTATE_)
@@ -98,10 +98,10 @@ def driveLogic():
     if(roomba.isDriving):
 
         if (PID() > 0):
-            roomba.driveDirect((right - u) , (left + u) )
+            roomba.driveDirect((right) , (left) )
 
         elif (PID() < 0):
-            roomba.driveDirect((right + u) , (left - u) )
+            roomba.driveDirect((right) , (left) )
         ####################### PID ####################################
         
         if(roomba.bumpLeft and roomba.bumpRight):
