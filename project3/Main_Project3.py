@@ -74,8 +74,8 @@ def rotate(direction):
 def PID():
     ####################### PID ####################################
     _S_ = 10000
-    _KP_ = 0.005 
-    _KD_ = 0.005
+    _KP_ = 0.0004 
+    _KD_ = 0.0004
     _PREVERROR_ = 0
     _CURRENTERROR_ = 0
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
