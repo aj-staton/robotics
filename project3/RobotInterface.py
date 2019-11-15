@@ -70,11 +70,14 @@ class RobotInterface:
         self.bumpRight = False
         self.wheelDropLeft = False
         self.wheelDropRight = False
-        self.cliffs = [False,False,False,False]
-        self.writeSong()
         self.leftIRSensor = 0
         self.rightIRSensor = 0
 
+    def getLeftIR(self):
+        return self.leftIRSensor
+
+    def getRightIR(self):
+        return self.rightIRSensor
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
     # will accept values for velocity(mm/s) and turning radius(mm).

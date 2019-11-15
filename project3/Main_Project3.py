@@ -73,30 +73,31 @@ def rotate(direction):
     stopRoomba()
     roomba.drive(_velocity_,_NOROTATE_)
 
+def PID():
+    ####################### PID ####################################
+    _PREVERROR_
+    _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
+    _CURRENTERROR_ = roomba.getLeftIR - _S_
+    # read sensors
+    # TODO: Create PID logic
+    U = _KP_ * _CURRENTERROR_ # + (_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
+    # using 
+    print("Error: " + str(U))
+    return U
+
 ###############################################################
 # driveLogic() will read all of the bumpers on the roomba
 # collectively. When one of these bumpers is hit, the roomba
 # will turn as needed.
 ###############################################################
 def driveLogic():
-    time.sleep(_DELAY_) # Used to minorly delay sensor reading.
     # _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-    _PREVERROR_
     if(roomba.isDriving):
-        ####################### PID ####################################
 
-        _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-        _CURRENTERROR_ = roomba.leftIRSensor - _S_
-        # read sensors
-        # TODO: Create PID logic
-        U = _KP_ * _CURRENTERROR_ # + (_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
-        # using 
-        print("Error: " + str(U))
-
-        if (U > 0):
+        if (PID() > 0):
             rotate(_ROTATECW_)
 
-        elif (U < 0):
+        elif (PID() < 0):
             rotate(_ROTATECCW_)
         ####################### PID ####################################
         
