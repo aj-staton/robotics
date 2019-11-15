@@ -82,22 +82,23 @@ def rotate(direction):
 ###############################################################
 def driveLogic():
     time.sleep(_DELAY_) # Used to minorly delay sensor reading.
+    _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
+    _CURRENTERROR_ = roomba.leftIRSensor - _S_
     if(roomba.isDriving):
-
+        ####################### PID ####################################
         # read sensors
-        _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-        _CURRENTERROR_ = roomba.leftIRSensor - _S_
         # TODO: Create PID logic
         U = _KP_ * _CURRENTERROR_ + (_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
         # using 
         print("Error: " + str(U))
 
-        if (U > 0)
+        if (U > 0):
             rotate(_ROTATECW_)
 
-        elif (U < 0)
+        elif (U < 0):
             rotate(_ROTATECCW_)
-
+        ####################### PID ####################################
+        
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
             roomba.getDistance()
