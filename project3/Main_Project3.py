@@ -30,10 +30,6 @@ _RIGHT_  = 150
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
 _DELAY_ = 0.015 # 15 ms = 0.015 s
-# PID CONTROLER VARIABLES
-_S_ = 10000
-_KP_ = 1 
-_KD_ = 1
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7    6   5   4   3   2   1   0
@@ -77,6 +73,9 @@ def rotate(direction):
 
 def PID():
     ####################### PID ####################################
+    _S_ = 10000
+    _KP_ = 0.005 
+    _KD_ = 0.005
     _PREVERROR_ = 0
     _CURRENTERROR_ = 0
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
@@ -98,10 +97,10 @@ def driveLogic():
     if(roomba.isDriving):
 
         if (PID() > 0):
-            roomba.driveDirect((_RIGHT_ + abs(PID())*0.0005) , (_LEFT_ - abs(PID())*0.0005))
+            roomba.driveDirect((_RIGHT_ + abs(PID())) , (_LEFT_ - abs(PID())))
 
         elif (PID() < 0):
-            roomba.driveDirect((_RIGHT_ - abs(PID())*0.0005) , (_LEFT_ + abs(PID())*0.0005))
+            roomba.driveDirect((_RIGHT_ - abs(PID())) , (_LEFT_ + abs(PID())))
         ####################### PID ####################################
         
         if(roomba.bumpLeft and roomba.bumpRight):

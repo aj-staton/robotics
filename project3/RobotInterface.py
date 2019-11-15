@@ -111,6 +111,10 @@ class RobotInterface:
     # This method will implement driveDirect for Project 2
     ###############################################################
     def driveDirect(self, rightVelocity, leftVelocity):
+        if (rightVelocity >= 500):
+            rightVelocity = 500
+        if (leftVelocity >= 500):
+            leftVelocity = 500
         data = struct.pack('>BHH', _DRIVE_DIRECT_, rightVelocity, leftVelocity)
         self.connection.write(data)
         print("go fast eat ass")
