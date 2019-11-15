@@ -32,8 +32,8 @@ _DELAY_ = 0.015 # 15 ms = 0.015 s
 _S_ = 1000
 _KP_ = 1 
 _KD_ = 1
-_CURRENTERROR_ = 0;
-_PREVERROR_ = 0;
+_CURRENTERROR_ = 0
+_PREVERROR_ = 0
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7    6   5   4   3   2   1   0
