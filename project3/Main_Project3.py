@@ -24,6 +24,8 @@ _omega_ = float(2*_velocity_)/_l_ #angular velocity
 _ROTATECW_ = 1 #Tells the roomba to rotate
 _ROTATECCW_ = - 1 #Tells the roomba to rotate
 _NOROTATE_ = 0 #Tells the roomba to not rotate
+_LEFT_ = 150
+_RIGHT_  = 150
 # Lets assuming we're driving at 150 mm/s still
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
@@ -96,10 +98,10 @@ def driveLogic():
     if(roomba.isDriving):
 
         if (PID() > 0):
-            rotate(_ROTATECW_)
+            driveDirect((right - u) , (left + u) )
 
         elif (PID() < 0):
-            rotate(_ROTATECCW_)
+            rotate((right + u) , (left - u) )
         ####################### PID ####################################
         
         if(roomba.bumpLeft and roomba.bumpRight):

@@ -99,7 +99,7 @@ class RobotInterface:
     ############################################################### 
     def drive(self, velocity, radius):
         if (velocity >= -500 or velocity <= 500):
-            data = struct.pack('>Bhh', _DRIVE_, velocity, radius)
+            data = struct.pack('>Bhh', _DRIVE_DIRECT_, velocity, radius)
             self.connection.write(data)
             # WE CAN SET THE DRIVING BOOL HERE
             # setDriving(True)
@@ -109,16 +109,13 @@ class RobotInterface:
       
     ###############################################################
     # This method will implement driveDirect for Project 2
-    #
     ###############################################################
-    def driveDirect(self, velocity, radius):
+    def driveDirect(self, rightVelocity, leftVelocity):
         if (velocity >= -500 or velocity <= 500):
-            data = struct.pack('>Bhh', _DRIVE_, velocity, radius)
+            data = struct.pack('>Bhh', _DRIVE_, rightVelocity, leftVelocity)
             self.connection.write(data)
-            # WE CAN SET THE DRIVING BOOL HERE
-            # setDriving(True)
         else:
-            print("Invalid driveDirect() speed given.")
+            print("go fast eat ass")
             sys.exit()
 
     ################################################################
