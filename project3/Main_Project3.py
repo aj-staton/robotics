@@ -13,8 +13,6 @@ import math
 from threading import Thread, Lock
 import random
 import logging
-#from simple_pid import PID
-
 ####################################################################
 # Magic number Variables
 _degrees_ = 360 #this is in degrees
@@ -30,6 +28,12 @@ _NOROTATE_ = 0 #Tells the roomba to not rotate
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
 _DELAY_ = 0.015 # 15 ms = 0.015 s
+# PID CONTROLER VARIABLES
+_S_ = 1000
+_KP_ = 1 
+_KD_ = 1
+_CURRENTERROR_ = 0;
+_PREVERROR_ = 0;
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7    6   5   4   3   2   1   0
@@ -64,13 +68,9 @@ def stopRoomba():
 def rotate(direction):
     # TODO: make this more directed to correction, not a random
     # value. 
-    
     roomba.driveDirect(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
-    turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
-    #theta = turnTime * _omega_
-    # turn for that amount of time
-    print("Rotate: " + str(turnTime) + " ms")
+    turnTime = .25
     time.sleep(turnTime)
     stopRoomba()
     roomba.drive(_velocity_,_NOROTATE_)
@@ -84,11 +84,19 @@ def driveLogic():
     time.sleep(_DELAY_) # Used to minorly delay sensor reading.
     if(roomba.isDriving):
 
-    # TODO: Interpret IR sensor readings, which is already done
-    # in roomba.readSensors() (called by readSensors).
-    # roomba.leftIRSensor...
-    # roomba.rightIRSensor...
-    # TODO: Create PID logic
+        # read sensors
+        _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
+        _CURRENTERROR_ = roomba.leftIRSensor - _S_
+        # TODO: Create PID logic
+        U = _KP_ * _CURRENTERROR_ + (_CURRENTERROR_ - _PREVERROR_)/_DELAY_# 15 ms = 0.015 s
+        # using 
+        print("Error: " + str(U))
+
+        if (U > 0)
+            rotate(_ROTATECW_)
+
+        elif (U < 0)
+            rotate(_ROTATECCW_)
 
         if(roomba.bumpLeft and roomba.bumpRight):
             stopRoomba()
@@ -107,11 +115,6 @@ def driveLogic():
             roomba.getDistance()
             rotate(_ROTATECW_)
             roomba.getAngle()
-
-        if (roomba.wheelDropLeft or roomba.wheelDropRight):
-            stopRoomba()
-            roomba.playSong()
-            print("WheelDrop--Playing Song")
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
@@ -134,9 +137,7 @@ def main():
     roomba.setState("START")
     roomba.setState("SAFE")
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
-    
     check = Thread(target = readSensors)
-
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     started = False
@@ -147,10 +148,8 @@ def main():
             started = True
             roomba.setPressed(False)
         time.sleep(_DELAY_)
-
     check.start()
     print("STARTING")
-
     # This while loop reads the 'Clean' button and starts/stops the roomba. 
     while(True):
         if(roomba.buttonPressed and roomba.isDriving):
@@ -162,7 +161,6 @@ def main():
             roomba.setDriving(True)
             roomba.driveDirect(_velocity_,_NOROTATE_)
         time.sleep(_DELAY_)
-
     # End our threads and stop the roomba.
     check.join()
     stopRoomba()
