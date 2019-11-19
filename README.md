@@ -14,7 +14,7 @@ Table of Contents
 Our robot drives around a [mufukin](https://drive.google.com/file/d/1qV1KdgdLvN7GdSB7fDuzNeR2KqT55yui/view) regular polygon of N sides.
 
 ### Project_Two
-[Mufukin](https://drive.google.com/file/d/17pS6uIGC5stqJetbmv9jQ1DKY17KgW3i/view) 
+[Mufukin](https://drive.google.com/file/d/17pS6uIGC5stqJetbmv9jQ1DKY17KgW3i/view) sensor reading.
 
 ### Project_Three
 The roomba has a [mufukin](https://drive.google.com/file/d/1RzoDoG3izRddcIuEF-j1B52c0YjJthWL/view) PD controller.
