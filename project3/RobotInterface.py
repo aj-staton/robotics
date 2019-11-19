@@ -40,8 +40,8 @@ _idBUMPSANDDROPS_ = 7
 _idBUTTONS_ = 18
 _idDISTANCE_ = 19
 _idANGLE_ = 20
-_idINFRAREDLEFT_ = 52
-_idINFRAREDRIGHT_ = 53
+_idINFRAREDLEFT_ = 48
+_idINFRAREDRIGHT_ = 51
 _idCLIFFS_ = [9,10,11,12]
 
 ##########################################################
@@ -73,11 +73,7 @@ class RobotInterface:
         self.leftIRSensor = 0
         self.rightIRSensor = 0
 
-    def getLeftIR(self):
-        return self.leftIRSensor
 
-    def getRightIR(self):
-        return self.rightIRSensor
     ###############################################################
     # drive() is the main fucntion of movement for the Roomba. It 
     # will accept values for velocity(mm/s) and turning radius(mm).
@@ -108,7 +104,18 @@ class RobotInterface:
             sys.exit()
       
     ###############################################################
-    # This method will implement driveDirect for Project 2
+    # driveDirect() is different than drive(). While each moves the
+    # iRobot, drive() sets a velocity for both wheels and using the
+    # passed parameter of turning radius, turns the roomba.
+    # This function passes in two separate velcities for the left
+    # and right wheels of the roomba; the turning radius calcultion
+    # is delegated to the user of this API.
+    #
+    # Params: rightVelocity -- the angular velocity of the right
+    #                          wheel (range [-500, 500]).
+    #               
+    #          leftVelocity -- the angular velocity of the left
+    #                          wheel (range [-500,500]).
     ###############################################################
     def driveDirect(self, rightVelocity, leftVelocity):
         # for right
@@ -150,7 +157,12 @@ class RobotInterface:
     # 
     # This fuction will return the distance traveled, in mm.
     ################################################################
-    def getDistance(self):
+    def getDistance(self):def getLeftIR(self):
+        return self.leftIRSensor
+
+    def getRightIR(self):
+        return self.rightIRSensor
+
         # Send the request for data.
         sentData = struct.pack('Bb', _SENSORS_, _idDISTANCE_)
         self.connection.write(sentData)
@@ -229,7 +241,13 @@ class RobotInterface:
             print("Button")
             logging.info("BUTTON")
         return pressed
-    def setPressed(self,pressed):
+
+    ###############################################################
+    #  setPressed() is used to flip the boolean value of whether or 
+    #  not a button has been pressed (i.e. -- when the clean button
+    #  is pressed, the value is true).
+    ###############################################################
+    def setPressed(self, pressed):
         self.buttonPressed = pressed
 
     ###############################################################
@@ -251,26 +269,34 @@ class RobotInterface:
         if (True in self.cliffs):
             logging.info("UNSAFE CLIFF")
 
-    ##############################################################
-    # readInfraredLeft() and readInfraredRight() returns the 8-bit
-    # (range [0,255]) unsigned byte from the left and right IR
-    # sensors on the Create2.
-    ##############################################################
+    ###############################################################
+    # readInfraredLeft() and readInfraredRight() returns the 2-byte
+    # number from the left and right IR sensors on the Create2.
+    # NOTE: The LeftIR Sensor is actually in the front of the
+    #       roomba.
+    ###############################################################
     def readInfraredLeft(self):
-        self.connection.write(chr(_SENSORS_)+chr(48))
+        self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDLEFT_))
         data = self.connection.read(2)
         # print(data)
-        data1 = struct.unpack('<H', data)[0]
+        data1 = struct.unpack('H', data)[0]
         self.leftIRSensor = data1
         print("LEFT: " + str(data1))
 
     def readInfraredRight(self):
-        self.connection.write(chr(_SENSORS_)+chr(51))
+        self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDRIGHT_))
         data = self.connection.read(2)
         # print(data)
         data1 = struct.unpack('H', data)[0]
         self.rightIRSensor = data1
         print("RIGHT: " + str(data1))
+    #############################################
+    # Accessors for the above IR sensors.
+    ############################################
+    def getLeftIR(self):
+        return self.leftIRSensor
+    def getRightIR(self):
+        return self.rightIRSensor
 
     ###############################################################
     # readSensors() is the function that will consolidate the other
@@ -300,6 +326,9 @@ class RobotInterface:
         
     ################################################################
     # Setters for wheel drops
+    # 
+    # Param: ToF -- The boolean value to set the state class
+    #               variable.
     ################################################################
     def setWheelDropLeft(self, ToF):
         self.wheelDropLeft = bool(TorF)

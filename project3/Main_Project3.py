@@ -62,9 +62,7 @@ def stopRoomba():
 #   we need to turn 180, and then +-45
 #   so turn (135 - 225)
 ###############################################################
-def rotate(direction):
-    # TODO: make this more directed to correction, not a random
-    # value. 
+def rotate(direction): 
     roomba.drive(_velocity_, direction)
     # pick a random wait time for 135-225 degrees
     turnTime = random.uniform(_rotateLowTime_,_rotateHighTime_)
@@ -72,20 +70,26 @@ def rotate(direction):
     stopRoomba()
     roomba.drive(_velocity_,_NOROTATE_)
 
-####################### PID ####################################
-# Right loop FUNCTIONAL
-####################### PID ####################################
-def PIDRIGHT():
-    _S_ = 17000
-    _KP_ = 0.002
-    _KD_ = 0.002
-    _PREVERROR_ = 0
-    _CURRENTERROR_ = 0
-    _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-    _CURRENTERROR_ = roomba.getRightIR() - _S_
-    # read sensors
-    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)
-    # using 
+###############################################################
+#  PDRight() implements Proportional, Derivative Control for
+#  the iRobot's right infrared sensor.
+#
+#  Returned Value: U -- the error of the current state from S,
+#                       the set point wrt PD control.
+###############################################################
+def PDRight():
+    S = 17000 # Set Point (i.e. -- the "ideal" sensor value)
+    KP = 0.002 # Proportial Gain 
+    KD = 0.002 # Derivative Gain
+    PREV_ERROR = 0 
+    CURRENT_ERROR = 0
+    PREV_ERROR = CURRENT_ERROR
+    CURRENT_ERROR = roomba.getRightIR() - S
+    # The error, wrt PD control, is 'U'
+    U = KP * CURRENTERROR + KD*(CURRENT_ERROR - PREV_ERROR)
+    # Since this error value is used to alter driveDirect()
+    # velocities, it must have a maximun and minumum, or else
+    # there will be overflow within driveDirect(). 
     if (U > 100):
         U = 100
     elif (U < -100):
@@ -93,21 +97,27 @@ def PIDRIGHT():
     print("Error: " + str(U))
     return U
 
-####################### PID ####################################
-# left loop
-####################### PID ####################################
-def PIDLEFT():
-    ####################### PID ####################################
-    _S_ = 200
-    _KP_ = 0.002
-    _KD_ = 0.002
-    _PREVERROR_ = 0
-    _CURRENTERROR_ = 0
-    _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-    _CURRENTERROR_ = roomba.getLeftIR() - _S_
-    # read sensors
-    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)
-    # using 
+################################################################
+#  PDLeft() _ATTEMPTS_ to implement Proportional, Derivative
+#  control for the iRobot's left infrared sensor.
+#  NOTE: This as an attempt to do a little bit more for the sake
+#        of learning and experience. It is a non functional
+#        function.
+#
+#  Returned Value: U -- the error of the current state from S,
+#                       the set point wrt PD control.
+################################################################
+def PDLeft():
+    S = 200
+    KP = 0.002
+    KD = 0.002
+    PREV_ERROR = 0
+    CURRENT_ERROR = 0
+    PREV_ERROR = CURRENT_ERROR 
+    CURRENT_ERROR = roomba.getLeftIR() - S
+    # The error, wrt to PD control, is 'U' 
+    U = KP * CURRENT_ERROR + KD*(CURRENT_ERROR - PREV_ERROR)
+    # See PDRight() for more explanation on bounds checking.
     if (U > 120):
         U = 120
     elif (U < -120):
@@ -121,22 +131,21 @@ def PIDLEFT():
 # will turn as needed.
 ###############################################################
 def driveLogic():
-    # _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     if(roomba.isDriving):
         if(_SIDE_ == "left"):
-            print ("HIIIIIIIIIII")
-            if (PIDLEFT() > 0):
-                roomba.driveDirect((_RIGHT_ - abs(PIDLEFT())) , (_LEFT_ + abs(PIDLEFT())))
+            # NOTE: this is not functioning (see "PDLeft()")
+            if (PDLeft() > 0):
+                roomba.driveDirect((_RIGHT_ - abs(PDLeft())) , (_LEFT_ + abs(PDLeft())))
 
-            elif (PIDLEFT() < 0):
-                roomba.driveDirect((_RIGHT_ + abs(PIDLEFT())) , (_LEFT_ - abs(PIDLEFT())))
-
+            elif (PDLeft() < 0):
+                roomba.driveDirect((_RIGHT_ + abs(PDLeft())) , (_LEFT_ - abs(PDLeft())))
+         
         if(_SIDE_ == "right"):
-            if (PIDRIGHT() > 0):
-                roomba.driveDirect((_RIGHT_ + abs(PIDRIGHT())) , (_LEFT_ - abs(PIDRIGHT())))
+            if (PDRight() > 0):
+                roomba.driveDirect((_RIGHT_ + abs(PDRight())) , (_LEFT_ - abs(PDRight())))
 
-            elif (PIDRIGHT() < 0):
-                roomba.driveDirect((_RIGHT_ - abs(PIDRIGHT())) , (_LEFT_ + abs(PIDRIGHT())))
+            elif (PDRight() < 0):
+                roomba.driveDirect((_RIGHT_ - abs(PDRight())) , (_LEFT_ + abs(PDRight())))
 
         if(roomba.bumpLeft and roomba.bumpRight):
             print("DOUBLE BUMPS")
@@ -146,14 +155,14 @@ def driveLogic():
             roomba.getAngle()
 
         if(roomba.bumpLeft):
-            print("LEFT BMUYP")
+            print("LEFT BUMP")
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECCW_)
             roomba.getAngle()
 
         if(roomba.bumpRight):
-            print("ROGHT BUMP")
+            print("RIGHT BUMP")
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECW_)
@@ -172,9 +181,14 @@ def readSensors():
         time.sleep(_DELAY_)
         roomba.readSensors()
         driveLogic()
+
+
+
+###############################################################
 ###############################################################
 #  main() controls all actions of execution, including calling
 #  for the drawing of the N-sided polygon for Project 1.
+###############################################################
 ###############################################################
 def main():
     roomba.setState("START")
