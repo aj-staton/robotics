@@ -33,7 +33,7 @@ Each needed file is listed and described below:
   Main_Project3.py -- this file controls all primary function-
                    ality of the Create2. For this project, this
                    includes managing the various threads for
-                   environment sensing and motion.
+                   PD control, sensing, and motion.
 
 -----------
 -Execution-
