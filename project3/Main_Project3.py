@@ -30,7 +30,7 @@ _RIGHT_  = 150
 _rotateLowTime_ = float(2.356)/_omega_ #time for 135 degrees in radians
 _rotateHighTime_ = float(3.926)/_omega_ #Time of 225 degrees in radians
 _DELAY_ = 0.015 # 15 ms = 0.015 s
-_SIDE_ = "left"
+_SIDE_ = "right"
 ####################################################################
 # Button Opcode 165
 # Bit Number:  7    6   5   4   3   2   1   0
@@ -76,46 +76,47 @@ def rotate(direction):
 # Right loop
 ####################### PID ####################################
 def PIDRIGHT():
-    _S_ = 20000
-    _KP_ = 0.005 
-    _KD_ = 0.005
+    _S_ = 17000
+    _KP_ = 0.002
+    _KD_ = 0.002
     _PREVERROR_ = 0
     _CURRENTERROR_ = 0
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     _CURRENTERROR_ = roomba.getRightIR() - _S_
     # read sensors
     # TODO: Create PID logic
-    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)/1# 15 ms = 0.015 s
+    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)
     # using 
-    if (U > 150):
-        U = 150
-    elif (U < -150):
-        U = -150
+    if (U > 100):
+        U = 100
+    elif (U < -100):
+        U = -100
     print("Error: " + str(U))
     return U
 
 ####################### PID ####################################
 # left loop
 ####################### PID ####################################
-def PIDLEFT():
+def PIDLEFT(): # NOT IT
     ####################### PID ####################################
     _S_ = 15000
-    _KP_ = 0.005 
-    _KD_ = 0.005
+    _KP_ = 0.002
+    _KD_ = 0.002
     _PREVERROR_ = 0
     _CURRENTERROR_ = 0
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
-    _CURRENTERROR_ = roomba.getRightIR() - _S_
+    _CURRENTERROR_ = roomba.getLeftIR() - _S_
     # read sensors
     # TODO: Create PID logic
-    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)/1# 15 ms = 0.015 s
+    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)# 15 ms = 0.015 s
     # using 
-    if (U > 150):
-        U = 150
-    elif (U < -150):
-        U = -150
+    if (U > 120):
+        U = 120
+    elif (U < -120):
+        U = -120
     print("Error: " + str(U))
     return U
+
 ###############################################################
 # driveLogic() will read all of the bumpers on the roomba
 # collectively. When one of these bumpers is hit, the roomba
@@ -124,8 +125,8 @@ def PIDLEFT():
 def driveLogic():
     # _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     if(roomba.isDriving):
-
         if(_SIDE_ == "left"):
+            print ("HIIIIIIIIIII")
             if (PIDLEFT() > 0):
                 roomba.driveDirect((_RIGHT_ + abs(PIDLEFT())) , (_LEFT_ - abs(PIDLEFT())))
 
@@ -140,16 +141,14 @@ def driveLogic():
                 roomba.driveDirect((_RIGHT_ - abs(PIDRIGHT())) , (_LEFT_ + abs(PIDRIGHT())))
 
         if(roomba.bumpLeft and roomba.bumpRight):
-            print("DOUBLKE BUMPS")
-
+            print("DOUBLE BUMPS")
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECW_)
             roomba.getAngle()
 
         if(roomba.bumpLeft):
-            print(">EFT BMUYP")
-
+            print("LEFT BMUYP")
             stopRoomba()
             roomba.getDistance()
             rotate(_ROTATECCW_)
