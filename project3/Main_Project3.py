@@ -86,7 +86,7 @@ def PDRight():
     PREV_ERROR = CURRENT_ERROR
     CURRENT_ERROR = roomba.getRightIR() - S
     # The error, wrt PD control, is 'U'
-    U = KP * CURRENTERROR + KD*(CURRENT_ERROR - PREV_ERROR)
+    U = KP * CURRENT_ERROR + KD*(CURRENT_ERROR - PREV_ERROR)
     # Since this error value is used to alter driveDirect()
     # velocities, it must have a maximun and minumum, or else
     # there will be overflow within driveDirect(). 

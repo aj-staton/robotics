@@ -157,12 +157,7 @@ class RobotInterface:
     # 
     # This fuction will return the distance traveled, in mm.
     ################################################################
-    def getDistance(self):def getLeftIR(self):
-        return self.leftIRSensor
-
-    def getRightIR(self):
-        return self.rightIRSensor
-
+    def getDistance(self):
         # Send the request for data.
         sentData = struct.pack('Bb', _SENSORS_, _idDISTANCE_)
         self.connection.write(sentData)
