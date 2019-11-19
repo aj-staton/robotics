@@ -73,7 +73,7 @@ def rotate(direction):
     roomba.drive(_velocity_,_NOROTATE_)
 
 ####################### PID ####################################
-# Right loop
+# Right loop FUNCTIONAL
 ####################### PID ####################################
 def PIDRIGHT():
     _S_ = 17000
@@ -84,7 +84,6 @@ def PIDRIGHT():
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     _CURRENTERROR_ = roomba.getRightIR() - _S_
     # read sensors
-    # TODO: Create PID logic
     U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)
     # using 
     if (U > 100):
@@ -97,9 +96,9 @@ def PIDRIGHT():
 ####################### PID ####################################
 # left loop
 ####################### PID ####################################
-def PIDLEFT(): # NOT IT
+def PIDLEFT():
     ####################### PID ####################################
-    _S_ = 15000
+    _S_ = 200
     _KP_ = 0.002
     _KD_ = 0.002
     _PREVERROR_ = 0
@@ -107,8 +106,7 @@ def PIDLEFT(): # NOT IT
     _PREVERROR_ = _CURRENTERROR_ #intial value will be 0
     _CURRENTERROR_ = roomba.getLeftIR() - _S_
     # read sensors
-    # TODO: Create PID logic
-    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)# 15 ms = 0.015 s
+    U = _KP_ * _CURRENTERROR_ + _KD_*(_CURRENTERROR_ - _PREVERROR_)
     # using 
     if (U > 120):
         U = 120
@@ -128,10 +126,10 @@ def driveLogic():
         if(_SIDE_ == "left"):
             print ("HIIIIIIIIIII")
             if (PIDLEFT() > 0):
-                roomba.driveDirect((_RIGHT_ + abs(PIDLEFT())) , (_LEFT_ - abs(PIDLEFT())))
+                roomba.driveDirect((_RIGHT_ - abs(PIDLEFT())) , (_LEFT_ + abs(PIDLEFT())))
 
             elif (PIDLEFT() < 0):
-                roomba.driveDirect((_RIGHT_ - abs(PIDLEFT())) , (_LEFT_ + abs(PIDLEFT())))
+                roomba.driveDirect((_RIGHT_ + abs(PIDLEFT())) , (_LEFT_ - abs(PIDLEFT())))
 
         if(_SIDE_ == "right"):
             if (PIDRIGHT() > 0):

@@ -123,7 +123,6 @@ class RobotInterface:
             leftVelocity = -500
         data = struct.pack('>BHH', _DRIVE_DIRECT_, rightVelocity, leftVelocity)
         self.connection.write(data)
-        print("go fast eat ass")
 
     ################################################################
     # getAngle() returns the angle that the Roomba has turned,
@@ -258,10 +257,10 @@ class RobotInterface:
     # sensors on the Create2.
     ##############################################################
     def readInfraredLeft(self):
-        self.connection.write(chr(_SENSORS_)+chr(46))
+        self.connection.write(chr(_SENSORS_)+chr(48))
         data = self.connection.read(2)
         # print(data)
-        data1 = struct.unpack('H', data)[0]
+        data1 = struct.unpack('<H', data)[0]
         self.leftIRSensor = data1
         print("LEFT: " + str(data1))
 
