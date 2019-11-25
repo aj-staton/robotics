@@ -41,6 +41,8 @@ _idDISTANCE_ = 19
 _idANGLE_ = 20
 _idINFRAREDLEFT_ = 48
 _idINFRAREDRIGHT_ = 51
+_idDOCKGREEN_ = 52
+_idDOCKRED_ = 53
 
 ##########################################################
 #  Read the sensor state of the Roomba every 15 ms.  Do
@@ -70,6 +72,8 @@ class RobotInterface:
         self.wheelDropRight = False
         self.leftIRSensor = 0
         self.rightIRSensor = 0
+        self.dockGreen = 0
+        self.dockRed = 0
 
 
     ###############################################################
@@ -212,6 +216,22 @@ class RobotInterface:
     ###############################################################
     def setPressed(self, pressed):
         self.buttonPressed = pressed
+    
+    ###############################################################
+    #  readDockGreen/Red() is used to read the Green (Facing-Dock
+    #  Left) and Red (Facing-Dock Right) sensors to be able to dock
+    #  the iRobot Create2.
+    ###############################################################
+    def readDockGreen(self):
+        self.connection.write(chr(_SENSORS) + chr(_idDOCKGREEN_))
+        data = self.connection.read(1)
+        # print(data)
+        self.dockGreen = struct.unpack('B', data)[0]
+    def readDockRed(self):
+        self.connection.write(chr(_SENSORS_) + chr(_idDOCKRED_))
+        data = self.connection.read(1)
+        # print (data)
+        self.dockRed = struct.unpack('B', data)[0]
 
     ###############################################################
     # readInfraredLeft() and readInfraredRight() returns the 2-byte
