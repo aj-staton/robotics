@@ -96,17 +96,23 @@ def PDControl():
     print("Error: " + str(U))
     return U
 
+
 ###############################################################
+# TODO: This should only happen on the clean button press
 # PIDLogic() will calculate the state error of the iRobot when
 # the 'CLEAN' button is pressed, and our robot must exhibit a 
 # wall-following behavior.
 ###############################################################
 def PIDLogic():
-    if(roomba.isDriving):
+    if(roomba.buttonPressed):
         if (PDControl() > 0):
-            roomba.driveDirect((_RIGHT_ + abs(PDRight())) , (_LEFT_ - abs(PDRight())))
+            roomba.driveDirect((_RIGHT_ + abs(PDControl())) , (_LEFT_ - abs(PDControl())))
         elif (PDControl() < 0):
-            roomba.driveDirect((_RIGHT_ - abs(PDRight())) , (_LEFT_ + abs(PDRight())))
+            roomba.driveDirect((_RIGHT_ - abs(PDControl())) , (_LEFT_ + abs(PDControl())))
+
+def findDock():
+    print ("LEFT DOCK: " + str(roomba.dockGreen))
+    print ("RIGHT DOCK: " + str(roomba.dockRed))
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
@@ -120,7 +126,6 @@ def readSensors():
     while(True):
         time.sleep(_DELAY_)
         roomba.readSensors()
-        PIDLogic()
 
 ###############################################################
 ###############################################################
@@ -138,15 +143,16 @@ def main():
     started = False
     while (not started):
         if(roomba.readButton(_CLEAN_)):
-            roomba.drive(_velocity_,_NOROTATE_)      
             roomba.setDriving(True)
             started = True
             roomba.setPressed(False)
+            #PIDLogic()
         time.sleep(_DELAY_)
     check.start()
     print("STARTING")
     # This while loop reads the 'Clean' button and starts/stops the roomba. 
     while(True):
+        findDock()
         if(roomba.buttonPressed and roomba.isDriving):
             roomba.setPressed(False)
             roomba.setDriving(False)
@@ -154,7 +160,7 @@ def main():
         elif(roomba.buttonPressed and not(roomba.isDriving)):
             roomba.setPressed(False)
             roomba.setDriving(True)
-            roomba.driveDirect(_velocity_,_NOROTATE_)
+            PIDLogic()
         time.sleep(_DELAY_)
     # End our threads and stop the roomba.
     check.join()

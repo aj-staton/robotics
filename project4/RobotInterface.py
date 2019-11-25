@@ -66,10 +66,6 @@ class RobotInterface:
         ###########################
         self.isDriving = True
         self.buttonPressed = False
-        self.bumpLeft = False
-        self.bumpRight = False
-        self.wheelDropLeft = False
-        self.wheelDropRight = False
         self.leftIRSensor = 0
         self.rightIRSensor = 0
         self.dockGreen = 0
@@ -245,7 +241,7 @@ class RobotInterface:
         # print(data)
         data1 = struct.unpack('H', data)[0]
         self.leftIRSensor = data1
-        print("LEFT: " + str(data1))
+        # print("LEFT: " + str(data1))
 
     def readInfraredRight(self):
         self.connection.write(chr(_SENSORS_)+chr(_idINFRAREDRIGHT_))
@@ -253,7 +249,7 @@ class RobotInterface:
         # print(data)
         data1 = struct.unpack('H', data)[0]
         self.rightIRSensor = data1
-        print("RIGHT: " + str(data1))
+        # print("RIGHT: " + str(data1))
     #############################################
     # Accessors for the above IR sensors.
     ############################################
@@ -270,7 +266,6 @@ class RobotInterface:
     ###############################################################
     def readSensors(self):
         self.readButton(_CLEAN_)
-        self.readBumper()
         self.readInfraredLeft()
         self.readInfraredRight()
 
