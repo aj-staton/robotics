@@ -219,14 +219,14 @@ class RobotInterface:
     #  the iRobot Create2.
     ###############################################################
     def readDockGreen(self):
-        self.connection.write(chr(_SENSORS) + chr(_idDOCKGREEN_))
+        self.connection.write(chr(_SENSORS_) + chr(_idDOCKGREEN_))
         data = self.connection.read(1)
-        # print(data)
+        print(data)
         self.dockGreen = struct.unpack('B', data)[0]
     def readDockRed(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKRED_))
         data = self.connection.read(1)
-        # print (data)
+        print (data)
         self.dockRed = struct.unpack('B', data)[0]
 
     ###############################################################
@@ -266,7 +266,8 @@ class RobotInterface:
     ###############################################################
     def readSensors(self):
         self.readButton(_CLEAN_)
-        self.readInfraredLeft()
+        self.readDockGreen()
+        self.readDockRed()
         self.readInfraredRight()
 
     ################################################################

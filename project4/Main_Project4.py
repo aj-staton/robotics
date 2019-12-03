@@ -104,7 +104,7 @@ def PDControl():
 # wall-following behavior.
 ###############################################################
 def PIDLogic():
-    if(roomba.buttonPressed):
+    if(roomba.isDriving):
         if (PDControl() > 0):
             roomba.driveDirect((_RIGHT_ + abs(PDControl())) , (_LEFT_ - abs(PDControl())))
         elif (PDControl() < 0):
@@ -141,12 +141,13 @@ def main():
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     started = False
+    PIDLogic()
     while (not started):
         if(roomba.readButton(_CLEAN_)):
             roomba.setDriving(True)
             started = True
             roomba.setPressed(False)
-            #PIDLogic()
+            PIDLogic()
         time.sleep(_DELAY_)
     check.start()
     print("STARTING")
