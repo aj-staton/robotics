@@ -103,16 +103,36 @@ def PDControl():
 # the 'CLEAN' button is pressed, and our robot must exhibit a 
 # wall-following behavior.
 ###############################################################
+# DOCK SENSOR STATES #
+ForceField = 161
+Green_Buoy = 164
+Green_Buoy_ForceField = 165
+Red_Buoy = 168
+Red_Buoy_ForceField = 169
+Red_Buoy_and_Green = 168
+
+
 def PIDLogic():
-    if(roomba.isDriving):
+    if(not roomba.dockFound and roomba.isDriving):
         if (PDControl() > 0):
             roomba.driveDirect((_RIGHT_ + abs(PDControl())) , (_LEFT_ - abs(PDControl())))
         elif (PDControl() < 0):
             roomba.driveDirect((_RIGHT_ - abs(PDControl())) , (_LEFT_ + abs(PDControl())))
+        if(roomba.leftdock || roomba.rightdock): # if anything is picked up
+            roomba.dockFound = True
+
+    if(roomba.dockFound and roomba.isDriving):
+        findDock()
 
 def findDock():
-    print ("LEFT DOCK: " + str(roomba.dockGreen))
-    print ("RIGHT DOCK: " + str(roomba.dockRed))
+    print ("LEFT DOCK: " + str(roomba.leftdock))
+    print ("RIGHT DOCK: " + str(roomba.rightdock))
+
+    if(roomba.leftdock = 172 or roomba.rightdock = 172 ):
+        driveDirect(50,50)
+
+
+
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
