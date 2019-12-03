@@ -65,11 +65,13 @@ class RobotInterface:
         # Flags for sensor states
         ###########################
         self.isDriving = True
+        self.dockFound = False
         self.buttonPressed = False
         self.leftIRSensor = 0
         self.rightIRSensor = 0
         self.leftdock = 0
         self.rightdock = 0
+
 
 
     ###############################################################
