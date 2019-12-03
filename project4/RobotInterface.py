@@ -68,8 +68,8 @@ class RobotInterface:
         self.buttonPressed = False
         self.leftIRSensor = 0
         self.rightIRSensor = 0
-        self.dockGreen = 0
-        self.dockRed = 0
+        self.leftdock = 0
+        self.rightdock = 0
 
 
     ###############################################################
@@ -222,12 +222,12 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKGREEN_))
         data = self.connection.read(1)
         print(data)
-        self.dockGreen = struct.unpack('B', data)[0]
+        self.leftdock = struct.unpack('B', data)[0]
     def readDockRed(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKRED_))
         data = self.connection.read(1)
         print (data)
-        self.dockRed = struct.unpack('B', data)[0]
+        self.rightdock = struct.unpack('B', data)[0]
 
     ###############################################################
     # readInfraredLeft() and readInfraredRight() returns the 2-byte
