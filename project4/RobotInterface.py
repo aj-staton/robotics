@@ -128,7 +128,7 @@ class RobotInterface:
             rightVelocity = -500
         if (leftVelocity <= -500):
             leftVelocity = -500
-        data = struct.pack('>BHH', _DRIVE_DIRECT_, rightVelocity, leftVelocity)
+        data = struct.pack('Bhh', _DRIVE_DIRECT_, rightVelocity, leftVelocity)
         self.connection.write(data)
 
     ################################################################
