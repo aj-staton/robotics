@@ -123,6 +123,7 @@ def PIDLogic():
             roomba.dockFound = True
 
     if(roomba.dockFound and roomba.isDriving):
+        stopRoomba()
         findDock()
 
 def findDock():
