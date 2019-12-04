@@ -118,7 +118,7 @@ def PIDLogic():
         elif (PDControl() < 0):
             roomba.driveDirect((_RIGHT_ - abs(PDControl())) , (_LEFT_ + abs(PDControl())))
         
-        if(((roomba.leftdock > 0) and (roomba.leftdock != 0)) or ((roomba.rightdock > 0) and roomba.rightdock != 0)): # if anything is picked up
+        if(((roomba.leftdock > 0) and (roomba.leftdock != 161)) or ((roomba.rightdock > 0) and roomba.rightdock != 161)): # if anything is picked up
             roomba.dockFound = True
 
     if(roomba.dockFound and roomba.isDriving):
@@ -130,9 +130,9 @@ def findDock():
     if(roomba.leftdock == 172 or roomba.rightdock == 172):
         roomba.driveDirect(50,50)
     # right see and left is 0
-    if(roomba.leftdock == 0 and roomba.rightdock == 168 ):
+    if(roomba.leftdock == 0 and (roomba.rightdock > 0 and roomba.rightdock != 161) ):
         print("found right dock")
-        while(not roomba.leftdock == 168 ):
+        while(print("LEFT: " + str(self.leftdock)) ):
             roomba.driveDirect(-10,10)
         print("found left dock")
         stopRoomba()
