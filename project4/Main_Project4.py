@@ -132,7 +132,7 @@ def findDock():
     # right see and left is 0
     if(roomba.leftdock == 0 and (roomba.rightdock > 0 and roomba.rightdock != 161) ):
         print("found right dock")
-        while(print("LEFT: " + str(self.leftdock)) ):
+        while(roomba.leftdock != 168):
             roomba.driveDirect(-10,10)
         print("found left dock")
         stopRoomba()
