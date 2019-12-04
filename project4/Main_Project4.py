@@ -133,9 +133,15 @@ def findDock():
     # right see and left is 0
     if(roomba.leftdock == 0 and roomba.rightdock == 168 ):
         print("found right dock")
-        while(roomba.leftdock == 0):
-            roomba.driveDirect(-50,50)
-            time.sleep(.015)
+        while(not roomba.leftdock == 168 ):
+            roomba.driveDirect(-10,10)
+            print("found left dick")
+
+
+
+
+
+
 
 
 
