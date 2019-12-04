@@ -118,7 +118,8 @@ def PIDLogic():
             roomba.driveDirect((_RIGHT_ + abs(PDControl())) , (_LEFT_ - abs(PDControl())))
         elif (PDControl() < 0):
             roomba.driveDirect((_RIGHT_ - abs(PDControl())) , (_LEFT_ + abs(PDControl())))
-        if(roomba.leftdock or roomba.rightdock): # if anything is picked up
+        
+        if((roomba.leftdock > 0) or (roomba.rightdock > 0)): # if anything is picked up
             roomba.dockFound = True
 
     if(roomba.dockFound and roomba.isDriving):
@@ -127,9 +128,16 @@ def PIDLogic():
 def findDock():
     print ("LEFT DOCK: " + str(roomba.leftdock))
     print ("RIGHT DOCK: " + str(roomba.rightdock))
-
-    if(roomba.leftdock == 172 or roomba.rightdock == 172 ):
+    # if we are dead on
+    if(roomba.leftdock == 172 or roomba.rightdock == 172):
         driveDirect(50,50)
+    # right see and left is 0
+    if(roomba.leftdock == 0 and roomba.rightdock == 168 ):
+        while(roomba.leftdock == 0):
+            driveDirect(-50,50)
+            time.sleep(.015)
+    
+
 
 
 
@@ -146,6 +154,7 @@ def readSensors():
     while(True):
         time.sleep(_DELAY_)
         roomba.readSensors()
+        PIDLogic()
 
 ###############################################################
 ###############################################################
@@ -161,13 +170,11 @@ def main():
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     started = False
-    PIDLogic()
     while (not started):
         if(roomba.readButton(_CLEAN_)):
             roomba.setDriving(True)
             started = True
             roomba.setPressed(False)
-            PIDLogic()
         time.sleep(_DELAY_)
     check.start()
     print("STARTING")
@@ -181,7 +188,6 @@ def main():
         elif(roomba.buttonPressed and not(roomba.isDriving)):
             roomba.setPressed(False)
             roomba.setDriving(True)
-            PIDLogic()
         time.sleep(_DELAY_)
     # End our threads and stop the roomba.
     check.join()
