@@ -137,6 +137,7 @@ def findDock():
         print("found left dick")
         stopRoomba()
 
+
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
 # the roomba. Since sensors cannot be read more frequently than

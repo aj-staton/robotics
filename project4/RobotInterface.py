@@ -224,10 +224,12 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKGREEN_))
         data = self.connection.read(1)
         self.leftdock = struct.unpack('B', data)[0]
+        print("LEFT: " + str(self.leftdock))
     def readDockRed(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKRED_))
         data = self.connection.read(1)
         self.rightdock = struct.unpack('B', data)[0]
+        print("RIGHT: " + str(self.rightdock))
 
     ###############################################################
     # readInfraredLeft() and readInfraredRight() returns the 2-byte
