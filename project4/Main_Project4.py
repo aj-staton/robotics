@@ -93,7 +93,6 @@ def PDControl():
         U = 100
     elif (U < -100):
         U = -100
-    print("Error: " + str(U))
     return U
 
 
@@ -136,11 +135,6 @@ def findDock():
         while(roomba.leftdock == 0):
             roomba.driveDirect(-50,50)
             time.sleep(.015)
-
-
-
-
-
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
