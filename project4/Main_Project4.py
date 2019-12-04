@@ -134,13 +134,8 @@ def findDock():
         print("found right dock")
         while(not roomba.leftdock == 168 ):
             roomba.driveDirect(-10,10)
-            print("found left dick")
-
-
-
-
-
-
+        print("found left dick")
+        stopRoomba()
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
