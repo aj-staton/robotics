@@ -223,12 +223,10 @@ class RobotInterface:
     def readDockGreen(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKGREEN_))
         data = self.connection.read(1)
-        print(data)
         self.leftdock = struct.unpack('B', data)[0]
     def readDockRed(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKRED_))
         data = self.connection.read(1)
-        print (data)
         self.rightdock = struct.unpack('B', data)[0]
 
     ###############################################################
