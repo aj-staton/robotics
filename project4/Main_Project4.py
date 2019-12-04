@@ -130,13 +130,13 @@ def findDock():
     print ("RIGHT DOCK: " + str(roomba.rightdock))
     # if we are dead on
     if(roomba.leftdock == 172 or roomba.rightdock == 172):
-        driveDirect(50,50)
+        roomba.driveDirect(50,50)
     # right see and left is 0
     if(roomba.leftdock == 0 and roomba.rightdock == 168 ):
         while(roomba.leftdock == 0):
-            driveDirect(-50,50)
+            roomba.driveDirect(-50,50)
             time.sleep(.015)
-    
+
 
 
 
