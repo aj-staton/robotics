@@ -43,7 +43,7 @@ _idINFRAREDLEFT_ = 48
 _idINFRAREDRIGHT_ = 51
 _idDOCKGREEN_ = 52
 _idDOCKRED_ = 53
-
+_idOMNI_ = 17
 ##########################################################
 #  Read the sensor state of the Roomba every 15 ms.  Do
 #  not send these commands more frequently than that.
@@ -69,8 +69,9 @@ class RobotInterface:
         self.buttonPressed = False
         self.leftIRSensor = 0
         self.rightIRSensor = 0
-        self.leftdock = 0
-        self.rightdock = 0
+        self.charLeft = 0
+        self.charRight = 0
+        self.charOmni = 0
 
 
 
@@ -216,20 +217,25 @@ class RobotInterface:
         self.buttonPressed = pressed
     
     ###############################################################
-    #  readDockGreen/Red() is used to read the Green (Facing-Dock
-    #  Left) and Red (Facing-Dock Right) sensors to be able to dock
-    #  the iRobot Create2.
+    #  readDockGreen/Red/Omni() is used to read the Green
+    #  (Facing-Dock Left) and Red (Facing-Dock Right) sensors from
+    #  the roomba to be able to dock the iRobot Create2.
     ###############################################################
-    def readDockGreen(self):
+    def readCharLeft(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKGREEN_))
         data = self.connection.read(1)
-        self.leftdock = struct.unpack('B', data)[0]
-        print("LEFT: " + str(self.leftdock))
-    def readDockRed(self):
+        self.charLeft = struct.unpack('B', data)[0]
+        print("LEFT: " + str(self.charLeft))
+    def readCharRight(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKRED_))
         data = self.connection.read(1)
-        self.rightdock = struct.unpack('B', data)[0]
-        print("RIGHT: " + str(self.rightdock))
+        self.charRight = struct.unpack('B', data)[0]
+        print("RIGHT: " + str(self.charRight))
+    def readCharOmni(self):
+        self.connection.write(chr(_SENSORS_) + chr(_idOMNI_))
+        data = self.connection.read(1)
+        self.charOmni = struct.unpack('B', data)[0]
+        print("OMNI: " + str(self.charOmni))
 
     ###############################################################
     # readInfraredLeft() and readInfraredRight() returns the 2-byte
@@ -268,9 +274,9 @@ class RobotInterface:
     ###############################################################
     def readSensors(self):
         self.readButton(_CLEAN_)
-        self.readDockGreen()
-        self.readDockRed()
-        self.readInfraredRight()
+        self.readCharLeft()
+        self.readCharRight()
+        self.readCharOmni()
 
     ################################################################
     # Setters for driving

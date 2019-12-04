@@ -120,23 +120,24 @@ def PIDLogic():
         
         if(((roomba.leftdock > 0) and (roomba.leftdock != 161)) or ((roomba.rightdock > 0) and roomba.rightdock != 161)): # if anything is picked up
             roomba.dockFound = True
-
+    # If the dock is 
     if(roomba.dockFound and roomba.isDriving):
         stopRoomba()
         findDock()
 
 def findDock():
+    '''
     # if we are dead on
-    if(roomba.leftdock == 172 or roomba.rightdock == 172):
+    if(roomba.charLeft == 172 or roomba.charRight == 172):
         roomba.driveDirect(50,50)
     # right see and left is 0
-    if(roomba.leftdock == 0 and (roomba.rightdock > 0 and roomba.rightdock != 161) ):
+    if(roomba.charLeft == 0 and (roomba.charRight > 0 and roomba.charRight != 161) ):
         print("found right dock")
-        while(roomba.leftdock != 168):
+        while(roomba.charRight != 168):
             roomba.driveDirect(-10,10)
         print("found left dock")
         stopRoomba()
-
+    '''
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
@@ -176,7 +177,6 @@ def main():
     print("STARTING")
     # This while loop reads the 'Clean' button and starts/stops the roomba. 
     while(True):
-        findDock()
         if(roomba.buttonPressed and roomba.isDriving):
             roomba.setPressed(False)
             roomba.setDriving(False)
