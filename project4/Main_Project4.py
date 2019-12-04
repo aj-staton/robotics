@@ -117,27 +117,34 @@ def PIDLogic():
             roomba.driveDirect((_RIGHT_ + abs(PDControl())) , (_LEFT_ - abs(PDControl())))
         elif (PDControl() < 0):
             roomba.driveDirect((_RIGHT_ - abs(PDControl())) , (_LEFT_ + abs(PDControl())))
-        
-        if(((roomba.leftdock > 0) and (roomba.leftdock != 161)) or ((roomba.rightdock > 0) and roomba.rightdock != 161)): # if anything is picked up
+
+        if(roomba.charOmni > 0):  #or roomba.charRight > 0): # if anything is picked up
             roomba.dockFound = True
-    # If the dock is 
-    if(roomba.dockFound and roomba.isDriving):
-        stopRoomba()
+            findDock()
+    # If the dock is found, stop following the wall.
+    elif(roomba.dockFound and roomba.isDriving):
         findDock()
 
 def findDock():
-    '''
-    # if we are dead on
-    if(roomba.charLeft == 172 or roomba.charRight == 172):
-        roomba.driveDirect(50,50)
-    # right see and left is 0
-    if(roomba.charLeft == 0 and (roomba.charRight > 0 and roomba.charRight != 161) ):
-        print("found right dock")
-        while(roomba.charRight != 168):
-            roomba.driveDirect(-10,10)
-        print("found left dock")
-        stopRoomba()
-    '''
+    while (roomba.chargingState == 0):
+        print "FUCK"
+        # The case for if the roomba is aligned perfectly with the dock.
+        # This is the IDEAL case.
+        if (roomba.charOmni == 172):
+            roomba.driveDirect(60,60)
+        # If the omni character is reading the RED (right) buoy from the dock,
+        # we know it needs to move left.
+        elif (roomba.charOmni == 168):
+            roomba.driveDirect(40, 60)
+        # If the omni character is reading the GREEN (left) buoy from the dock,
+        # we know the roomba shuld move right.
+        elif (roomba.charOmni == 164):
+            roomba.driveDirect(60, 40)
+        else:
+            roomba.driveDirect(10,-10)
+
+        time.sleep(_DELAY_)
+    
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
@@ -162,6 +169,7 @@ def readSensors():
 def main():
     roomba.setState("START")
     roomba.setState("SAFE")
+    roomba.playSong()
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     check = Thread(target=readSensors)
     # Listen for the press of the Clean button, which will begin
@@ -184,10 +192,13 @@ def main():
         elif(roomba.buttonPressed and not(roomba.isDriving)):
             roomba.setPressed(False)
             roomba.setDriving(True)
+        if (roomba.chargingState > 0):
+            check.join()
+            roomba.playSong()
+            break
         time.sleep(_DELAY_)
     # End our threads and stop the roomba.
-    check.join()
+    #check.join()
     stopRoomba()
     sys.exit()
-
 main()

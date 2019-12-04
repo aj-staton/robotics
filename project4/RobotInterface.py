@@ -44,6 +44,7 @@ _idINFRAREDRIGHT_ = 51
 _idDOCKGREEN_ = 52
 _idDOCKRED_ = 53
 _idOMNI_ = 17
+_idCHARGINGSTATE_ = 21
 ##########################################################
 #  Read the sensor state of the Roomba every 15 ms.  Do
 #  not send these commands more frequently than that.
@@ -72,6 +73,7 @@ class RobotInterface:
         self.charLeft = 0
         self.charRight = 0
         self.charOmni = 0
+        self.chargingState = 0
 
 
 
@@ -129,7 +131,7 @@ class RobotInterface:
             rightVelocity = -500
         if (leftVelocity <= -500):
             leftVelocity = -500
-        data = struct.pack('Bhh', _DRIVE_DIRECT_, rightVelocity, leftVelocity)
+        data = struct.pack('>Bhh', _DRIVE_DIRECT_, rightVelocity, leftVelocity)
         self.connection.write(data)
 
     ################################################################
@@ -225,17 +227,27 @@ class RobotInterface:
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKGREEN_))
         data = self.connection.read(1)
         self.charLeft = struct.unpack('B', data)[0]
-        print("LEFT: " + str(self.charLeft))
+        # print("LEFT: " + str(self.charLeft))
     def readCharRight(self):
         self.connection.write(chr(_SENSORS_) + chr(_idDOCKRED_))
         data = self.connection.read(1)
         self.charRight = struct.unpack('B', data)[0]
-        print("RIGHT: " + str(self.charRight))
+        # print("RIGHT: " + str(self.charRight))
     def readCharOmni(self):
         self.connection.write(chr(_SENSORS_) + chr(_idOMNI_))
         data = self.connection.read(1)
         self.charOmni = struct.unpack('B', data)[0]
+        # if (self.charOmni == 161):
+        #    self.charOmni = -1
         print("OMNI: " + str(self.charOmni))
+
+    ###############################################################
+    # readChargingState() pg 28 pdf
+    ###############################################################
+    def readChargingState(self):
+        self.connection.write(chr(_SENSORS_) + chr(_idCHARGINGSTATE_))
+        data = self.connection.read(1)
+        self.chargingState = struct.unpack('B', data)[0]
 
     ###############################################################
     # readInfraredLeft() and readInfraredRight() returns the 2-byte
