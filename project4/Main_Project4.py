@@ -134,7 +134,7 @@ def findDock():
         print("found right dock")
         while(not roomba.leftdock == 168 ):
             roomba.driveDirect(-10,10)
-        print("found left dick")
+        print("found left dock")
         stopRoomba()
 
 
@@ -162,7 +162,7 @@ def main():
     roomba.setState("START")
     roomba.setState("SAFE")
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
-    check = Thread(target = readSensors)
+    check = Thread(target=readSensors)
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     started = False
