@@ -110,7 +110,6 @@ Red_Buoy = 168
 Red_Buoy_ForceField = 169
 Red_Buoy_and_Green = 168
 
-
 def PIDLogic():
     if(not roomba.dockFound and roomba.isDriving):
         if (PDControl() > 0):
@@ -127,7 +126,7 @@ def PIDLogic():
 
 def findDock():
     while (roomba.chargingState == 0):
-        print "FUCK"
+        print("FUCK")
         # The case for if the roomba is aligned perfectly with the dock.
         # This is the IDEAL case.
         if (roomba.charOmni == 172):
@@ -142,9 +141,7 @@ def findDock():
             roomba.driveDirect(60, 40)
         else:
             roomba.driveDirect(10,-10)
-
         time.sleep(_DELAY_)
-    
 
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
