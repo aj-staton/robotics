@@ -117,13 +117,16 @@ def driveLogic():
             if (roomba.charLeft == 0 and roomba.charRight == 0):
                 while (roomba.charLeft == 0 and roomba.charRight ==0):
                     roomba.driveDirect(-60, 60)
-                    roomba.readCharRight()
-                    roomba.readCharLeft()
                 stopRoomba()
-
+'''
     elif (roomba.isDriving and roomba.dockFound):
-        print "FUCK"
-
+        if (roomba.charRight == 172 and roomba.charLeft == 172):
+            roomba.driveDirect(60,60)
+        elif (roomba.charRight == 172 and roomba.charLeft == 164):
+            roomba.driveDirect(60, 60)
+        elif (roomba.charRight == 168 and roomba.charLeft == 172):
+            roomba.driveDirect(60, 60)
+'''
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
 # the roomba. Since sensors cannot be read more frequently than
@@ -139,6 +142,9 @@ def readSensors():
         roomba.readCharLeft()
         roomba.readCharOmni()
         roomba.readCharRight()
+
+def driveLogicThread():
+    while(True):
         driveLogic()
 
 ###############################################################
@@ -152,6 +158,7 @@ def main():
     roomba.setState("SAFE")
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     check = Thread(target = readSensors)
+    driving = Thread(target = driveLogicThread)
     # Listen for the press of the Clean button, which will begin
     # the drawing of the polygon.
     started = False
@@ -163,6 +170,7 @@ def main():
             roomba.setPressed(False)
         time.sleep(_DELAY_)
     check.start()
+    driving.start()
     print("STARTING")
     # This while loop reads the 'Clean' button and starts/stops the roomba. 
     while(True):
@@ -177,6 +185,7 @@ def main():
         time.sleep(_DELAY_)
     # End our threads and stop the roomba.
     check.join()
+    driving.join()
     stopRoomba()
     sys.exit()
 
