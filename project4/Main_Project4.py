@@ -96,13 +96,20 @@ def PDRight():
     # print("Error: " + str(U))
     return U
 
-
-###############################################################
-# driveLogic() will read all of the bumpers on the roomba
-# collectively. When one of these bumpers is hit, the roomba
-# will turn as needed.
+GREEN = 164
+FORCE = 161
+RED = 168
+BOTH = 172
+_stdspd_ = 50
+EMPTY = 0
+#############################################################
+# driveLogic()
 ###############################################################
 def driveLogic():
+    print str(roomba.dockFound)
+    ####################
+    # Wall Following Behavior
+    #####################
     if(roomba.isDriving and  not roomba.dockFound):   
         if (PDRight() > 0):
             roomba.driveDirect((_RIGHT_ + abs(PDRight())) , (_LEFT_ - abs(PDRight())))
@@ -110,23 +117,53 @@ def driveLogic():
         elif (PDRight() < 0):
             roomba.driveDirect((_RIGHT_ - abs(PDRight())) , (_LEFT_ + abs(PDRight())))
 
-        if (roomba.charOmni > 0):
+        if (roomba.charOmni > 0 ):
             roomba.dockFound = True
             # If the dock is found, but the dock is not in the correct
             # direction of the roomba, find the dock.
-            if (roomba.charLeft == 0 and roomba.charRight == 0):
-                while (roomba.charLeft == 0 and roomba.charRight ==0):
-                    roomba.driveDirect(-60, 60)
-                stopRoomba()
-'''
+            if (roomba.charLeft == EMPTY and roomba.charRight == EMPTY):
+                while (roomba.charLeft == EMPTY and roomba.charRight == EMPTY):
+                    roomba.driveDirect(-_stdspd_, _stdspd_+2)
+    ######################
+    # Docking Behavior
+    ######################
     elif (roomba.isDriving and roomba.dockFound):
-        if (roomba.charRight == 172 and roomba.charLeft == 172):
-            roomba.driveDirect(60,60)
-        elif (roomba.charRight == 172 and roomba.charLeft == 164):
-            roomba.driveDirect(60, 60)
-        elif (roomba.charRight == 168 and roomba.charLeft == 172):
-            roomba.driveDirect(60, 60)
-'''
+        # Handle if BOTH beams are directed in the center of the roomba.
+        if (roomba.charRight == BOTH and roomba.charLeft == BOTH):
+            roomba.driveDirect(_stdspd_, _stdspd_)
+        elif (roomba.charRight == RED):
+            if(roomba.charRight != 172):
+                roomba.driveDirect(_stdspd_, _stdspd_)
+                time.sleep(_DELAY_ * 30)
+            stopRoomba()
+        elif (roomba.charLeft == GREEN):
+            if(roomba.charLeft != 172):
+                roomba.driveDirect(_stdspd_, _stdspd_)
+                time.sleep(_DELAY_ * 30)
+            stopRoomba()
+        # Something went wrong. Fix it.
+        elif (roomba.charLeft == 0 and roomba.charRight == 0):
+            while (roomba.charLeft == EMPTY and roomba.charRight == EMPTY):
+                    roomba.driveDirect(-_stdspd_, _stdspd_+2)
+        else:
+            roomba.driveDirect(_stdspd_,_stdspd_)
+            time.sleep(_DELAY_ * 30 )
+            print("nothing")
+
+
+        '''
+        elif (roomba.charRight == GREEN and roomba.charLeft == GREEN):
+            while (roomba.charRight != BOTH and rooma.charLeft != BOTH):
+                roomba.driveDirect(_stdspd_, -_stdspd_)
+        # Handle if right beam is directed at the dock, and left is GREEN
+        elif (roomba.charRight == BOTH and roomba.charLeft == GREEN):
+            roomba.driveDirect(_stdspd_, _stdspd_)
+        # Handle if right beam is in RED and left is directed at the dock.
+        elif (roomba.charRight == RED and roomba.charLeft == BOTH):
+            roomba.driveDirect(_stdspd_, _stdspd_)
+        '''
+        
+
 ###############################################################
 # readSensors() iteratively reads all the needed sensors on
 # the roomba. Since sensors cannot be read more frequently than
@@ -139,13 +176,29 @@ def readSensors():
     while(True):
         time.sleep(_DELAY_)
         roomba.readSensors()
-        roomba.readCharLeft()
-        roomba.readCharOmni()
-        roomba.readCharRight()
+        # Stop if on dock and charging
+        if (roomba.chargingState != 0):
+            print("song1")
+            time.sleep(_DELAY_)
+            roomba.playSong()
+            time.sleep(_DELAY_)
+            break
+    stopRoomba()
+
 
 def driveLogicThread():
     while(True):
         driveLogic()
+        time.sleep(_DELAY_)
+        print("charge state   == " + str(roomba.chargingState))
+        # Stop if on dock and charging.
+        if (roomba.chargingState != 0):
+            print("song2")
+            time.sleep(_DELAY_)
+            roomba.playSong()
+            time.sleep(2*_DELAY_)
+            break
+    stopRoomba()
 
 ###############################################################
 ###############################################################
@@ -156,6 +209,7 @@ def driveLogicThread():
 def main():
     roomba.setState("START")
     roomba.setState("SAFE")
+    roomba.playSong()
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     check = Thread(target = readSensors)
     driving = Thread(target = driveLogicThread)
@@ -183,9 +237,14 @@ def main():
             roomba.setDriving(True)
             roomba.driveDirect(_velocity_,_NOROTATE_)
         time.sleep(_DELAY_)
+        
+        if (roomba.chargingState != 0):
+            break
     # End our threads and stop the roomba.
+    roomba.playSong()
     check.join()
     driving.join()
+    roomba.playSong()
     stopRoomba()
     sys.exit()
 

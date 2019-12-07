@@ -314,6 +314,10 @@ class RobotInterface:
         self.readButton(_CLEAN_)
         self.readBumper()
         self.readInfraredRight()
+        self.readCharLeft()
+        self.readCharOmni()
+        self.readCharRight()
+        self.readChargingState()
 
     ################################################################
     # Setters for Bumpers
