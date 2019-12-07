@@ -295,7 +295,14 @@ class RobotInterface:
         return self.rightIRSensor
 
 
-    
+    ###############################################################
+    # readChargingState()
+    ###############################################################
+    def readChargingState(self):
+        self.connection.write(chr(_SENSORS_)+chr(_idCHARGINGSTATE_))
+        data = self.connection.read(1)
+        data1 = struct.unpack('B', data)[0]
+        self.chargingState = data1
 
     ###############################################################
     # readSensors() is the function that will consolidate the other
