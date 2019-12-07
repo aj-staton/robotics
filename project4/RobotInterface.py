@@ -80,6 +80,7 @@ class RobotInterface:
         self.charOmni = 0
         self.chargingState = 0
         self.dockFound = False
+        self.isCharging = False
 
 
     ###############################################################
@@ -183,9 +184,6 @@ class RobotInterface:
     # this created song. This function will have song number '0'
     # pre-programmed in, since we are only composing one song in
     # writeSong()
-    # 
-    # Params: songNumber -- an integer from [0, 4] which represents
-    #                       the song for the roomba to play.
     ###############################################################
     def playSong(self):
         songNumber = 0

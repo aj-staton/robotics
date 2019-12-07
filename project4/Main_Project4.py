@@ -132,14 +132,14 @@ def driveLogic():
         if (roomba.charRight == BOTH and roomba.charLeft == BOTH):
             roomba.driveDirect(_stdspd_, _stdspd_)
         elif (roomba.charRight == RED):
-            if(roomba.charRight != 172):
+            if(roomba.charRight != BOTH):
                 roomba.driveDirect(_stdspd_, _stdspd_)
-                time.sleep(_DELAY_ * 30)
+                time.sleep(_DELAY_ * 30) # Extended Delay
             stopRoomba()
         elif (roomba.charLeft == GREEN):
-            if(roomba.charLeft != 172):
+            if(roomba.charLeft != BOTH):
                 roomba.driveDirect(_stdspd_, _stdspd_)
-                time.sleep(_DELAY_ * 30)
+                time.sleep(_DELAY_ * 30) # Extended Delay
             stopRoomba()
         # Something went wrong. Fix it.
         elif (roomba.charLeft == 0 and roomba.charRight == 0):
@@ -148,20 +148,10 @@ def driveLogic():
         else:
             roomba.driveDirect(_stdspd_,_stdspd_)
             time.sleep(_DELAY_ * 30 )
-            print("nothing")
-
-
-        '''
-        elif (roomba.charRight == GREEN and roomba.charLeft == GREEN):
-            while (roomba.charRight != BOTH and rooma.charLeft != BOTH):
-                roomba.driveDirect(_stdspd_, -_stdspd_)
-        # Handle if right beam is directed at the dock, and left is GREEN
-        elif (roomba.charRight == BOTH and roomba.charLeft == GREEN):
-            roomba.driveDirect(_stdspd_, _stdspd_)
-        # Handle if right beam is in RED and left is directed at the dock.
-        elif (roomba.charRight == RED and roomba.charLeft == BOTH):
-            roomba.driveDirect(_stdspd_, _stdspd_)
-        '''
+            print("Nothing Found -- go Straight")
+    elif (roomba.isCharging):
+        print "it stopped it"
+        stopRoomba()
         
 
 ###############################################################
@@ -178,10 +168,14 @@ def readSensors():
         roomba.readSensors()
         # Stop if on dock and charging
         if (roomba.chargingState != 0):
-            print("song1")
-            time.sleep(_DELAY_)
+            stopRoomba()
+            roomba.isCharging = True
+            print("song1//////////////////////////////")
+            roomba.setState("FULL")
             roomba.playSong()
-            time.sleep(_DELAY_)
+            roomba.setState("SAFE")
+            exit(0)
+            print("SONG IS DONE")
             break
     stopRoomba()
 
@@ -190,13 +184,13 @@ def driveLogicThread():
     while(True):
         driveLogic()
         time.sleep(_DELAY_)
-        print("charge state   == " + str(roomba.chargingState))
+        print("charge state  is " + str(roomba.chargingState))
         # Stop if on dock and charging.
         if (roomba.chargingState != 0):
-            print("song2")
-            time.sleep(_DELAY_)
+            roomba.isCharging = True
+            stopRoomba()
+            print("song2////////////////////////////")
             roomba.playSong()
-            time.sleep(2*_DELAY_)
             break
     stopRoomba()
 
@@ -209,7 +203,7 @@ def driveLogicThread():
 def main():
     roomba.setState("START")
     roomba.setState("SAFE")
-    roomba.playSong()
+    # !roomba.playSong()
     logging.basicConfig(level=logging.DEBUG,filename="output.log",filemode="w")
     check = Thread(target = readSensors)
     driving = Thread(target = driveLogicThread)
