@@ -1,6 +1,6 @@
 ## Robotic Applications and Design 
 ---
-This repository houses projects for the iRobot Roomba Create2 robot in Robotic Applications and Design at the University of South Carolina.
+This repository houses projects using the iRobot Create2 in Robotic Applications and Design at the University of South Carolina.
 All projects are written in Python and reference the [iRobot Interface Spec](https://www.irobotweb.com/~/media/MainSite/PDFs/About/STEM/Create/iRobot_Roomba_600_Open_Interface_Spec.pdf?la=en).
 
 ### Project_One
