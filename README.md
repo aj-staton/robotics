@@ -16,4 +16,4 @@ All projects are written in Python and reference the [iRobot Interface Spec](htt
 [Our robot](https://drive.google.com/file/d/1EhvBXYeJgKimL22GS0Wtsyu0TkXgzaNn/view) finds its docking station to charge.
 
 ### Credits
-The course was taught by [Marios Xanthidis](https://sites.google.com/view/mariosx). He was a reference for sample code.
+The course was taught by [Marios Xanthidis](https://sites.google.com/view/mariosx).
