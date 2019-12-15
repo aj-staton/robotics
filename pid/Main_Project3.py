@@ -44,6 +44,7 @@ _HOUR_ = 4
 _DAY_ = 5
 _SCHEDULE_ = 6
 _CLOCK_ = 7
+PREV_ERROR = 0
 
 roomba = RobotInterface() #Initialize the robot interface
 lock = Lock() #Initialize lock variable
@@ -81,7 +82,6 @@ def PDRight():
     S = 17000 # Set Point (i.e. -- the "ideal" sensor value)
     KP = 0.002 # Proportial Gain 
     KD = 0.002 # Derivative Gain
-    PREV_ERROR = 0 
     CURRENT_ERROR = 0
     PREV_ERROR = CURRENT_ERROR
     CURRENT_ERROR = roomba.getRightIR() - S
@@ -97,34 +97,6 @@ def PDRight():
     print("Error: " + str(U))
     return U
 
-################################################################
-#  PDLeft() _ATTEMPTS_ to implement Proportional, Derivative
-#  control for the iRobot's left infrared sensor.
-#  NOTE: This as an attempt to do a little bit more for the sake
-#        of learning and experience. It is a non functional
-#        function.
-#
-#  Returned Value: U -- the error of the current state from S,
-#                       the set point wrt PD control.
-################################################################
-def PDLeft():
-    S = 200
-    KP = 0.002
-    KD = 0.002
-    PREV_ERROR = 0
-    CURRENT_ERROR = 0
-    PREV_ERROR = CURRENT_ERROR 
-    CURRENT_ERROR = roomba.getLeftIR() - S
-    # The error, wrt to PD control, is 'U' 
-    U = KP * CURRENT_ERROR + KD*(CURRENT_ERROR - PREV_ERROR)
-    # See PDRight() for more explanation on bounds checking.
-    if (U > 120):
-        U = 120
-    elif (U < -120):
-        U = -120
-    print("Error: " + str(U))
-    return U
-
 ###############################################################
 # driveLogic() will read all of the bumpers on the roomba
 # collectively. When one of these bumpers is hit, the roomba
@@ -132,14 +104,6 @@ def PDLeft():
 ###############################################################
 def driveLogic():
     if(roomba.isDriving):
-        if(_SIDE_ == "left"):
-            # NOTE: this is not functioning (see "PDLeft()")
-            if (PDLeft() > 0):
-                roomba.driveDirect((_RIGHT_ - abs(PDLeft())) , (_LEFT_ + abs(PDLeft())))
-
-            elif (PDLeft() < 0):
-                roomba.driveDirect((_RIGHT_ + abs(PDLeft())) , (_LEFT_ - abs(PDLeft())))
-         
         if(_SIDE_ == "right"):
             if (PDRight() > 0):
                 roomba.driveDirect((_RIGHT_ + abs(PDRight())) , (_LEFT_ - abs(PDRight())))
