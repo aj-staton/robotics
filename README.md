@@ -1,26 +1,19 @@
 ## Robotic Applications and Design 
 ---
-This repository houses our projects for the iRobot Roomba Create2 robot.
-Projects are written in Python and reference the iRobot [Interface Spec](https://www.irobotweb.com/~/media/MainSite/PDFs/About/STEM/Create/iRobot_Roomba_600_Open_Interface_Spec.pdf?la=en).
-
-Table of Contents
-* [Project_One](#Project_One)
-* [Project_Two](#Project_Two)
-* [Project_Three](#Project_Three)
-* [Project_Four](#Project_Four)
-* [Credits](#Credits)
+This repository houses projects using the iRobot Create2 in Robotic Applications and Design at the University of South Carolina.
+All projects are written in Python and reference the [iRobot Interface Spec](https://www.irobotweb.com/~/media/MainSite/PDFs/About/STEM/Create/iRobot_Roomba_600_Open_Interface_Spec.pdf?la=en).
 
 ### Project_One
-Our robot drives around a [mufukin](https://drive.google.com/file/d/1qV1KdgdLvN7GdSB7fDuzNeR2KqT55yui/view) regular polygon of N sides.
+[Our robot](https://drive.google.com/file/d/1qV1KdgdLvN7GdSB7fDuzNeR2KqT55yui/view) drives around a regular polygon of N sides.
 
 ### Project_Two
-[Mufukin](https://drive.google.com/file/d/17pS6uIGC5stqJetbmv9jQ1DKY17KgW3i/view) sensor reading.
+[Our robot](https://drive.google.com/file/d/17pS6uIGC5stqJetbmv9jQ1DKY17KgW3i/view) reads and interprets its sensors.
 
 ### Project_Three
-The roomba has a [mufukin](https://drive.google.com/file/d/1RzoDoG3izRddcIuEF-j1B52c0YjJthWL/view) PD controller.
+[Our robot](https://drive.google.com/file/d/1RzoDoG3izRddcIuEF-j1B52c0YjJthWL/view) implements a PD controller to demonstrate a wall-following behavior.
 
 ### Project_Four
-[Mufukin](https://drive.google.com/file/d/1EhvBXYeJgKimL22GS0Wtsyu0TkXgzaNn/view) finding a dock.
+[Our robot](https://drive.google.com/file/d/1EhvBXYeJgKimL22GS0Wtsyu0TkXgzaNn/view) finds its docking station to charge.
 
 ### Credits
-[Marios](https://sites.google.com/view/mariosx) - for notes and sample code
+The course was taught by [Marios Xanthidis](https://sites.google.com/view/mariosx).
