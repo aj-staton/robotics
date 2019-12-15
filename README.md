@@ -20,4 +20,4 @@ intended to read the IR sensor value as it was driving alongside a barricade, to
 ### Credits
 This course, Robotic Applications and Design, was taught by [Marios Xanthidis](https://sites.google.com/view/mariosx).
 
-The Group for this project included Robby Carff, Miles Ziemer, and Austin Staton.
+ These projects were completed by Robby Carff, Miles Ziemer, and Austin Staton.
