@@ -21,5 +21,5 @@ intended to read the IR sensor value as it was driving alongside a barricade, to
 * This course, Robotic Applications and Design, was taught by [Marios Xanthidis](https://sites.google.com/view/mariosx).
 * These projects were completed by Robby Carff, Miles Ziemer, and Austin Staton.
 
-#### Major Takeaways/Lessons Learned
+#### Major Takeaway
 Trust the robot, but always verify its returned data. A robot has sensors that can malfunction. Functional code using non-functional sensors _appears_ to be incorrect. Ensure that a robot is properly functioning before correcting code "errors".
