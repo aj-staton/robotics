@@ -18,5 +18,5 @@ intended to read the IR sensor value as it was driving alongside a barricade, to
 [The robot](https://drive.google.com/file/d/1EhvBXYeJgKimL22GS0Wtsyu0TkXgzaNn/view) finds its docking station to charge. The robot initally moves using wall-following behavior; then, once the robot is in range of its dock, the robot will begin the movement towards the dock. 
 
 ### Credits
-*This course, Robotic Applications and Design, was taught by [Marios Xanthidis](https://sites.google.com/view/mariosx).
-*These projects were completed by Robby Carff, Miles Ziemer, and Austin Staton.
+* This course, Robotic Applications and Design, was taught by [Marios Xanthidis](https://sites.google.com/view/mariosx).
+* These projects were completed by Robby Carff, Miles Ziemer, and Austin Staton.
